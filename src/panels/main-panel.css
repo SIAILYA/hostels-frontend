@@ -1,0 +1,62 @@
+:root{
+    --yellow: #F2C94C;
+    --orange: #F2994A;
+    --red: #E44D26;
+}
+
+.yellow-color{
+    color: var(--yellow);
+}
+
+.yellow-gradient{
+    background: linear-gradient(to left, #F2C94C, #F2994A)
+}
+
+.search{
+    background-image: url("../img/banner.jpg")!important;
+}
+
+.write{
+    background-image: url("../img/banner2.jpg")!important;
+}
+
+@media screen and (min-width: 550px) {
+    .search{
+        background-image: url("../img/banner-max.jpg")!important;
+    }
+
+    .write{
+        background-image: url("../img/banner2-max.jpg")!important;
+    }
+}
+
+.Gallery__slide {
+    justify-content: center;
+    display: flex;
+}
+
+.TabbarItem--selected{
+    color: var(--yellow);
+}
+
+.grades, .review, .gift, .rating{
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.grades{
+    background-image: url('../img/grades.jpg');
+}
+
+.gift{
+    background-image: url('../img/gift.jpg');
+}
+
+.review{
+    background-image: url('../img/review.jpg');
+}
+
+.rating{
+    background-image: url('../img/rating.jpg');
+}
