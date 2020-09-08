@@ -2,9 +2,6 @@ import React from "react";
 import {
     Panel,
     PanelHeader,
-    FormLayout,
-    FormLayoutGroup,
-    Input,
     Group,
     Card,
     CardScroll,
@@ -20,7 +17,7 @@ import {
 import './main-panel.css'
 
 
-const Search = () => {
+const Search = ({onStoryChange}) => {
     const reviews_data = [
         {
             name: 'Захар Филиппов',
@@ -61,22 +58,20 @@ const Search = () => {
             <PanelHeader>Поиск</PanelHeader>
 
             <Group separator='hide'>
-                <Div>
-                    <CardScroll>
-                        <Card size="s" className='rating'>
-                            <div style={{ width: 96, height: 96 }}/>
-                        </Card>
-                        <Card size="s" className='grades'>
-                            <div style={{ width: 96, height: 96 }} />
-                        </Card>
-                        <Card size="s" className='gift'>
-                            <div style={{ width: 96, height: 96 }} />
-                        </Card>
-                        <Card size="s" className='review'>
-                            <div style={{ width: 96, height: 96 }} />
-                        </Card>
-                    </CardScroll>
-                </Div>
+                <CardScroll>
+                    <Card size="s" className='rating'>
+                        <div style={{ width: 96, height: 96 }}/>
+                    </Card>
+                    <Card size="s" className='grades'>
+                        <div style={{ width: 96, height: 96 }} />
+                    </Card>
+                    <Card size="s" className='gift'>
+                        <div style={{ width: 96, height: 96 }} />
+                    </Card>
+                    <Card size="s" className='review'>
+                        <div style={{ width: 96, height: 96 }} />
+                    </Card>
+                </CardScroll>
             </Group>
 
             <Group separator='hide'>
@@ -115,7 +110,7 @@ const Search = () => {
                             }}
                         />
                     }
-                    actions={<Button mode="overlay_primary" size="l">Рассказать</Button>}
+                    actions={<Button mode="overlay_primary" size="l" onClick={onStoryChange} data-story="add">Рассказать</Button>}
                 />
             </Group>
 
@@ -129,7 +124,7 @@ const Search = () => {
                         {
                             reviews_data.map((review, index, array) => {
                                 return (
-                                    <Card size='l' mode='outline' style={{width: '95%'}}>
+                                    <Card key={index} size='l' mode='outline' style={{width: '95%'}}>
                                         <RichCell
                                             before={<Avatar size={72} src={review.photo}/>}
                                             text={review.review_text.slice(0, 50) + '...'}
@@ -147,7 +142,22 @@ const Search = () => {
                 </Div>
             </Group>
 
-
+            <Group
+                header={<Header mode='secondary'>Интересное и полезное</Header>}
+                description='Подборка интересных статей для абитуриентов и заселяющихся'
+            >
+                <CardScroll>
+                    <Card size="m">
+                        <div style={{ width: 224, height: 96 }} />
+                    </Card>
+                    <Card size="m">
+                        <div style={{ width: 224, height: 96 }} />
+                    </Card>
+                    <Card size="m">
+                        <div style={{ width: 224, height: 96 }} />
+                    </Card>
+                </CardScroll>
+            </Group>
 
         </Panel>
     )
