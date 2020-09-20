@@ -18,11 +18,14 @@
     "react-scripts": "^3.4.3"
   },
   "dependencies": {
+    "@delowar/react-circle-progressbar": "^0.1.5",
     "@vkontakte/icons": "^1.38.0",
     "@vkontakte/vk-bridge": "^2.2.8",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
     "@vkontakte/vkui": "^3.12.1",
+    "axios": "^0.20.0",
     "babel-eslint": "^10.1.0",
+    "beauty-stars": "^1.1.0",
     "chalk": "^2.4.2",
     "core-js": "^3.6.5",
     "eruda": "^2.3.3",

@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import GoogleMapReact from 'google-map-react';
+import axios from 'axios';
+
 import {
     Panel,
     PanelHeader,
@@ -7,43 +9,77 @@ import {
     View,
     FixedLayout,
     Button,
-    Placeholder, Input, Div, ModalRoot, ModalPage, ModalPageHeader
+    Placeholder,
+    Input,
+    Div,
+    FormStatus,
+    Header,
+    Radio,
+    Separator,
+    Checkbox,
+    Textarea,
+    FormLayout,
+    FormLayoutGroup,
+    SelectMimicry,
+    Group,
+    File, Avatar,
+
 } from "@vkontakte/vkui";
-import FormLayout from "@vkontakte/vkui/dist/components/FormLayout/FormLayout";
-import FormLayoutGroup from "@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup";
-import SelectMimicry from "@vkontakte/vkui/dist/components/SelectMimicry/SelectMimicry";
-import Group from "@vkontakte/vkui/dist/components/Group/Group";
+
 import Icon56ErrorOutline from '@vkontakte/icons/dist/56/error_outline';
 import Icon28DoneOutline from '@vkontakte/icons/dist/28/done_outline';
 import Icon36HomeOutline from '@vkontakte/icons/dist/36/home_outline';
+import Icon24Camera from "@vkontakte/icons/dist/24/camera";
+
+import Stars from "./components/Stars";
+import CircularProgressBar from "./components/CircleProgress";
 
 
 const AddForm = ({
     go,
     goBack,
+
     activePanel,
-    activeModal,
+    setDormitoryList,
+
     regionsList,
     citiesList,
     uniList,
     dormitoryList,
+
     selectedRegion,
     selectedCity,
     selectedUniversity,
+    selectedDormitory,
+
     setRegion,
     setCity,
     setUniversity,
     setDormitory,
-    selectedDormitory,
+
     customAddress,
     customCoordinates,
     customTitle,
+
     setAddress,
     setCoordinates,
     setTitle,
-    setDormitoryList,
-    forceUpdate
+
+    ratingCondition,
+    ratingCost,
+    ratingPersonal,
+    ratingLocation,
+    ratingNoise,
+    mainRating,
+
+    setConditionRating,
+    setCostRating,
+    setPersonalRating,
+    setLocationRating,
+    setNoiseRating,
+    setMainRating
 }) => {
+    const [previewPhotos, setPreviews] = useState([])
 
     const onChange = e => {
         const { name, value } = e.currentTarget;
@@ -56,6 +92,36 @@ const AddForm = ({
             setTitle(value)
         }
     }
+
+    const onChangeRating = e => {
+        const {name, value} = e
+
+        if (name === 'stars-condition'){
+            setConditionRating(value);
+        }
+        if (name === 'stars-cost'){
+            setCostRating(value);
+        }
+        if (name === 'stars-personal'){
+            setPersonalRating(value);
+        }
+        if (name === 'stars-location'){
+            setLocationRating(value);
+        }
+        if (name === 'stars-noise'){
+            setNoiseRating(value);
+        }
+    }
+
+    useEffect(() => {
+        setMainRating(Math.fround((
+            ratingCondition * 1.2 +
+            ratingCost * 1.25 +
+            ratingPersonal * 0.75 +
+            ratingLocation * 1 +
+            ratingNoise * 0.8
+        ) / 5))
+    })
 
     const AnyReactComponent = () => (
         <div
@@ -73,37 +139,20 @@ const AddForm = ({
         </div>
     );
 
-    const modal = (
-        <ModalRoot activeModal={activeModal} onClose={goBack}>
-            <ModalPage onClose={goBack} id="address_modal" header={
-                <ModalPageHeader>
-                    Ввод адреса
-                </ModalPageHeader>
-            }>
-                <div>
-                    <FormLayout>
-                        <FormLayoutGroup top="Адрес общежития" bottom="Введите адрес в произвольной форме или выберете точку на карте:">
-                            <Input type='text' onChange={onChange}/>
-                        </FormLayoutGroup>
-                    </FormLayout>
-                </div>
-                <Div style={{height: '30vh', borderRadius: '15px', overflow: 'hidden', padding: 0, margin: '12px'}}>
-                    <GoogleMapReact
-                        bootstrapURLKeys={{ key: 'AIzaSyCTGj2Q0pCF-W-VAh8i2GImSUhXuxZF8yI'}}
-                        defaultCenter={{
-                            'lat': 59.95,
-                            'lng': 30.33
-                        }}
-                        defaultZoom={11}
-                    >
-                    </GoogleMapReact>
-                </Div>
-            </ModalPage>
-        </ModalRoot>
-    );
+    const completePreview = (files) => {
+        let FD = new FormData()
+        setPreviews([...previewPhotos, ''])
+        FD.append('key', '0000111b8b4e5294c682ea80ab68f379')
+        Array.from(files).forEach((file, index) => {
+            FD.append('media', file)
+        })
+        setTimeout(() => {
+            axios.post('https://thumbsnap.com/api/upload', FD).then(res => {console.log(res.data.data.thumb); setPreviews([...previewPhotos, res.data.data.thumb]);})
+        }, 1000)
+    }
 
     return (
-        <View id="add_review_view" activePanel={activePanel} modal={modal}>
+        <View id="add_review_view" activePanel={activePanel}>
             <Panel id="location_panel">
                 <PanelHeader>Расположение</PanelHeader>
 
@@ -267,7 +316,7 @@ const AddForm = ({
                             stretched
                             className='yellow-gradient'
                             data-goto='addPanel_grades_panel'
-                            onClick={() => console.log(selectedDormitory)}
+                            onClick={go}
                             disabled={!(selectedDormitory)}
                         >
                             Дальше
@@ -317,7 +366,6 @@ const AddForm = ({
                             data-goto='addPanel_grades_panel'
                             onClick={() => {
                                 const randomId = Math.random()
-                                forceUpdate();
                                 setDormitory(
                                 {
                                     'id': randomId,
@@ -334,7 +382,6 @@ const AddForm = ({
                                     }
                                 ])
                                 goBack();
-                                forceUpdate();
                                 }
                             }
                             disabled={!(customTitle && (customAddress || customCoordinates.lat))}
@@ -343,6 +390,176 @@ const AddForm = ({
                         </Button>
                     </Div>
                 </FixedLayout>
+            </Panel>
+            <Panel id='grades_panel'>
+                <PanelHeader>Оценка общежития</PanelHeader>
+                <Div>
+                    <FormStatus mode='default' header='Оцените ваше общежитие'>
+                        Расставьте оценки по нескольким критериям, которые будут влиять на общий рейтинг общежития.
+                        Следующим шагом вам будет предложено более подробно составить отзыв об общежитии.
+                        <div className="circle-progress-wrap " style={{height: '75px', width: '75px', position: 'relative'}}>
+                            <CircularProgressBar
+                                strokeWidth="10"
+                                sqSize="75"
+                                percentage={Math.round(mainRating / 5 * 100)}
+                            />
+                        </div>
+                    </FormStatus>
+                    <Stars
+                        id='stars-condition'
+                        name='Ремонт и состояние общежития'
+                        description='Характеристика, отражающая насколько приятно находиться и проживать в общежитии'
+                        ratingValue={ratingCondition}
+                        onChange={onChangeRating}
+                    />
+                    <Stars
+                        id='stars-cost'
+                        name='Цена'
+                        description='Насколько дорого обходится общежитие относительно вашего личного бюджета.'
+                        ratingValue={ratingCost}
+                        onChange={onChangeRating}
+                    />
+                    <Stars
+                        id='stars-personal'
+                        name='Персонал'
+                        description='Как быстро и качественно решаются проблемы, возникающие во время проживания в общежитии'
+                        ratingValue={ratingPersonal}
+                        onChange={onChangeRating}
+                    />
+                    <Stars
+                        id='stars-location'
+                        name='Расположение'
+                        description='Как далеко расположено метро и прочий транспорт, насколько удобно добираться от общежития до учебных корпусов'
+                        ratingValue={ratingLocation}
+                        onChange={onChangeRating}
+                    />
+                    <Stars
+                        id='stars-noise'
+                        name='Шумоизоляция '
+                        description='Шум шум шум пошумим блять'
+                        ratingValue={ratingNoise}
+                        onChange={onChangeRating}
+                        sep
+                    />
+                </Div>
+
+                <Div>
+                    <Button
+                        size='xl'
+                        stretched
+                        className='yellow-gradient'
+                        data-goto='addPanel_questions_panel'
+                        onClick={go}
+                        disabled={!(ratingCondition && ratingCost && ratingPersonal && ratingLocation && ratingNoise)}
+                    >
+                        Дальше
+                    </Button>
+                </Div>
+            </Panel>
+            <Panel id='questions_panel'>
+                {/*TODO: Создать и связать с корневым элементом*/}
+                <PanelHeader>Отзыв</PanelHeader>
+
+                <Div>
+                    <FormStatus mode='default' header='Еще несколько вопросов...'>
+                        Ответьте еще на пару вопросов и напишите небольшое ревью, чтобы чуть лучше рассказать об общежитии
+                    </FormStatus>
+
+                    <FormLayout>
+                        <Group header={<Header mode='secondary'>Тип общежития</Header>} separator='show'>
+                            <Radio name="radio_type" value="Блочный" description="Комнаты расположены на этаже по блокам" defaultChecked>Блочный</Radio>
+                            <Radio name="radio_type" value="Коридорный" description="Комнаты расположены вдоль коридора">Коридорный</Radio>
+                            <Radio name="radio_type" value="Квартирный" description="В каждой комнате собственный санузел и кухня">Квартирный</Radio>
+                        </Group>
+
+                        <Group header={<Header mode='secondary'>Цена и оплата</Header>} separator='hide'>
+                            <Radio name="radio_billing" value="Помесячно" defaultChecked>Раз в месяц</Radio>
+                            <Radio name="radio_billing" value="Посеместрово">Раз в семестр</Radio>
+                            <Radio name="radio_billing" value="Погодично">Раз в год</Radio>
+                            <Checkbox name='check_billing'>Можно оплатить картой или в интернет-банке</Checkbox>
+                        </Group>
+                        <FormLayoutGroup top="Стоимость за месяц" bottom="Оставьте поле пустым, если не знаете, сколько платите">
+                            <Input type='number' max={99999} />
+                        </FormLayoutGroup>
+                        <Separator/>
+
+                        <Group header={<Header mode='secondary'>Комнаты</Header>} separator='hide'>
+                            <Checkbox name='check_beds'>Двухъярусные кровати</Checkbox>
+                        </Group>
+                        <FormLayoutGroup top="Количество человек в комнатах">
+                            <Input type='number' max={20} />
+                        </FormLayoutGroup>
+                        <Separator/>
+
+                        <Group header={<Header mode='secondary'>Комендантский час</Header>} separator='hide'>
+                            <Checkbox name='check_beds'>Общежитие работает круглосуточно</Checkbox>
+                        </Group>
+                        <FormLayoutGroup top="Общежитие закрывают на ночь" bottom='Укажите период, в который обжщежитие закрыто'>
+                            <Input type='time' />
+                            <Input type='time' />
+                        </FormLayoutGroup>
+                        <Separator/>
+
+
+                        <Group header={<Header mode='secondary'>Остальное</Header>} separator='hide'>
+                            <Checkbox name='check_smoking'>В помещениях общежития разрешено курить</Checkbox>
+                            <Checkbox name='check_billing'>В комнатах можно использовать электроприборы (чайник, мультиварка и т.п.)</Checkbox>
+                            <Checkbox name='check_billing'>Есть интернет-провайдер</Checkbox>
+                        </Group>
+                    </FormLayout>
+                </Div>
+                <FixedLayout vertical='bottom'>
+                    <Div>
+                        <Button
+                            size='xl'
+                            stretched
+                            className='yellow-gradient'
+                            data-goto='addPanel_text_review_panel'
+                            onClick={go}
+                        >
+                            Дальше
+                        </Button>
+                    </Div>
+                </FixedLayout>
+            </Panel>
+            <Panel id='text_review_panel'>
+                <PanelHeader>Отзыв</PanelHeader>
+
+                <Div>
+                    <FormStatus mode='default' header='Скажите пару слов'>
+                        Напишите небольшой отзыв, который увидят все пользователи сервиса.<br/><br/>
+                        <i>- О чем написать?</i><br/>
+                        - Расскажите о том, как долго добираетесь до места учебы, с какими трудностями столкнулись при заселении,
+                        отметьте плюсы и минусы общежития.
+                    </FormStatus>
+
+                    <FormLayout>
+                        <Textarea top="Краткий отзыв" />
+                        <File top="Загрузите фотографии общежития"
+                              className='yellow-gradient'
+                              before={<Icon24Camera />}
+                              controlSize="l"
+                              accept="image/*"
+                              onChange={e => {completePreview(e.currentTarget.files)}}
+                        >
+                            Открыть галерею
+                        </File>
+                    </FormLayout>
+
+                    <Div style={{display: 'flex'}}>
+                        {
+                            previewPhotos.length
+                            ? previewPhotos.map((source, index) => {
+                                return (
+                                    <div style={{marginRight: '10px'}}>
+                                        <Avatar size={80} src={source} key={index} mode='app'/>
+                                    </div>
+                                )
+                            })
+                            : null
+                        }
+                    </Div>
+                </Div>
             </Panel>
         </View>
     )

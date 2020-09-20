@@ -67,3 +67,42 @@
 .rating{
     background-image: url('../img/rating.jpg');
 }
+
+.circle-progress-wrap{
+    margin: auto;
+}
+
+.main-rating{
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+#app {
+    margin-top: 40px;
+}
+
+#progressInput {
+    margin: 20px auto;
+    width: 30%;
+}
+
+.circle-background,
+.circle-progress {
+    fill: none;
+}
+
+.circle-background {
+    stroke: #ddd;
+}
+
+.circle-progress {
+    stroke: var(--yellow);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: .3s all ease-in-out;
+}
+
+.circle-text {
+    font-size: 24px;
+    font-weight: bold;
+}

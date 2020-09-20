@@ -58,8 +58,12 @@ const App = () => {
 	const [customTitle, setTitle] = useState('');
 	const [customCoordinates, setCoordinates] = useState({lat: 0, lng: 0});
 
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
+	const [ratingCondition, setConditionRating] = useState(0)
+	const [ratingCost, setCostRating] = useState(0)
+	const [ratingPersonal, setPersonalRating] = useState(0)
+	const [ratingLocation, setLocationRating] = useState(0)
+	const [ratingNoise, setNoiseRating] = useState(0)
+	const [mainRating, setMainRating] = useState(0)
 
 	useEffect(() => {
 		window.addEventListener('popstate', () => goBack());
@@ -98,7 +102,6 @@ const App = () => {
 		const goTo = e.currentTarget.dataset.goto
 
 		console.log(goTo)
-		forceUpdate()
 		
 		if (goTo.slice(0, 4) === 'view') {
 			const view = goTo.slice(5, goTo.length)
@@ -115,7 +118,6 @@ const App = () => {
 			window.history.pushState( {panel: 'panel_' + panel}, 'panel_' + panel );
 			history.push( 'panel_' + panel );
 			setActivePanel(panel)
-			forceUpdate()
 		} else
 
 		if (goTo.slice(0, 8) === 'addPanel') {
@@ -123,7 +125,6 @@ const App = () => {
 			window.history.pushState( {panel: 'addPanel_' + panel}, 'addPanel_' + panel );
 			history.push( 'addPanel_' + panel );
 			setActiveAddPanel(panel)
-			forceUpdate()
 			}
 
 		if (goTo.slice(0, 8) === 'addModal') {
@@ -131,7 +132,6 @@ const App = () => {
 			window.history.pushState( {panel: 'addModal_' + modal}, 'addModal_' + modal );
 			history.push( 'addModal_' + modal );
 			setActiveAddModal(modal)
-			forceUpdate()
 		}
 
 
@@ -150,7 +150,6 @@ const App = () => {
 			if (last.slice(0, 8) === 'addModal') {
 				setActiveAddModal(null)
 				console.log(last + '!!!!')
-				forceUpdate()
 			} else
 
 			if (goBack.slice(0, 5) === 'story') {
@@ -232,31 +231,50 @@ const App = () => {
 				</View>
 
 				<AddForm id='add_review_view'
+						 go={go}
+						 goBack={goBack}
+
+						 activePanel={activeAddPanel}
+						 setActivePanel={setActiveAddPanel}
+						 activeModal={activeAddModal}
+
+						 dormitoryList={dormitoryList}
+
+						 setDormitoryList={setDormitoryList}
 						 regionsList={regionsList}
 						 citiesList={citiesList}
 						 uniList={uniList}
-						 dormitoryList={dormitoryList}
-						 go={go}
-						 goBack={goBack}
-						 activePanel={activeAddPanel}
-						 setActivePanel={setActiveAddPanel}
 						 selectedRegion={selectedRegion}
 						 selectedCity={selectedCity}
 						 selectedUniversity={selectedUniversity}
+						 selectedDormitory={selectedDormitory}
+
 						 setRegion={setRegion}
 						 setCity={setCity}
 						 setUniversity={setUniversity}
 						 setDormitory={setDormitory}
-						 selectedDormitory={selectedDormitory}
-						 activeModal={activeAddModal}
+
 						 customAddress={customAddress}
 						 customCoordinates={customCoordinates}
 						 customTitle={customTitle}
+
+						 setTitle={setTitle}
 						 setAddress={setAddress}
 						 setCoordinates={setCoordinates}
-						 setTitle={setTitle}
-						 setDormitoryList={setDormitoryList}
-						 forceUpdate={forceUpdate}
+
+						 ratingCondition={ratingCondition}
+						 ratingCost={ratingCost}
+						 ratingPersonal={ratingPersonal}
+						 ratingLocation={ratingLocation}
+						 ratingNoise={ratingNoise}
+						 mainRating={mainRating}
+
+						 setConditionRating={setConditionRating}
+						 setCostRating={setCostRating}
+						 setPersonalRating={setPersonalRating}
+						 setLocationRating={setLocationRating}
+						 setNoiseRating={setNoiseRating}
+						 setMainRating={setMainRating}
 				/>
 
 				<View id="empty_view" activePanel="spinner_panel">
