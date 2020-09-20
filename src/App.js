@@ -16,6 +16,7 @@ import AddForm from "./panels/AddForm";
 
 const App = () => {
 	const [history, setHistory] = useState(['story_search'])
+	const [scheme, setScheme] = useState(['bright_light'])
 
 	const [fetchedUser, setUser] = useState(null);
 	const [accessToken, setToken] = useState('');
@@ -25,14 +26,40 @@ const App = () => {
 	const [activeStory, setActiveStory] = useState('search');
 	const [activeView, setActiveView] = useState('epic_view');
 	const [activePanel, setActivePanel] = useState('epic_panel');
+	const [activeAddPanel, setActiveAddPanel] = useState('location_panel');
+	const [activeAddModal, setActiveAddModal] = useState('');
 
-	const [regionsList, setRegionsList] = useState('');
-	const [citiesList, setCitiesList] = useState('');
-	const [uniList, setUniList] = useState('');
+	const [regionsList, setRegionsList] = useState([{
+		"id": 1045244,
+		"title": "СПб и Ленинградская область"
+	}]);
+	const [citiesList, setCitiesList] = useState([{
+		"id": 2,
+		"title": "Санкт-Петербург",
+		"important": 1
+	}]);
+	const [uniList, setUniList] = useState([{
+		"id": 66,
+		"title": "СПбГУПТД (бывш. СПГУТД)"
+	}]);
+	const [dormitoryList, setDormitoryList] = useState(
+		[{
+		'id': 1,
+		"title": 'Общежитие №3',
+		'address': 'пр-кт Ударников, 29к1'
+	}]
+	);
 
 	const [selectedRegion, setRegion] = useState('');
 	const [selectedCity, setCity] = useState('');
 	const [selectedUniversity, setUniversity] = useState('');
+	const [selectedDormitory, setDormitory] = useState('');
+	const [customAddress, setAddress] = useState('');
+	const [customTitle, setTitle] = useState('');
+	const [customCoordinates, setCoordinates] = useState({lat: 0, lng: 0});
+
+	const [, updateState] = React.useState();
+	const forceUpdate = React.useCallback(() => updateState({}), []);
 
 	useEffect(() => {
 		window.addEventListener('popstate', () => goBack());
@@ -42,12 +69,12 @@ const App = () => {
 				const schemeAttribute = document.createAttribute('scheme');
 				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
+				setScheme(data.scheme ? data.scheme : 'bright_light')
 			}
 
 			if (type === 'VKWebAppAccessTokenReceived') {
 				setToken(data.access_token)
 			}
-
 			else {
 				console.log(type)
 				console.log(data)
@@ -62,8 +89,6 @@ const App = () => {
 		fetchData();
 	}, []);
 
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
 
 	async function getToken() {
 		const result = await bridge.send("VKWebAppGetAuthToken", {"app_id": 7582793, "scope": ''});
@@ -73,24 +98,42 @@ const App = () => {
 		const goTo = e.currentTarget.dataset.goto
 
 		console.log(goTo)
+		forceUpdate()
 		
 		if (goTo.slice(0, 4) === 'view') {
 			const view = goTo.slice(5, goTo.length)
-			window.history.pushState( {panel: 'view_' + view}, 'view_' + view ); // Создаём новую запись в истории браузера
-			history.push( 'view_' + view ); // Добавляем панель в историю
+			window.history.pushState( {panel: 'view_' + view}, 'view_' + view );
+			history.push( 'view_' + view );
 			setActiveView(view)
 			if (view === 'add_review_view') {
 				setActivePanel('location_panel')
 			}
-		}
+		} else
 
 		if (goTo.slice(0, 5) === 'panel') {
 			const panel = goTo.slice(6, goTo.length)
-			window.history.pushState( {panel: 'panel_' + panel}, 'panel_' + panel ); // Создаём новую запись в истории браузера
-			history.push( 'panel_' + panel ); // Добавляем панель в историю
+			window.history.pushState( {panel: 'panel_' + panel}, 'panel_' + panel );
+			history.push( 'panel_' + panel );
 			setActivePanel(panel)
 			forceUpdate()
+		} else
+
+		if (goTo.slice(0, 8) === 'addPanel') {
+			const panel = goTo.slice(9, goTo.length)
+			window.history.pushState( {panel: 'addPanel_' + panel}, 'addPanel_' + panel );
+			history.push( 'addPanel_' + panel );
+			setActiveAddPanel(panel)
+			forceUpdate()
+			}
+
+		if (goTo.slice(0, 8) === 'addModal') {
+			const modal = goTo.slice(9, goTo.length)
+			window.history.pushState( {panel: 'addModal_' + modal}, 'addModal_' + modal );
+			history.push( 'addModal_' + modal );
+			setActiveAddModal(modal)
+			forceUpdate()
 		}
+
 
 	};
 
@@ -100,19 +143,28 @@ const App = () => {
 		if( history.length === 1 ) {  // Если в массиве одно значение:
 			bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
 		} else if( history.length > 1 ) { // Если в массиве больше одного значения:
-			history.pop() // удаляем последний элемент в массиве.
-
+			const last = history.pop() // удаляем последний элемент в массиве.
 			const goBack = history[history.length - 1]
 			console.log(goBack)
+
+			if (last.slice(0, 8) === 'addModal') {
+				setActiveAddModal(null)
+				console.log(last + '!!!!')
+				forceUpdate()
+			} else
 
 			if (goBack.slice(0, 5) === 'story') {
 				setActiveStory(goBack.slice(6, goBack.length))
 				setActiveView('epic_view')
 				setActivePanel('epic_panel')
-			}
+			} else
 
 			if (goBack.slice(0, 4) === 'view') {
-				setActivePanel('location_panel')
+				setActiveAddPanel('location_panel')
+			} else
+
+			if (goBack.slice(0, 8) === 'addPanel') {
+				setActiveAddPanel(goBack.slice(9, goBack.length))
 			}
 		}
 	}
@@ -122,15 +174,15 @@ const App = () => {
 		const story = e.currentTarget.dataset.story
 		if (last_element.slice(6, last_element.length) !== story){
 			setActiveStory(story);
-			window.history.pushState( {story: 'story_' + story}, 'story_' + story ); // Создаём новую запись в истории браузера
-			history.push( 'story_' + story ); // Добавляем панель в историю
+			window.history.pushState( {story: 'story_' + story}, 'story_' + story );
+			history.push( 'story_' + story );
 		}
 	};
 
 	return (
 		<ConfigProvider
 			isWebView={true}
-			scheme='bright_light'
+			scheme={scheme}
 		>
 			<Root activeView={activeView}>
 				<View id="epic_view"
@@ -183,11 +235,28 @@ const App = () => {
 						 regionsList={regionsList}
 						 citiesList={citiesList}
 						 uniList={uniList}
+						 dormitoryList={dormitoryList}
 						 go={go}
-						 activePanel={activePanel}
+						 goBack={goBack}
+						 activePanel={activeAddPanel}
+						 setActivePanel={setActiveAddPanel}
 						 selectedRegion={selectedRegion}
 						 selectedCity={selectedCity}
 						 selectedUniversity={selectedUniversity}
+						 setRegion={setRegion}
+						 setCity={setCity}
+						 setUniversity={setUniversity}
+						 setDormitory={setDormitory}
+						 selectedDormitory={selectedDormitory}
+						 activeModal={activeAddModal}
+						 customAddress={customAddress}
+						 customCoordinates={customCoordinates}
+						 customTitle={customTitle}
+						 setAddress={setAddress}
+						 setCoordinates={setCoordinates}
+						 setTitle={setTitle}
+						 setDormitoryList={setDormitoryList}
+						 forceUpdate={forceUpdate}
 				/>
 
 				<View id="empty_view" activePanel="spinner_panel">
@@ -198,9 +267,9 @@ const App = () => {
 						<PanelSpinner />
 					</Panel>
 				</View>
-				<View id="onboarding_view">
+				{/*<View id="onboarding_view">*/}
 
-				</View>
+				{/*</View>*/}
 			</Root>
 
 		</ConfigProvider>

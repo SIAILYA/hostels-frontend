@@ -2,6 +2,13 @@
     --yellow: #F2C94C;
     --orange: #F2994A;
     --red: #E44D26;
+    --accent: #F2C94C!important;
+    --button_outline_foreground: #F2C94C!important;
+    --button_outline_border: #F2C94C!important;
+}
+
+.text-center{
+    text-align: center;
 }
 
 .yellow-color{
