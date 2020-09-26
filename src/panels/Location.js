@@ -12,14 +12,16 @@ import {
 import {Navigation, LocationContext} from "../Contexts";
 import Icon24UserOutgoing from '@vkontakte/icons/dist/24/user_outgoing';
 import {FailedSnackbar, SuccessSnackbar} from "./components/Snackbars";
+import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner";
 
 
 const LocationPanel = ({id, user}) => {
     const {
         selectedCountry, selectedCity, selectedUniversity,
-        setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity
+        setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity,
+        getUniDormitories
     } = useContext(LocationContext)
-    const {go} = useContext(Navigation)
+    const {go, setPopout} = useContext(Navigation)
 
     return (
         <Panel id={id}>
@@ -104,7 +106,12 @@ const LocationPanel = ({id, user}) => {
                         stretched
                         className='yellow-gradient'
                         data-goto='addPanel_dormitory_panel'
-                        onClick={go}
+                        onClick={() => {
+                            go({currentTarget: {dataset: {goto: 'addPanel_dormitory_panel'}}})
+                            getUniDormitories()
+                            setPopout(<ScreenSpinner size='large' />);
+                        }
+                        }
                         disabled={!(selectedCountry && selectedCity && selectedUniversity)}
                     >
                         Дальше

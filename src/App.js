@@ -309,6 +309,7 @@ const App = () => {
 				return
 			}
 			getToken();
+			getUniDormitories()
 		}
 	}
 
@@ -385,6 +386,17 @@ const App = () => {
 		}
 	};
 
+	const getUniDormitories = () => {
+		axios.post(
+			"https://your-dormitory.herokuapp.com/api/v1/get_dormitories",
+			{university_id: selectedUniversity.id}
+			).then(res => {
+				setDormitoryList(res.data)
+				setPopout(null)
+			}
+		)
+	}
+
 
 	return (
 		<ConfigProvider
@@ -405,7 +417,8 @@ const App = () => {
 				selectedCountry, selectedCity, selectedUniversity, selectedDormitory,
 				customCoordinates, customAddress, customTitle,
 				locationSnackbar, setLocationSnackbar,
-				setEducation, setTextReview, textReview, anonReview, setAnon
+				setEducation, setTextReview, textReview, anonReview, setAnon,
+				getUniDormitories
 			}}>
 			<RatingContext.Provider value={{
 				ratingCondition, setConditionRating,
