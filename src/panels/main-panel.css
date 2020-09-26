@@ -5,6 +5,13 @@
     --accent: #F2C94C!important;
     --button_outline_foreground: #F2C94C!important;
     --button_outline_border: #F2C94C!important;
+    --tabbar_active_icon: var(--yellow)!important;
+}
+
+::selection{
+    background: var(--yellow);
+    color: #2c2d2e;
+    text-shadow: none;
 }
 
 .text-center{
@@ -105,4 +112,8 @@
 .circle-text {
     font-size: 24px;
     font-weight: bold;
+}
+
+.upload-photo .Placeholder__in{
+    padding: 12px 32px;
 }

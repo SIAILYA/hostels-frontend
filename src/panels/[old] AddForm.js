@@ -35,7 +35,7 @@ import Stars from "./components/Stars";
 import CircularProgressBar from "./components/CircleProgress";
 
 
-const AddForm = ({
+const OldAddForm = ({
     go,
     goBack,
 
@@ -77,9 +77,12 @@ const AddForm = ({
     setPersonalRating,
     setLocationRating,
     setNoiseRating,
-    setMainRating
+    setMainRating,
+
+    previewPhotos,
+    setPreviews
 }) => {
-    const [previewPhotos, setPreviews] = useState([])
+    const [photoFiles, setPhotoFiles] = useState([])
 
     const onChange = e => {
         const { name, value } = e.currentTarget;
@@ -121,9 +124,9 @@ const AddForm = ({
             ratingLocation * 1 +
             ratingNoise * 0.8
         ) / 5))
-    })
+    }, [ratingNoise, ratingCost, ratingCondition, ratingLocation, ratingPersonal])
 
-    const AnyReactComponent = () => (
+    const GoogleMap = () => (
         <div
             style={{
                 background: 'white',
@@ -139,17 +142,21 @@ const AddForm = ({
         </div>
     );
 
-    const completePreview = (files) => {
+    useEffect(() => {
         let FD = new FormData()
-        setPreviews([...previewPhotos, ''])
-        FD.append('key', '0000111b8b4e5294c682ea80ab68f379')
-        Array.from(files).forEach((file, index) => {
-            FD.append('media', file)
+        let tempPreviews = []
+        Array.from(photoFiles).forEach((file, index) => {
+            FD.append('media' + index, file)
         })
-        setTimeout(() => {
-            axios.post('https://thumbsnap.com/api/upload', FD).then(res => {console.log(res.data.data.thumb); setPreviews([...previewPhotos, res.data.data.thumb]);})
-        }, 1000)
-    }
+
+        axios.post('https://your-dormitory.herokuapp.com/api/v1/upload_photos', FD).then(res => {
+            console.log(res);
+            res.data.forEach((item) => {
+                tempPreviews.push(item)
+            });
+            setPreviews(prev => ([...prev, tempPreviews]))
+        })
+    }, [photoFiles])
 
     return (
         <View id="add_review_view" activePanel={activePanel}>
@@ -349,7 +356,7 @@ const AddForm = ({
                         defaultZoom={11}
                         onClick={({lat, lng}) => setCoordinates({lat: lat, lng: lng})}
                     >
-                        <AnyReactComponent
+                        <GoogleMap
                             lat={customCoordinates.lat}
                             lng={customCoordinates.lng}
                         />
@@ -539,8 +546,9 @@ const AddForm = ({
                               className='yellow-gradient'
                               before={<Icon24Camera />}
                               controlSize="l"
+                              multiple
                               accept="image/*"
-                              onChange={e => {completePreview(e.currentTarget.files)}}
+                              onChange={e => {setPhotoFiles(e.currentTarget.files)}}
                         >
                             Открыть галерею
                         </File>
@@ -548,15 +556,7 @@ const AddForm = ({
 
                     <Div style={{display: 'flex'}}>
                         {
-                            previewPhotos.length
-                            ? previewPhotos.map((source, index) => {
-                                return (
-                                    <div style={{marginRight: '10px'}}>
-                                        <Avatar size={80} src={source} key={index} mode='app'/>
-                                    </div>
-                                )
-                            })
-                            : null
+                            previewPhotos.map((item, index) => console.log(item))
                         }
                     </Div>
                 </Div>
@@ -565,4 +565,4 @@ const AddForm = ({
     )
 }
 
-export default AddForm;
+export default OldAddForm;

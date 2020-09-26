@@ -36,7 +36,7 @@
     "react": "^16.13.1",
     "react-animated-css": "^1.2.1",
     "react-dom": "^16.13.1",
-    "react-typed": "^1.2.0"
+    "react-dropzone": "^11.2.0"
   },
   "browserslist": {
     "production": [

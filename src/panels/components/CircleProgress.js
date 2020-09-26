@@ -46,7 +46,9 @@ class CircularProgressBar extends React.Component {
                     x="50%"
                     y="50%"
                     dy=".3em"
-                    textAnchor="middle">
+                    textAnchor="middle"
+                    style={{color: 'var(--text_primary)'}}
+                >
                     {(this.props.percentage / 100 * 5).toFixed(1)}
                 </text>
             </svg>
