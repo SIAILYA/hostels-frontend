@@ -16,7 +16,7 @@ import {
 	ScreenSpinner,
 	Tabbar,
 	TabbarItem,
-	View
+	View, Textarea
 } from '@vkontakte/vkui';
 
 import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
@@ -29,7 +29,7 @@ import Rating from './panels/Rating'
 
 import LocationPanel from "./panels/Location";
 import CityChoosePanel from "./panels/mimicries/CityMimicry";
-import RegionChoosePanel from "./panels/mimicries/RegionMimicry";
+import CountryChoosePanel from "./panels/mimicries/CountryMimicry";
 import UniversityChoosePanel from "./panels/mimicries/UniversityMimicry";
 import DormitoryPanel from "./panels/Dormitory";
 import CustomDormitoryPanel from "./panels/CustomDormitory";
@@ -37,7 +37,6 @@ import GradesPanel from "./panels/Grades";
 import QuestionsPanel from "./panels/Questions";
 import TextPhotoPanel from "./panels/TextPhoto";
 import AddModal from "./panels/AddModal";
-import Textarea from "@vkontakte/vkui/dist/components/Textarea/Textarea";
 
 const axios = require('axios')
 
@@ -188,6 +187,18 @@ const App = () => {
 
 			if (type === 'VKWebAppAccessTokenReceived') {
 				setToken(data.access_token)
+			}
+
+			if (type === "VKWebAppCallAPIMethodResult"){
+				if (data.request_id === "getCities"){
+					setCitiesList(data.response.items)
+				}
+
+				if (data.request_id === "getUniversities"){
+					setUniList(data.response.items)
+				}
+
+				setPopout(null)
 			}
 
 			else {
@@ -374,36 +385,6 @@ const App = () => {
 		}
 	};
 
-	function nestObj(prevKey, arr, arrFormData) {
-		arr.forEach((obj, key) => {
-			Object.entries(obj).forEach(([key, value], index) => {
-				if (value.isArray) {
-					nestObj(value, arrFormData);
-				} else {
-					arrFormData.push({
-						key: prevKey[index].key,
-						value
-					});
-				}
-			})
-		});
-		return arrFormData;
-	}
-
-	function jsonToFormData(obj){
-		const bodyFormData = new FormData();
-		const arrFormData = [];
-		Object.entries(obj).forEach(
-			([key, value]) => {
-				if (value.isArray){
-					return nestObj(key, value, arrFormData);
-				} else {
-					arrFormData.push({key, value});
-				}
-			}
-		);
-		return arrFormData;
-	}
 
 	return (
 		<ConfigProvider
@@ -413,7 +394,8 @@ const App = () => {
 			<Navigation.Provider value={{
 				go, goBack,
 				activePanel, activeAddPanel, activeAddModal,
-				setActivePanel, setActiveAddPanel, setActiveAddModal
+				setActivePanel, setActiveAddPanel, setActiveAddModal,
+				setPopout, accessToken
 			}}>
 			<LocationContext.Provider value={{
 				countryList, citiesList, uniList, dormitoryList,
@@ -501,11 +483,16 @@ const App = () => {
 					</Panel>
 				</View>
 
-				<View id="add_review_view" activePanel={activeAddPanel} modal={<AddModal/>}>
+				<View
+					id="add_review_view"
+					activePanel={activeAddPanel}
+					modal={<AddModal/>}
+					popout={popout}
+				>
 					<LocationPanel id="location_panel" user={fetchedUser}/>
 
 					{/*Mimicries block*/}
-					<RegionChoosePanel id="region_choose"/>
+					<CountryChoosePanel id="country_choose"/>
 					<CityChoosePanel id="city_choose"/>
 					<UniversityChoosePanel id="uni_choose"/>
 					{/*Mimicries block*/}

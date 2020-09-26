@@ -70,7 +70,7 @@ const GradesPanel = ({id}) => {
                 <Stars
                     id='stars-noise'
                     name='Шумоизоляция '
-                    description='Шум шум шум пошумим блять'
+                    description='Насколько хорошо шумоизолированы комнаты? Не слишно ли посторонних звуков ночью или шум транспорта с улицы?'
                     ratingValue={ratingNoise}
                     onChange={(e) => {setNoiseRating(e.value)}}
                     sep

@@ -29,27 +29,29 @@ const LocationPanel = ({id, user}) => {
                 <FormLayoutGroup top="Общая инофрмация" bottom="Расскажите, к какому учебному заведению относится ваше общежитие">
                     <SelectMimicry
                         top="Выберите страну"
-                        placeholder="Не выбран"
+                        placeholder="Страна не выбрана"
                         onClick={go}
-                        data-goto='addPanel_region_choose'
+                        data-goto='addPanel_country_choose'
                     >
                         {selectedCountry.title}
                     </SelectMimicry>
 
                     <SelectMimicry
                         top="Выберите город"
-                        placeholder="Не выбран"
+                        placeholder="Город не выбран"
                         onClick={go}
                         data-goto='addPanel_city_choose'
+                        disabled={!selectedCountry}
                     >
                         {selectedCity.title}
                     </SelectMimicry>
 
                     <SelectMimicry
                         top="Выберите ВУЗ"
-                        placeholder="Не выбран"
+                        placeholder="ВУЗ не выбран"
                         onClick={go}
                         data-goto='addPanel_uni_choose'
+                        disabled={!selectedCity}
                     >
                         {selectedUniversity.title}
                     </SelectMimicry>
