@@ -56,5 +56,5 @@ export const COUNTRIES = [
     }
 ]
 
-export const DEV_BACKEND_URL = "https://3e6124e5e754.ngrok.io/"
+export const DEV_BACKEND_URL = ""
 export const BACKEND_URL = DEV_BACKEND_URL || "https://your-dormitory.herokuapp.com/"

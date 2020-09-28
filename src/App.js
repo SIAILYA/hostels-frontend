@@ -152,6 +152,7 @@ const App = () => {
 			getLastReviews().then(res => {
 				setLastReviews(res);
 				console.log(res);
+				setPopout(null)
 			})
 		}
 	}, []);
