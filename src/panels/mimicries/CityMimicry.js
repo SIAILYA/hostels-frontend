@@ -1,21 +1,23 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import bridge from "@vkontakte/vk-bridge";
 
-import {Group, Panel, PanelHeader, ScreenSpinner, Search, SimpleCell} from "@vkontakte/vkui";
+import {Group, Panel, PanelHeader, PanelSpinner, ScreenSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 import {Navigation, LocationContext} from "../../Contexts";
 
 
 const CityChoosePanel = ({id}) => {
     const {goBack, setPopout, accessToken} = useContext(Navigation)
-    const {citiesList, setCity, selectedCountry} = useContext(LocationContext)
+    const {citiesList, setCity, selectedCountry, setUniversity} = useContext(LocationContext)
     const [searchValue, setSearch] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [intervalId, setIntervalId] = useState(0)
 
-
-    return (
-        <Panel id={id}>
-            <PanelHeader>Выбор города</PanelHeader>
-            <Search value={searchValue} onChange={e => {
-                setSearch(e.target.value);
+    useEffect(() => {
+        clearTimeout(intervalId)
+        console.log(intervalId)
+        if (searchValue){
+            setLoading(true)
+            setIntervalId(setTimeout(() => {
                 bridge.send(
                     "VKWebAppCallAPIMethod",
                     {
@@ -28,53 +30,85 @@ const CityChoosePanel = ({id}) => {
                             "v": "5.124",
                             "access_token": accessToken,
                         }
-                    })
-            }}/>
-            <Group>
+                }).then(() => {
+                    setLoading(false);
+                })
+            }, 600))
+        } else {
+            bridge.send(
+                "VKWebAppCallAPIMethod",
                 {
-                    citiesList
-                        .filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-                        .map((item, index) => {
-                        return(
-                            <SimpleCell
-                                onClick={() => {
-                                    goBack();
-                                    setCity(item);
-                                    setPopout(<ScreenSpinner size='large' />);
-                                    bridge.send(
-                                        "VKWebAppCallAPIMethod",
-                                        {
-                                            "method": "database.getUniversities",
-                                            "request_id": "getUniversities",
-                                            "params": {
-                                                "country_id": selectedCountry.id,
-                                                "city_id": item.id,
-                                                "count": 2000,
-                                                "v": "5.124",
-                                                "access_token": accessToken,
-                                            }
-                                        })
-                                    bridge.send(
-                                        "VKWebAppCallAPIMethod",
-                                        {
-                                            "method": "database.getCities",
-                                            "request_id": "getCities",
-                                            "params": {
-                                                "country_id": selectedCountry.id,
-                                                "v": "5.124",
-                                                "access_token": accessToken,
-                                            }
-                                        })
-                                }}
-                                key={index}
-                                expandable
-                            >
-                                {item.title}
-                            </SimpleCell>
-                        )
-                    })
+                    "method": "database.getCities",
+                    "request_id": "getCities",
+                    "params": {
+                        "country_id": selectedCountry.id,
+                        "v": "5.124",
+                        "access_token": accessToken,
+                    }
+                }).then(() => {
+                setLoading(false);
+            })
+        }
+    }, [searchValue])
+
+    const onBack = (city) => {
+        bridge.send(
+            "VKWebAppCallAPIMethod",
+            {
+                "method": "database.getUniversities",
+                "request_id": "getUniversities",
+                "params": {
+                    "country_id": selectedCountry.id,
+                    "city_id": city,
+                    "count": 100,
+                    "v": "5.124",
+                    "access_token": accessToken,
                 }
-            </Group>
+            })
+        bridge.send(
+            "VKWebAppCallAPIMethod",
+            {
+                "method": "database.getCities",
+                "request_id": "getCities",
+                "params": {
+                    "country_id": selectedCountry.id,
+                    "v": "5.124",
+                    "access_token": accessToken,
+                }
+            })
+    }
+
+    return (
+        <Panel id={id}>
+            <PanelHeader>Выбор города</PanelHeader>
+            <Search value={searchValue} onChange={e => {setSearch(e.target.value)}}/>
+            {!loading ?
+                <Group>
+                    {
+                        citiesList
+                            .filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                            .map((item, index) => {
+                                return (
+                                    <SimpleCell
+                                        onClick={() => {
+                                            goBack();
+                                            setCity(item);
+                                            setPopout(<ScreenSpinner size='large'/>);
+                                            setUniversity('')
+                                            onBack(item.id, )
+                                        }}
+                                        key={index}
+                                        expandable
+                                    >
+                                        {item.title}
+                                    </SimpleCell>
+                                )
+                            })
+                    }
+                </Group>
+                :
+                <PanelSpinner/>
+            }
         </Panel>
     )
 }

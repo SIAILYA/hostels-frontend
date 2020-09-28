@@ -4,7 +4,7 @@ import {
     Div,
     FixedLayout,
     FormLayout,
-    FormLayoutGroup,
+    FormLayoutGroup, FormStatus,
     Panel,
     PanelHeader,
     SelectMimicry,
@@ -26,6 +26,11 @@ const LocationPanel = ({id, user}) => {
     return (
         <Panel id={id}>
             <PanelHeader>Расположение</PanelHeader>
+            <Div>
+                <FormStatus header="Местоположение общежития">
+                    Для начала расскажите, где расположено ваше общежитие и к какому ВУЗу оно относится
+                </FormStatus>
+            </Div>
 
             <FormLayout>
                 <FormLayoutGroup top="Общая инофрмация" bottom="Расскажите, к какому учебному заведению относится ваше общежитие">
@@ -65,14 +70,15 @@ const LocationPanel = ({id, user}) => {
                     style={{color: 'var(--yellow)!important', margin: 'auto'}}
                     onClick={() => {
                         setEducation().then(() => {
+                                console.log(user)
                             try {
-                                if (user.country && user.city && user.university) {
+                                if (user.country && user.city.title && user.university.title) {
                                     setCountry(user.country)
                                     setCity(user.city)
                                     setUniversity(user.university)
                                     setLocationSnackbar(<SuccessSnackbar caption="Данные успешно заполнены!"
                                                                          onClose={setLocationSnackbar}
-                                                                         duration={700}/>)
+                                                                         duration={1000}/>)
                                 } else {
                                     if (user.country){
                                         setCountry(user.country)
@@ -108,8 +114,6 @@ const LocationPanel = ({id, user}) => {
                         data-goto='addPanel_dormitory_panel'
                         onClick={() => {
                             go({currentTarget: {dataset: {goto: 'addPanel_dormitory_panel'}}})
-                            getUniDormitories()
-                            setPopout(<ScreenSpinner size='large' />);
                         }
                         }
                         disabled={!(selectedCountry && selectedCity && selectedUniversity)}

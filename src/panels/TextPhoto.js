@@ -96,6 +96,7 @@ const TextPhotoPanel = ({id}) => {
                 <FormLayout>
                     <FormLayoutGroup top="Загруженные фото" bottom={previews.length > 0 && "Нажмите на фото чтобы добавить описание"}>
                         {/*TODO: Удаление фото*/}
+                        {/*TODO: Загрузка фото сразу же*/}
                         {previews.length > 0 ?
                         <CardScroll style={{minHeight: '90px'}}>
                             {

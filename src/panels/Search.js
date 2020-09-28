@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
     Panel,
     PanelHeader,
@@ -15,44 +15,12 @@ import {
     Caption
 } from "@vkontakte/vkui";
 import './main-panel.css'
+import {ReviewsContext} from "../Contexts";
 
 
 const Search = ({onStoryChange}) => {
-    const reviews_data = [
-        {
-            name: 'Захар Филиппов',
-            user_id: 222383631,
-            date: 'Пару секунд назад...',
-            photo: 'https://www.hse.ru/pubs/share/direct/224095322.jpg',
-            university: 'НИУ "ВШЭ"',
-            picture: 'https://youclever.org/wp-content/uploads/2019/02/ВШЭ-лого.png',
-            dormitory: 'Общежитие #6',
-            address: 'Москва, Комсомольская, 1',
-            review_text: 'Замечательное общежитие!! Тут живет Слава!! Как дела как дела это новый кадиллак МОРГЕНШТЕРН КРУТОЙ!!!',
-        },
-        {
-            name: 'Захар Филиппов',
-            user_id: 222383631,
-            date: 'Пару секунд назад...',
-            photo: 'https://www.hse.ru/pubs/share/direct/224095322.jpg',
-            university: 'НИУ "ВШЭ"',
-            picture: 'https://youclever.org/wp-content/uploads/2019/02/ВШЭ-лого.png',
-            dormitory: 'Общежитие #6',
-            address: 'Москва, Комсомольская, 1',
-            review_text: 'Замечательное общежитие!! Тут живет Слава!! Как дела как дела это новый кадиллак МОРГЕНШТЕРН КРУТОЙ!!!',
-        },
-        {
-            name: 'Захар Филиппов',
-            user_id: 222383631,
-            date: 'Пару секунд назад...',
-            photo: 'https://www.hse.ru/pubs/share/direct/224095322.jpg',
-            university: 'НИУ "ВШЭ"',
-            picture: 'https://youclever.org/wp-content/uploads/2019/02/ВШЭ-лого.png',
-            dormitory: 'Общежитие #6',
-            address: 'Москва, Комсомольская, 1',
-            review_text: 'Замечательное общежитие!! Тут живет Слава!! Как дела как дела это новый кадиллак МОРГЕНШТЕРН КРУТОЙ!!!',
-        }
-    ]
+    const {lastReviews} = useContext(ReviewsContext)
+
     return (
         <Panel id="search_panel">
             <PanelHeader>Поиск</PanelHeader>
@@ -122,17 +90,17 @@ const Search = ({onStoryChange}) => {
                         style={{ height: '105%'}}
                     >
                         {
-                            reviews_data.map((review, index, array) => {
+                            lastReviews.map((review, index) => {
                                 return (
                                     <Card key={index} size='l' mode='outline' style={{width: '95%'}}>
                                         <RichCell
                                             before={<Avatar size={72} src={review.photo}/>}
-                                            text={review.review_text.slice(0, 50) + '...'}
-                                            caption={<Caption level="3" weight="medium" style={{ marginTop: 7 }}> {review.university + ', ' + review.dormitory + ', ' + review.address} </Caption>}
+                                            text={review.review.text.slice(0, 50) + '...'}
+                                            caption={<Caption level="3" weight="medium" style={{ marginTop: 7 }}> {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address} </Caption>}
                                             multiline
                                             actions={<Button className='yellow-gradient' size={'m'}>Читать полностью</Button>}
                                         >
-                                            {review.name}
+                                            {review.author_name} {review.author_surname}
                                         </RichCell>
                                     </Card>
                                 )

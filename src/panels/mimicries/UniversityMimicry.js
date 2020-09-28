@@ -1,19 +1,21 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {LocationContext, Navigation} from "../../Contexts";
-import {Group, Panel, PanelHeader, Search, SimpleCell} from "@vkontakte/vkui";
+import {Group, Panel, PanelHeader, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
 
 const UniversityChoosePanel = ({id}) => {
     const {goBack, accessToken} = useContext(Navigation)
     const {uniList, setUniversity, selectedCountry, selectedCity} = useContext(LocationContext)
     const [searchValue, setSearch] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [intervalId, setIntervalId] = useState(0)
 
-
-    return (
-        <Panel id={id}>
-            <PanelHeader>Выбор ВУЗа</PanelHeader>
-            <Search value={searchValue} onChange={e => {
-                setSearch(e.target.value);
+    useEffect(() => {
+        clearTimeout(intervalId)
+        console.log(intervalId)
+        if (searchValue){
+            setLoading(true)
+            setIntervalId(setTimeout(() => {
                 bridge.send(
                     "VKWebAppCallAPIMethod",
                     {
@@ -26,38 +28,68 @@ const UniversityChoosePanel = ({id}) => {
                             "v": "5.124",
                             "access_token": accessToken,
                         }
-                    })
-            }}/>
-            <Group>
+                    }).then(() => {
+                    setLoading(false);
+                })
+            }, 600))
+        } else {
+            bridge.send(
+                "VKWebAppCallAPIMethod",
                 {
-                    uniList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).map((item, index) => {
-                        return(
-                            <SimpleCell
-                                onClick={() => {
-                                    goBack();
-                                    setUniversity(item)
-                                    bridge.send(
-                                        "VKWebAppCallAPIMethod",
-                                        {
-                                            "method": "database.getUniversities",
-                                            "request_id": "getUniversities",
-                                            "params": {
-                                                "country_id": selectedCountry.id,
-                                                "city_id": selectedCity.id,
-                                                "v": "5.124",
-                                                "access_token": accessToken,
-                                            }
-                                        })
-                                }}
-                                key={index}
-                                expandable
-                            >
-                                {item.title}
-                            </SimpleCell>
-                        )
-                    })
-                }
-            </Group>
+                    "method": "database.getUniversities",
+                    "request_id": "getUniversities",
+                    "params": {
+                        "country_id": selectedCountry.id,
+                        "city_id": selectedCity.id,
+                        "v": "5.124",
+                        "access_token": accessToken,
+                    }
+                }).then(() => {
+                setLoading(false);
+            })
+        }
+    }, [searchValue])
+
+
+    return (
+        <Panel id={id}>
+            <PanelHeader>Выбор ВУЗа</PanelHeader>
+            <Search value={searchValue} onChange={e => {setSearch(e.target.value)}}/>
+            {
+                !loading ?
+                    <Group>
+                        {
+                            uniList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).map((item, index) => {
+                                return (
+                                    <SimpleCell
+                                        onClick={() => {
+                                            goBack();
+                                            setUniversity(item)
+                                            bridge.send(
+                                                "VKWebAppCallAPIMethod",
+                                                {
+                                                    "method": "database.getUniversities",
+                                                    "request_id": "getUniversities",
+                                                    "params": {
+                                                        "country_id": selectedCountry.id,
+                                                        "city_id": selectedCity.id,
+                                                        "v": "5.124",
+                                                        "access_token": accessToken,
+                                                    }
+                                                })
+                                        }}
+                                        key={index}
+                                        expandable
+                                    >
+                                        {item.title}
+                                    </SimpleCell>
+                                )
+                            })
+                        }
+                    </Group>
+                    :
+                    <PanelSpinner/>
+            }
         </Panel>
     )
 }

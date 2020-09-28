@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import {LocationContext, ModalContext, Navigation, QuestionsContext, RatingContext} from "./Contexts";
+import {LocationContext, ModalContext, Navigation, QuestionsContext, RatingContext, ReviewsContext} from "./Contexts";
 
 import {
 	Button,
@@ -37,6 +37,8 @@ import GradesPanel from "./panels/Grades";
 import QuestionsPanel from "./panels/Questions";
 import TextPhotoPanel from "./panels/TextPhoto";
 import AddModal from "./panels/AddModal";
+import {BACKEND_URL, COUNTRIES} from "./Constants";
+import {getLastReviews, getUniDormitories} from "./Backend";
 
 const axios = require('axios')
 
@@ -61,80 +63,11 @@ const App = () => {
 	const [userPhotos, setUserPhotos] = useState([])
 
 
-	const [countryList, setCountryList] = useState(
-		[
-			{
-			id: 1,
-			title: 'Россия',
-		}, {
-			id: 2,
-			title: 'Украина',
-		}, {
-			id: 3,
-			title: 'Беларусь',
-		}, {
-			id: 4,
-			title: 'Казахстан',
-		}, {
-			id: 5,
-			title: 'Азербайджан',
-		}, {
-			id: 6,
-			title: 'Армения',
-		}, {
-			id: 7,
-			title: 'Грузия',
-		}, {
-			id: 8,
-			title: 'Израиль',
-		}, {
-			id: 9,
-			title: 'США',
-		}, {
-			id: 65,
-			title: 'Германия',
-		}, {
-			id: 11,
-			title: 'Кыргызстан',
-		}, {
-			id: 12,
-			title: 'Латвия',
-		}, {
-			id: 13,
-			title: 'Литва',
-		}, {
-			id: 14,
-			title: 'Эстония',
-		}, {
-			id: 15,
-			title: 'Молдова',
-		}, {
-			id: 16,
-			title: 'Таджикистан',
-		}, {
-			id: 17,
-			title: 'Туркменистан',
-		}, {
-			id: 18,
-			title: 'Узбекистан',
-		}]
-	);
-	const [citiesList, setCitiesList] = useState([{
-		"id": 2,
-		"title": "Санкт-Петербург",
-		"important": 1
-	}]);
-	const [uniList, setUniList] = useState([{
-		"id": 66,
-		"title": "СПбГУПТД (бывш. СПГУТД)"
-	}]);
-	const [dormitoryList, setDormitoryList] = useState(
-		[{
-		'id': 1,
-		"title": 'Общежитие №3',
-		'address': 'пр-кт Ударников, 29к1'
-	}]
-	);
+	const [countryList, setCountryList] = useState(COUNTRIES);
+
+	const [citiesList, setCitiesList] = useState([]);
+	const [uniList, setUniList] = useState([]);
+	const [dormitoryList, setDormitoryList] = useState([]);
 
 	const [selectedCountry, setCountry] = useState('');
 	const [selectedCity, setCity] = useState('');
@@ -172,6 +105,7 @@ const App = () => {
 	const [review, setReview] = useState({})
 
 	const [backend, setBackend] = useState('')
+	const [lastReviews, setLastReviews] = useState([])
 
 
 	useEffect(() => {
@@ -210,10 +144,16 @@ const App = () => {
 			const user = await bridge.send('VKWebAppGetUserInfo', );
 			setUser(user);
 		}
-		setPopout(null)
 
 		fetchData();
-		setToken(getToken());
+		setToken(getToken()); // TODO: Сделать получение токена только после запроса
+
+		if (lastReviews.length === 0) {
+			getLastReviews().then(res => {
+				setLastReviews(res);
+				console.log(res);
+			})
+		}
 	}, []);
 
 	useEffect(() => {
@@ -269,6 +209,7 @@ const App = () => {
 			photos: photoURLs,
 			captions: photoCaptions.slice(0, photoURLs.length)
 		})
+
 	}, [
 		photoCaptions, selectedCountry, selectedCity,selectedUniversity,
 		selectedDormitory, customAddress, customTitle, customCoordinates,
@@ -279,6 +220,12 @@ const App = () => {
 		smoking, electricity, internet, userPhotos, anonReview, fetchedUser,
 		textReview, photoURLs
 	])
+
+	useEffect(() => {
+		if (selectedUniversity){
+			getUniDormitories(selectedUniversity.id).then(res => setDormitoryList(res))
+		}
+	}, [selectedUniversity])
 
 	async function getToken() {
 		return await bridge.send("VKWebAppGetAuthToken", {"app_id": 7582793, "scope": ''})
@@ -308,8 +255,7 @@ const App = () => {
 				setUser(tempUser)
 				return
 			}
-			getToken();
-			getUniDormitories()
+			await getToken();
 		}
 	}
 
@@ -386,17 +332,6 @@ const App = () => {
 		}
 	};
 
-	const getUniDormitories = () => {
-		axios.post(
-			"https://your-dormitory.herokuapp.com/api/v1/get_dormitories",
-			{university_id: selectedUniversity.id}
-			).then(res => {
-				setDormitoryList(res.data)
-				setPopout(null)
-			}
-		)
-	}
-
 
 	return (
 		<ConfigProvider
@@ -449,6 +384,7 @@ const App = () => {
 				electricity, setElectricity,
 				internet, setInternet
 			}}>
+			<ReviewsContext.Provider value={{lastReviews}}>
 				<Root activeView={activeView}>
 				<View id="epic_view"
 					  activePanel="epic_panel"
@@ -576,9 +512,7 @@ const App = () => {
 										})
 										axios.post(
 											backend,
-											{
-												data: review
-											}
+											review
 										).then(res => {
 											console.log(res)
 										})
@@ -604,6 +538,7 @@ const App = () => {
 				{/*TODO: Сделать онбординг*/}
 				{/*</View>*/}
 				</Root>
+			</ReviewsContext.Provider>
 			</QuestionsContext.Provider>
 			</ModalContext.Provider>
 			</RatingContext.Provider>

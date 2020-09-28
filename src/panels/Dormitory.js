@@ -53,7 +53,7 @@ const DormitoryPanel = ({id}) => {
                                 mode="primary"
                                 className='yellow-gradient'
                                 onClick={go}
-                                data-goto='addPanel_custom_address_panel'
+                                data-goto='addPanel_custom_dormitory_panel'
                             >
                                 Указать адрес
                             </Button>}

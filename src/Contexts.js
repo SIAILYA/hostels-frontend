@@ -5,7 +5,7 @@ export const LocationContext = createContext('')
 export const RatingContext = createContext('')
 export const ModalContext = createContext('')
 export const QuestionsContext = createContext('')
-
+export const ReviewsContext = createContext('')
 
 const GlobalContext = ({children, navigationValue, locationValue, ratingValue}) => {
     return(
