@@ -1,4 +1,5 @@
 import React, {useContext} from "react";
+
 import {
     Panel,
     PanelHeader,
@@ -12,18 +13,19 @@ import {
     Gallery,
     Avatar,
     RichCell,
-    Caption
+    Caption, PanelSpinner, PromoBanner
 } from "@vkontakte/vkui";
-import './main-panel.css'
-import {ReviewsContext} from "../Contexts";
+
+import {Navigation, ReviewsContext} from "../../Contexts";
 
 
-const Search = ({onStoryChange}) => {
-    const {lastReviews} = useContext(ReviewsContext)
+const Main = ({onStoryChange}) => {
+    const {lastReviews, reviewsLoading} = useContext(ReviewsContext)
+    const {searchBanner} = useContext(Navigation)
 
     return (
-        <Panel id="search_panel">
-            <PanelHeader>Поиск</PanelHeader>
+        <Panel id="main_panel">
+            <PanelHeader>Главная</PanelHeader>
 
             <Group separator='hide'>
                 <CardScroll>
@@ -59,7 +61,7 @@ const Search = ({onStoryChange}) => {
                             }}
                         />
                     }
-                    actions={<Button mode="overlay_primary" size="l">Смотреть</Button>}
+                    actions={<Button mode="overlay_primary" size="l" onClick={onStoryChange} data-story="search">Смотреть</Button>}
                 />
 
                 <Banner
@@ -82,34 +84,54 @@ const Search = ({onStoryChange}) => {
                 />
             </Group>
 
-            <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide'>
-                <Div>
-                    <Gallery
-                        slideWidth="90%"
-                        align="center"
-                        style={{ height: '105%'}}
-                    >
+            <Div>
+                <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide'>
+                    {
+                        reviewsLoading ?
+                        <PanelSpinner/>
+                        :
+                        <Gallery
+                            slideWidth="90%"
+                            align="center"
+                            style={{ height: '105%'}}
+                        >
                         {
                             lastReviews.map((review, index) => {
                                 return (
-                                    <Card key={index} size='l' mode='outline' style={{width: '95%'}}>
-                                        <RichCell
-                                            before={<Avatar size={72} src={review.photo}/>}
-                                            text={review.review.text.slice(0, 50) + '...'}
-                                            caption={<Caption level="3" weight="medium" style={{ marginTop: 7 }}> {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address} </Caption>}
-                                            multiline
-                                            actions={<Button className='yellow-gradient' size={'m'}>Читать полностью</Button>}
+                                    <div
+                                        key={index}
+                                        style={{padding: "0 3%"}}
+                                    >
+                                        <Card
+                                            size="l"
+                                            mode="outline"
+                                            style={{overflow: "hidden"}}
                                         >
-                                            {review.author_name} {review.author_surname}
-                                        </RichCell>
-                                    </Card>
+                                            <RichCell
+                                                before={<Avatar size={48} src={review.author_photo}/>}
+                                                text={review.review.text.slice(0, 50) + '...'}
+                                                caption={
+                                                    <Caption level="3" weight="medium" style={{ marginTop: 7 }}>
+                                                        {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address}
+                                                    </Caption>
+                                                }
+                                                multiline
+                                                actions={<Button className='yellow-gradient' size={'m'}>Читать полностью</Button>}
+                                            >
+                                                {review.author_name} {review.author_surname}
+                                            </RichCell>
+                                        </Card>
+                                    </div>
                                 )
                             })
                         }
                     </Gallery>
-                </Div>
-            </Group>
-
+                    }
+                </Group>
+            </Div>
+            <Div>
+                <PromoBanner bannerData={searchBanner} isCloseButtonHidden/>
+            </Div>
             <Group
                 header={<Header mode='secondary'>Интересное и полезное</Header>}
                 description='Подборка интересных статей для абитуриентов и заселяющихся'
@@ -131,4 +153,4 @@ const Search = ({onStoryChange}) => {
     )
 }
 
-export default Search;
+export default Main;

@@ -20,7 +20,7 @@
   "dependencies": {
     "@delowar/react-circle-progressbar": "^0.1.5",
     "@vkontakte/icons": "^1.38.0",
-    "@vkontakte/vk-bridge": "^2.2.8",
+    "@vkontakte/vk-bridge": "^2.3.0",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
     "@vkontakte/vkui": "^3.12.1",
     "axios": "^0.20.0",

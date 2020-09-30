@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
 :root{
     --yellow: #F2C94C;
     --orange: #F2994A;
@@ -26,21 +28,28 @@
     background: linear-gradient(to left, #F2C94C, #F2994A);
 }
 
+.yellow-gradient-text{
+    background: linear-gradient(to left, #F2C94C, #F2994A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--yellow);
+}
+
 .search{
-    background-image: url("../img/banner.jpg")!important;
+    background-image: url("img/banner.jpg")!important;
 }
 
 .write{
-    background-image: url("../img/banner2.jpg")!important;
+    background-image: url("img/banner2.jpg")!important;
 }
 
 @media screen and (min-width: 550px) {
     .search{
-        background-image: url("../img/banner-max.jpg")!important;
+        background-image: url("img/banner-max.jpg")!important;
     }
 
     .write{
-        background-image: url("../img/banner2-max.jpg")!important;
+        background-image: url("img/banner2-max.jpg")!important;
     }
 }
 
@@ -60,19 +69,19 @@
 }
 
 .grades{
-    background-image: url('../img/grades.jpg');
+    background-image: url('img/grades.jpg');
 }
 
 .gift{
-    background-image: url('../img/gift.jpg');
+    background-image: url('img/gift.jpg');
 }
 
 .review{
-    background-image: url('../img/review.jpg');
+    background-image: url('img/review.jpg');
 }
 
 .rating{
-    background-image: url('../img/rating.jpg');
+    background-image: url('img/rating.jpg');
 }
 
 .circle-progress-wrap{
@@ -116,4 +125,27 @@
 
 .upload-photo .Placeholder__in{
     padding: 12px 32px;
+}
+
+.hello, .who-are-you{
+    font-size: 20vw;
+    font-weight: bold;
+}
+
+.super{
+    font-size: 17vw;
+    font-weight: bold;
+}
+
+.where-are-you{
+    font-size: 11vw;
+    font-weight: bold;
+}
+
+.description-header{
+    font-size: 6vw;
+}
+
+.role-choose .Cell__main, .role-choose .Cell__aside{
+    padding: 0;
 }

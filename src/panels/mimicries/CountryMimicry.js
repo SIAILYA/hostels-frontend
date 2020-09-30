@@ -1,12 +1,13 @@
 import React, {useContext} from "react";
 import bridge from '@vkontakte/vk-bridge';
 
+import {Group, Panel, PanelHeader, SimpleCell} from "@vkontakte/vkui";
+
 import {LocationContext, Navigation} from "../../Contexts";
-import {Group, Panel, PanelHeader, ScreenSpinner, SimpleCell} from "@vkontakte/vkui";
 
 
 const CountryChoosePanel = ({id}) => {
-    const {goBack, setPopout, accessToken} = useContext(Navigation)
+    const {goBack, accessToken} = useContext(Navigation)
     const {countryList, setCountry} = useContext(LocationContext)
 
     return (
@@ -20,7 +21,6 @@ const CountryChoosePanel = ({id}) => {
                                 onClick={() => {
                                     goBack();
                                     setCountry(item);
-                                    setPopout(<ScreenSpinner size='large' />);
                                     bridge.send(
                                         "VKWebAppCallAPIMethod",
                                         {

@@ -63,11 +63,12 @@ const TextPhotoPanel = ({id}) => {
                     <Div>
                         <div
                             style={{
-                            minHeight: '100px',
-                            border: 'dashed 3px var(--accent)',
-                            borderRadius: '15px',
-                            overflow: 'hidden'
-                        }}>
+                                minHeight: '100px',
+                                border: 'dashed 3px var(--accent)',
+                                borderRadius: '15px',
+                                overflow: 'hidden'
+                            }}
+                        >
                             <Placeholder
                                 icon={<Icon56GalleryOutline className="yellow-color"/>}
                                 header="Загрузите фотографии"

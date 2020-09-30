@@ -1,12 +1,13 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import bridge from "@vkontakte/vk-bridge";
 
-import {Group, Panel, PanelHeader, PanelSpinner, ScreenSpinner, Search, SimpleCell} from "@vkontakte/vkui";
+import {Group, Panel, PanelHeader, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
+
 import {Navigation, LocationContext} from "../../Contexts";
 
 
 const CityChoosePanel = ({id}) => {
-    const {goBack, setPopout, accessToken} = useContext(Navigation)
+    const {goBack, accessToken} = useContext(Navigation)
     const {citiesList, setCity, selectedCountry, setUniversity} = useContext(LocationContext)
     const [searchValue, setSearch] = useState('')
     const [loading, setLoading] = useState(false)
@@ -14,7 +15,6 @@ const CityChoosePanel = ({id}) => {
 
     useEffect(() => {
         clearTimeout(intervalId)
-        console.log(intervalId)
         if (searchValue){
             setLoading(true)
             setIntervalId(setTimeout(() => {
@@ -93,9 +93,8 @@ const CityChoosePanel = ({id}) => {
                                         onClick={() => {
                                             goBack();
                                             setCity(item);
-                                            setPopout(<ScreenSpinner size='large'/>);
                                             setUniversity('')
-                                            onBack(item.id, )
+                                            onBack(item.id)
                                         }}
                                         key={index}
                                         expandable

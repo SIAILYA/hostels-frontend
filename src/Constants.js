@@ -54,7 +54,11 @@ export const COUNTRIES = [
         id: 18,
         title: 'Узбекистан',
     }
-]
+];
 
-export const DEV_BACKEND_URL = ""
-export const BACKEND_URL = DEV_BACKEND_URL || "https://your-dormitory.herokuapp.com/"
+export const DEV_BACKEND_URL = "";
+export const BACKEND_URL = DEV_BACKEND_URL || "https://your-dormitory.herokuapp.com/";
+
+export const INIT_VIEW = "empty_view";
+export const INIT_PANEL = "epic_panel";
+export const INIT_ADD_PANEL = "location_panel";

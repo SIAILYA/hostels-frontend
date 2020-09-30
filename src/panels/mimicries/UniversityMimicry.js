@@ -1,7 +1,10 @@
 import React, {useContext, useEffect, useState} from "react";
-import {LocationContext, Navigation} from "../../Contexts";
-import {Group, Panel, PanelHeader, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
+
+import {Group, Panel, PanelHeader, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
+
+import {LocationContext, Navigation} from "../../Contexts";
+
 
 const UniversityChoosePanel = ({id}) => {
     const {goBack, accessToken} = useContext(Navigation)
@@ -12,7 +15,6 @@ const UniversityChoosePanel = ({id}) => {
 
     useEffect(() => {
         clearTimeout(intervalId)
-        console.log(intervalId)
         if (searchValue){
             setLoading(true)
             setIntervalId(setTimeout(() => {

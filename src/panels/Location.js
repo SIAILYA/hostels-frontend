@@ -9,19 +9,19 @@ import {
     PanelHeader,
     SelectMimicry,
 } from "@vkontakte/vkui";
-import {Navigation, LocationContext} from "../Contexts";
+
 import Icon24UserOutgoing from '@vkontakte/icons/dist/24/user_outgoing';
+
+import {Navigation, LocationContext} from "../Contexts";
 import {FailedSnackbar, SuccessSnackbar} from "./components/Snackbars";
-import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner";
 
 
 const LocationPanel = ({id, user}) => {
     const {
         selectedCountry, selectedCity, selectedUniversity,
-        setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity,
-        getUniDormitories
+        setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity
     } = useContext(LocationContext)
-    const {go, setPopout} = useContext(Navigation)
+    const {go} = useContext(Navigation)
 
     return (
         <Panel id={id}>
@@ -70,7 +70,6 @@ const LocationPanel = ({id, user}) => {
                     style={{color: 'var(--yellow)!important', margin: 'auto'}}
                     onClick={() => {
                         setEducation().then(() => {
-                                console.log(user)
                             try {
                                 if (user.country && user.city.title && user.university.title) {
                                     setCountry(user.country)
