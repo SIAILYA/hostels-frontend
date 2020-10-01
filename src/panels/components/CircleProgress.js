@@ -42,7 +42,7 @@ class CircularProgressBar extends React.Component {
                         strokeDashoffset: dashOffset
                     }} />
                 <text
-                    className="circle-text"
+                    className={this.props.sm ? "circle-text-sm" : "circle-text"}
                     x="50%"
                     y="50%"
                     dy=".3em"

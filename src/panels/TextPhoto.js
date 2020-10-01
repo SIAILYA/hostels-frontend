@@ -10,19 +10,25 @@ import {
     FormLayout, FormLayoutGroup,
     FormStatus,
     Panel,
-    PanelHeader, Placeholder,
-    Textarea,
+    PanelHeader, Placeholder, Spinner,
+    Textarea, PanelSpinner, ScreenSpinner
 } from "@vkontakte/vkui";
+
 import Icon24CameraOutline from '@vkontakte/icons/dist/24/camera_outline';
 import Icon56GalleryOutline from '@vkontakte/icons/dist/56/gallery_outline';
 import Icon56CameraOffOutline from '@vkontakte/icons/dist/56/camera_off_outline';
-import {LocationContext, ModalContext, Navigation} from "../Contexts";
+
+import {LocationContext, ModalContext, Navigation, ReviewsContext} from "../Contexts";
+
+import {sendReview, uploadPhotos} from "../Backend";
+import {FailedSnackbar} from "./components/Snackbars";
 
 
 const TextPhotoPanel = ({id}) => {
-    const {go} = useContext(Navigation)
+    const {go, setPopout} = useContext(Navigation)
     const {setPhotoCaptionIndex, setPhotoCard, photoCaptions, userPhotos, setUserPhotos} = useContext(ModalContext)
-    const {locationSnackbar, setTextReview, textReview, anonReview, setAnon} = useContext(LocationContext)
+    const {locationSnackbar, setTextReview, textReview, anonReview, setAnon, setLocationSnackbar} = useContext(LocationContext)
+    const {setPhotoURLs, review} = useContext(ReviewsContext)
     const {getInputProps} = useDropzone();
 
     const [previews, setPreviews] = useState([])
@@ -142,7 +148,20 @@ const TextPhotoPanel = ({id}) => {
                     stretched
                     className="yellow-gradient"
                     data-goto="addPanel_preview_review_panel"
-                    onClick={go}
+                    onClick={() => {
+                        setPopout(<ScreenSpinner size='large' />)
+                        uploadPhotos(userPhotos).then(res => {
+                            setPhotoURLs(res.data)
+                            sendReview(review).then(res => {
+                                setPopout(null)
+                                if (res.status === 200){
+                                    go({currentTarget: {dataset: {goto: "addPanel_preview_review_panel"}}})
+                                } else {
+                                    setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                }
+                            })
+                        })
+                    }}
                 >
                     Опубликовать
                 </Button>

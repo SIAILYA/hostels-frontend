@@ -17,6 +17,7 @@ import {
 } from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
+import bridge from "@vkontakte/vk-bridge";
 
 
 const Main = ({onStoryChange}) => {
@@ -129,9 +130,11 @@ const Main = ({onStoryChange}) => {
                     }
                 </Group>
             </Div>
+
             <Div>
                 <PromoBanner bannerData={searchBanner} isCloseButtonHidden/>
             </Div>
+
             <Group
                 header={<Header mode='secondary'>Интересное и полезное</Header>}
                 description='Подборка интересных статей для абитуриентов и заселяющихся'
@@ -148,6 +151,20 @@ const Main = ({onStoryChange}) => {
                     </Card>
                 </CardScroll>
             </Group>
+
+            <div style={{textAlign: "center", marginBottom: "20px"}}>
+                <Button
+                    className="yellow-gradient"
+                    onClick={() => {
+                        bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": ""});
+                        bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": ""});
+                        bridge.send("VKWebAppStorageSet", {"key": "onboarding_showed", "value": ""});
+                        bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": ""});
+                    }}
+                >
+                    Сбросить Storage
+                </Button>
+            </div>
 
         </Panel>
     )

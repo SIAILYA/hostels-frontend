@@ -85,7 +85,7 @@ const WhereStudyPanel = ({id}) => {
                                         if (fetchedUser.city.title){
                                             setCity(fetchedUser.city)
                                         }
-                                        if (fetchedUser.university){
+                                        if (fetchedUser.university.title){
                                             setUniversity(fetchedUser.university)
                                         }
                                         setOnboardingSnackbar(<FailedSnackbar caption="В профиле не хватает информации, заполните недостающие поля вручную"
@@ -114,7 +114,11 @@ const WhereStudyPanel = ({id}) => {
                             setActiveView("epic_view")
                             bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": JSON.stringify({country: selectedCountry, city: selectedCity, university: selectedUniversity})});
                         }}
-                        disabled={false}
+                        disabled={
+                            selectedCountry.title === "" ||
+                            selectedCity.title === "" ||
+                            selectedUniversity.title === ""
+                        }
                     >
                         Дальше
                     </Button>
@@ -122,7 +126,9 @@ const WhereStudyPanel = ({id}) => {
                         size="m"
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
-                        onClick={() => setActiveView("thanks")}
+                        onClick={() => {
+                            setActiveView("epic_view")
+                        }}
                     >
                         Пропустить
                     </Button>

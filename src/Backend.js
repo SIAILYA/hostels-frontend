@@ -1,4 +1,5 @@
 import {BACKEND_URL} from "./Constants";
+
 const axios = require('axios')
 
 export const getUniDormitories = (selectedUniId) => {
@@ -24,4 +25,23 @@ export const getLastReviews = () => {
         BACKEND_URL + "api/v1/get_last_reviews",
     ).then(res => res.data)
     return res
+}
+
+export const uploadPhotos = (userPhotos) => {
+    let FD = new FormData()
+    Array.from(userPhotos).forEach((file, index) => {
+        FD.append('media' + index, file)
+    })
+
+    return axios.post(
+        BACKEND_URL + "api/v1/upload_photos",
+        FD
+    )
+}
+
+export const sendReview = (review) => {
+    return axios.post(
+        BACKEND_URL + "api/v1/add_review",
+        review
+    )
 }

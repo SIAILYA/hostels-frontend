@@ -4,6 +4,7 @@ import bridge from '@vkontakte/vk-bridge';
 import {Button, FixedLayout, Panel, Div, Alert} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
+import phone from "../../img/phone.svg"
 
 
 const ThanksPanel = ({id}) => {
@@ -21,7 +22,10 @@ const ThanksPanel = ({id}) => {
                 <div className="description-header" style={{textAlign: "center"}}>
                     Рады знакомству
                 </div>
-                <div style={{textAlign: "center", marginTop: "10px"}}>
+                <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
+                    <img src={phone} alt="" width="120vw"/>
+                </div>
+                <div style={{textAlign: "center", marginTop: "25px"}}>
                     Чтобы все корректно работало предоставьте доступ к вашей общей информации
                 </div>
             </Div>

@@ -13,7 +13,7 @@ import parent from "../../img/parent.png"
 
 const RolePanel = ({id}) => {
     const {userRole, setUserRole} = useContext(ReviewsContext)
-    const {fetchedUser} = useContext(Navigation)
+    const {fetchedUser, setActiveView, accessToken} = useContext(Navigation)
     const {setOnboardingPanel} = useContext(Navigation)
 
 
@@ -48,6 +48,7 @@ const RolePanel = ({id}) => {
                 >
                     <Radio
                         name="role_radio"
+                        defaultChecked={userRole === "Студент"}
                         onClick={() => {
                             setUserRole("Студент")
                         }}
@@ -67,7 +68,10 @@ const RolePanel = ({id}) => {
                     </Radio>
                     <Radio
                         name="role_radio"
-                        onClick={() => {setUserRole("Абитуриент")}}
+                        defaultChecked={userRole === "Абитуриент"}
+                        onClick={() => {
+                            setUserRole("Абитуриент")
+                        }}
                     >
                         <Cell
                             asideContent={
@@ -84,7 +88,10 @@ const RolePanel = ({id}) => {
                     </Radio>
                     <Radio
                         name="role_radio"
-                        onClick={() => {setUserRole("Родитель")}}
+                        defaultChecked={userRole === "Родитель"}
+                        onClick={() => {
+                            setUserRole("Родитель")
+                        }}
                     >
                         <Cell
                             asideContent={
@@ -101,7 +108,10 @@ const RolePanel = ({id}) => {
                     </Radio>
                     <Radio
                         name="role_radio"
-                        onClick={() => {setUserRole("Интересующийся")}}
+                        defaultChecked={userRole === "Интересующийся"}
+                        onClick={() => {
+                            setUserRole("Интересующийся")
+                        }}
                     >
                         <Cell
                             asideContent={
@@ -127,8 +137,16 @@ const RolePanel = ({id}) => {
                         size="xl"
                         stretched
                         onClick={() => {
-                            setOnboardingPanel("thanks_panel")
                             bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
+                            if (!accessToken){
+                                setOnboardingPanel("thanks_panel")
+                            } else {
+                                if (userRole !== "Студент"){
+                                    setActiveView("epic_view")
+                                } else {
+                                    setOnboardingPanel("university_panel")
+                                }
+                            }
                         }}
                         disabled={!userRole}
                     >
@@ -139,7 +157,13 @@ const RolePanel = ({id}) => {
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
                         onClick={() => {
-                            setOnboardingPanel("thanks_panel")
+                            setUserRole(prev => prev || "Интересующийся")
+                            bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
+                            if (!accessToken){
+                                setOnboardingPanel("thanks_panel")
+                            } else {
+                                setActiveView("epic_view")
+                            }
                         }}
                     >
                         Пропустить

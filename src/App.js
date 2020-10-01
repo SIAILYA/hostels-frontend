@@ -23,7 +23,8 @@ import {
 	TabbarItem,
 	View,
 	Placeholder,
-	ScreenSpinner
+	ScreenSpinner,
+	usePlatform
 } from '@vkontakte/vkui';
 
 import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
@@ -47,10 +48,11 @@ import GradesPanel from "./panels/Grades";
 import QuestionsPanel from "./panels/Questions";
 import TextPhotoPanel from "./panels/TextPhoto";
 import AddModal from "./panels/AddModal";
-import OnboardingHelloPanel from "./panels/onboarding/OnboardingHello"
+import OnboardingHelloPanel from "./panels/onboarding/Hello"
 
 import {COUNTRIES, INIT_ADD_PANEL, INIT_PANEL, INIT_VIEW} from "./Constants";
 import {getLastReviews, getUniDormitories} from "./Backend";
+
 import RolePanel from "./panels/onboarding/Role";
 import ThanksPanel from "./panels/onboarding/Thanks";
 import WhereStudyPanel from "./panels/onboarding/ChooseUniversity";
@@ -88,15 +90,16 @@ const App = () => {
 	const [activeView, setActiveView] = useState(INIT_VIEW);
 	const [activePanel, setActivePanel] = useState(INIT_PANEL);
 	const [activeAddPanel, setActiveAddPanel] = useState(INIT_ADD_PANEL);
+	const [activeModal, setActiveModal] = useState('');
 	const [activeAddModal, setActiveAddModal] = useState('');
-	const [activeOnboardingPanel, setOnboardingPanel] = useState("hello_panel")
-	const [onboardingPopup, setOnboardingPopup] = useState('')
-	const [onboardingSnackbar, setOnboardingSnackbar] = useState('')
+	const [activeOnboardingPanel, setOnboardingPanel] = useState("hello_panel");
+	const [onboardingPopup, setOnboardingPopup] = useState('');
+	const [onboardingSnackbar, setOnboardingSnackbar] = useState('');
 
-	const [photoCard, setPhotoCard] = useState('')
-	const [photoCaptionIndex, setPhotoCaptionIndex] = useState('')
-	const [photoCaptions, setPhotoCaptions] = useState([])
-	const [userPhotos, setUserPhotos] = useState([])
+	const [photoCard, setPhotoCard] = useState('');
+	const [photoCaptionIndex, setPhotoCaptionIndex] = useState('');
+	const [photoCaptions, setPhotoCaptions] = useState([]);
+	const [userPhotos, setUserPhotos] = useState([]);
 
 	const [countryList, setCountryList] = useState(COUNTRIES);
 
@@ -112,36 +115,36 @@ const App = () => {
 	const [customTitle, setTitle] = useState('');
 	const [customCoordinates, setCoordinates] = useState({lat: 0, lng: 0});
 
-	const [ratingCondition, setConditionRating] = useState(0)
-	const [ratingCost, setCostRating] = useState(0)
-	const [ratingPersonal, setPersonalRating] = useState(0)
-	const [ratingLocation, setLocationRating] = useState(0)
-	const [ratingNoise, setNoiseRating] = useState(0)
-	const [mainRating, setMainRating] = useState(0)
+	const [ratingCondition, setConditionRating] = useState(0);
+	const [ratingCost, setCostRating] = useState(0);
+	const [ratingPersonal, setPersonalRating] = useState(0);
+	const [ratingLocation, setLocationRating] = useState(0);
+	const [ratingNoise, setNoiseRating] = useState(0);
+	const [mainRating, setMainRating] = useState(0);
 
-	const [dormitoryType, setDormitoryType] = useState('Блочный')
-	const [payType, setPayType] = useState('Раз в месяц')
-	const [cost, setCost] = useState('')
-	const [cardPay, setCardPay] = useState(false)
-	const [twoLevelBed, setTwoLevelBed] = useState(false)
-	const [balcony, setBalcony] = useState(false)
-	const [plasticWindows, setPlasticWindows] = useState(false)
-	const [peopleInRoom, setPeopleInRoom] = useState('')
-	const [workAlways, setWorkAlways] = useState(false)
-	const [closedStart, setClosedStart] = useState('')
-	const [closedEnd, setClosedEnd] = useState('')
-	const [smoking, setSmoking] = useState(false)
-	const [electricity, setElectricity] = useState(false)
-	const [internet, setInternet] = useState(false)
+	const [dormitoryType, setDormitoryType] = useState('Блочный');
+	const [payType, setPayType] = useState('Раз в месяц');
+	const [cost, setCost] = useState('');
+	const [cardPay, setCardPay] = useState(false);
+	const [twoLevelBed, setTwoLevelBed] = useState(false);
+	const [balcony, setBalcony] = useState(false);
+	const [plasticWindows, setPlasticWindows] = useState(false);
+	const [peopleInRoom, setPeopleInRoom] = useState('');
+	const [workAlways, setWorkAlways] = useState(false);
+	const [closedStart, setClosedStart] = useState('');
+	const [closedEnd, setClosedEnd] = useState('');
+	const [smoking, setSmoking] = useState(false);
+	const [electricity, setElectricity] = useState(false);
+	const [internet, setInternet] = useState(false);
 
-	const [userRole, setUserRole] = useState('')
-	const [anonReview, setAnon] = useState(false)
-	const [textReview, setTextReview] = useState('')
-	const [photoURLs, setPhotoURLs] = useState([])
-	const [review, setReview] = useState({})
+	const [userRole, setUserRole] = useState('');
+	const [anonReview, setAnon] = useState(false);
+	const [textReview, setTextReview] = useState('');
+	const [photoURLs, setPhotoURLs] = useState([]);
+	const [review, setReview] = useState({});
 
-	const [lastReviews, setLastReviews] = useState([])
-	const [reviewsLoading, setReviewsLoading] = useState(true)
+	const [lastReviews, setLastReviews] = useState([]);
+	const [reviewsLoading, setReviewsLoading] = useState(true);
 
 
 	useEffect(() => {
@@ -169,6 +172,13 @@ const App = () => {
 				}
 			} else
 
+			if (type === "VKWebAppStorageSetResult" ||
+				type === "VKWebAppStorageGetResult" ||
+				type === "VKWebAppGetUserInfoResult" ||
+				type === "VKWebAppInitResult"){
+
+			} else
+
 			{
 				console.log(type)
 				console.log(data)
@@ -183,16 +193,22 @@ const App = () => {
 				setActiveView("onboarding_view")
 			}
 
-			const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role"]})
+			const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role", "allow_access"]})
 
 			if (defaults.keys[0].value !== ""){
 				const default_location = JSON.parse(defaults.keys[0].value)
 				setCountry(default_location.country)
 				setCity(default_location.city)
 				setUniversity(default_location.university)
+				bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": "true"})
 			}
+
 			if (defaults.keys[1].value !== ""){
 				setUserRole(defaults.keys[1].value)
+			}
+
+			if (defaults.keys[2].value === "true" && onboarding_showed.keys[0].value === "true"){
+				getToken()
 			}
 
 			setPopout(null)
@@ -212,8 +228,8 @@ const App = () => {
 		}
 
 		fetchData();
-		fetchStorageInit()
-		fetchReviews()
+		fetchStorageInit();
+		fetchReviews();
 
 		setInterval(() => {
 			fetchReviews()
@@ -229,6 +245,7 @@ const App = () => {
 			author_photo:anonReview
 				? `https://api.adorable.io/avatars/face/eyes${Math.round(Math.random() * 4)}/nose${Math.round(Math.random() * 4)}/mouth${Math.round(Math.random() * 4)}/F2994A`
 				: fetchedUser ? fetchedUser.photo_200 : null,
+			author_role: userRole,
 			anonymous: anonReview,
 			country: selectedCountry,
 			city: selectedCity,
@@ -287,7 +304,7 @@ const App = () => {
 		cost, cardPay, twoLevelBed, balcony, plasticWindows,
 		peopleInRoom, workAlways, closedStart, closedEnd,
 		smoking, electricity, internet, userPhotos, anonReview, fetchedUser,
-		textReview, photoURLs
+		textReview, photoURLs, userRole
 	])
 
 	useEffect(() => {
@@ -327,6 +344,7 @@ const App = () => {
 
 	const go = e => {
 		const goTo = e.currentTarget.dataset.goto
+
 		if (goTo.slice(0, 4) === 'view') {
 			const view = goTo.slice(5, goTo.length)
 			window.history.pushState( {panel: 'view_' + view}, 'view_' + view );
@@ -336,6 +354,13 @@ const App = () => {
 				setActiveView('add_review_view')
 				setActiveAddPanel('location_panel')
 			}
+		} else
+
+		if (goTo === 'onboarding') {
+			window.history.pushState( {panel: "onboarding"}, "onboarding" );
+			history.push( "onboarding" );
+			setActiveView("onboarding_view")
+			setOnboardingPanel("hello_panel")
 		} else
 
 		if (goTo.slice(0, 5) === 'panel') {
@@ -364,6 +389,13 @@ const App = () => {
 			window.history.pushState( {panel: 'addModal_' + modal}, 'addModal_' + modal );
 			history.push( 'addModal_' + modal );
 			setActiveAddModal(modal)
+		} else
+
+		if (goTo.slice(0, 9) === 'epicModal') {
+			const modal = goTo.slice(10, goTo.length)
+			window.history.pushState( {panel: 'epicModal_' + modal}, 'epicModal_' + modal );
+			history.push( 'epicModal_' + modal );
+			setActiveModal(modal)
 		}
 	};
 
@@ -372,7 +404,15 @@ const App = () => {
 			bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
 		} else if( history.length > 1 ) { // Если в массиве больше одного значения:
 			const last = history.pop() // удаляем последний элемент в массиве.
-			const goBack = history[history.length - 1]
+			const goBackTo = history[history.length - 1]
+
+			if (last === "onboarding"){
+				if (activeView !== "epic_view"){
+					setActiveView("epic_view")
+				} else {
+					goBack()
+				}
+			} else
 
 			if (last.slice(0, 15) === "onboardingPanel"){
 				switch (last.slice(16, last.length)) {
@@ -388,18 +428,22 @@ const App = () => {
 				setActiveAddModal(null)
 			} else
 
-			if (goBack.slice(0, 5) === 'story') {
-				setActiveStory(goBack.slice(6, goBack.length))
+			if (last.slice(0, 9) === 'epicModal') {
+				setActiveModal(null)
+			} else
+
+			if (goBackTo.slice(0, 5) === 'story') {
+				setActiveStory(goBackTo.slice(6, goBackTo.length))
 				setActiveView('epic_view')
 				setActivePanel('epic_panel')
 			} else
 
-			if (goBack.slice(0, 4) === 'view') {
+			if (goBackTo.slice(0, 4) === 'view') {
 				setActiveAddPanel('location_panel')
 			} else
 
-			if (goBack.slice(0, 8) === 'addPanel') {
-				setActiveAddPanel(goBack.slice(9, goBack.length))
+			if (goBackTo.slice(0, 8) === 'addPanel') {
+				setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
 			}
 		}
 	}
@@ -414,6 +458,8 @@ const App = () => {
 		}
 	};
 
+	const platform = usePlatform()
+
 
 	return (
 		<ConfigProvider
@@ -422,11 +468,12 @@ const App = () => {
 		>
 			<Navigation.Provider value={{
 				go, goBack, getToken, setToken, history,
-				activeView, setActiveView,
+				activeView, setActiveView, activeModal, setActiveModal,
 				activePanel, activeAddPanel, activeAddModal,
 				setActivePanel, setActiveAddPanel, setActiveAddModal,
 				setPopout, accessToken, fetchedUser, activeOnboardingPanel, setOnboardingPanel,
-				searchBanner, onboardingPopup, setOnboardingPopup, setOnboardingSnackbar, onboardingSnackbar
+				searchBanner, onboardingPopup, setOnboardingPopup,
+				setOnboardingSnackbar, onboardingSnackbar
 			}}>
 			<LocationContext.Provider value={{
 				countryList, citiesList, uniList, dormitoryList,
@@ -468,14 +515,14 @@ const App = () => {
 				electricity, setElectricity,
 				internet, setInternet
 			}}>
-			<ReviewsContext.Provider value={{lastReviews, reviewsLoading, userRole, setUserRole, review}}>
+			<ReviewsContext.Provider value={{lastReviews, reviewsLoading, userRole, setUserRole, review, setPhotoURLs}}>
 				<Root activeView={activeView}>
-				<View id="epic_view"
-					  activePanel="epic_panel"
-					  popout={popout}
-					  header={null}
-					  history={history}
-					  onSwipeBack={goBack}
+				<View
+					id="epic_view"
+					activePanel="epic_panel"
+					popout={popout}
+					header={null}
+					onSwipeBack={() => goBack()}
 				>
 					<Panel id="epic_panel">
 						<Epic
@@ -549,77 +596,6 @@ const App = () => {
 					<TextPhotoPanel id="text_photo_panel"/>
 
 					<PreviewPanel id="preview_review_panel"/>
-					{/*	<PanelHeader>Предпросмотр</PanelHeader>*/}
-					{/*	<Div>*/}
-					{/*		<Textarea*/}
-					{/*			defaultValue={JSON.stringify(review, null, ' ')}*/}
-					{/*			readOnly*/}
-					{/*		/>*/}
-					{/*		<Button*/}
-					{/*			size="xl"*/}
-					{/*			stretched*/}
-					{/*			className="yellow-gradient"*/}
-					{/*			style={{marginTop: '20px'}}*/}
-					{/*			onClick={() => {bridge.send("VKWebAppCopyText",*/}
-					{/*				{"text": JSON.stringify(review, null, ' ')})*/}
-					{/*			}}*/}
-					{/*		>*/}
-					{/*			Скопировать объект отзыва*/}
-					{/*		</Button>*/}
-					{/*	</Div>*/}
-					{/*	<FormLayout style={{marginTop: '20px'}} top="Отправить объект отзыва">*/}
-					{/*		<FormLayoutGroup>*/}
-					{/*			<Input*/}
-					{/*				top="Адрес бэкенд-сервера для отправки"*/}
-					{/*				placeholder="https://"*/}
-					{/*				onChange={e => setBackend(e.target.value)}*/}
-					{/*			/>*/}
-					{/*			<Button*/}
-					{/*				size="xl"*/}
-					{/*				stretched*/}
-					{/*				className="yellow-gradient"*/}
-					{/*				style={{marginTop: '20px'}}*/}
-					{/*				onClick={() => {*/}
-					{/*					let FD = new FormData()*/}
-					{/*					Array.from(userPhotos).forEach((file, index) => {*/}
-					{/*						FD.append('media' + index, file)*/}
-					{/*					})*/}
-					{/*					axios.post(*/}
-					{/*						"https://your-dormitory.herokuapp.com/api/v1/upload_photos",*/}
-					{/*						FD*/}
-					{/*					).then(res => {*/}
-					{/*						setPhotoURLs(res.data)*/}
-					{/*						console.log('Фото загружены')*/}
-					{/*					})*/}
-					{/*				}*/}
-					{/*				}*/}
-					{/*			>*/}
-					{/*				Загрузить фото*/}
-					{/*			</Button>*/}
-					{/*			<Button*/}
-					{/*				size="xl"*/}
-					{/*				stretched*/}
-					{/*				className="yellow-gradient"*/}
-					{/*				style={{marginTop: '20px'}}*/}
-					{/*				onClick={() => {*/}
-					{/*					let FD = new FormData()*/}
-					{/*					Array.from(userPhotos).forEach((file, index) => {*/}
-					{/*						FD.append('media' + index, file)*/}
-					{/*					})*/}
-					{/*					axios.post(*/}
-					{/*						backend,*/}
-					{/*						review*/}
-					{/*					).then(res => {*/}
-					{/*						console.log(res)*/}
-					{/*					})*/}
-					{/*				}*/}
-					{/*				}*/}
-					{/*			>*/}
-					{/*				Отправить запрос*/}
-					{/*			</Button>*/}
-					{/*		</FormLayoutGroup>*/}
-					{/*	</FormLayout>*/}
-					{/*</PreviewPanel>*/}
 				</View>
 
 				<View id="onboarding_view" activePanel={activeOnboardingPanel} popout={onboardingPopup}>

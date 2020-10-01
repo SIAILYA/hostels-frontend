@@ -1,15 +1,24 @@
 import React, {useContext} from "react";
-import bridge from '@vkontakte/vk-bridge';
 
 import {Group, Div, Panel, PanelHeader, Button, Placeholder, Avatar, Header, Cell} from "@vkontakte/vkui";
-import {Navigation, ReviewsContext} from "../../Contexts";
+import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
+import Icon28WriteOutline from '@vkontakte/icons/dist/28/write_outline';
 import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline';
 
 
 const Add = ({go}) => {
     const {fetchedUser, accessToken, getToken} = useContext(Navigation)
     const {userRole} = useContext(ReviewsContext)
+    const {selectedUniversity} = useContext(LocationContext)
+
+    const getDescription = () => {
+        if (userRole !== "Студент") return userRole
+        if (selectedUniversity.title) return userRole + " " + selectedUniversity.title
+        return userRole
+    }
+
+    const description = getDescription()
 
     return (
         <Panel id="add_panel">
@@ -19,7 +28,10 @@ const Add = ({go}) => {
                         <Cell
                             before={<Avatar size={40} src={fetchedUser.photo_200}/>}
                             size="m"
-                            description={userRole}
+                            description={description}
+                            asideContent={<Icon28WriteOutline className="yellow-gradient-text"/>}
+                            data-goto="onboarding"
+                            onClick={go}
                         >
                             {fetchedUser.first_name} {fetchedUser.last_name}
                         </Cell>
@@ -46,17 +58,6 @@ const Add = ({go}) => {
             >
                 Вы еще не оставили ни одного отзыва
             </Placeholder>
-            <div style={{display: "flex"}}>
-                <Button
-                    onClick={() => {
-                        bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": ""});
-                        bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": ""});
-                        bridge.send("VKWebAppStorageSet", {"key": "onboarding_showed", "value": ""});
-                    }}
-                >
-                    Сбросить Storage
-                </Button>
-            </div>
         </Panel>
     )
 }

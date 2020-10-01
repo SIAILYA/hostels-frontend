@@ -123,6 +123,11 @@
     font-weight: bold;
 }
 
+.circle-text-sm {
+    font-size: 18px;
+    font-weight: 500;
+}
+
 .upload-photo .Placeholder__in{
     padding: 12px 32px;
 }
@@ -148,4 +153,17 @@
 
 .role-choose .Cell__main, .role-choose .Cell__aside{
     padding: 0;
+}
+
+@keyframes spin {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(0,10px);
+    }
+}
+
+.animate-up-down{
+    animation: ease-in-out spin 4s infinite;
 }

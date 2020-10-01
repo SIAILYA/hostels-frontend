@@ -1,12 +1,16 @@
 import React, {useContext} from "react";
+import bridge from "@vkontakte/vk-bridge";
 
 import {Button, Div, FixedLayout, Panel} from "@vkontakte/vkui";
 
-import {Navigation} from "../../Contexts";
+import {Navigation, ReviewsContext} from "../../Contexts";
+
+import logo from "../../img/logo.svg"
 
 
 const OnboardingHelloPanel = ({id}) => {
-    const {setOnboardingPanel} = useContext(Navigation)
+    const {setOnboardingPanel, accessToken, setActiveView} = useContext(Navigation)
+    const {userRole, setUserRole} = useContext(ReviewsContext)
 
 
     return(
@@ -18,7 +22,10 @@ const OnboardingHelloPanel = ({id}) => {
                 <div className="description-header" style={{textAlign: "center"}}>
                     Это "Твоё общежитие"
                 </div>
-                <div style={{textAlign: "center", marginTop: "10px"}}>
+                <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
+                    <img src={logo} alt="" width="200vh"/>
+                </div>
+                <div style={{textAlign: "center", marginTop: "25px"}}>
                     Сервис, который покажет десятки студенческих общежитий изнутри и позволит рассказать о вашем общежитии другим!
                 </div>
             </Div>
@@ -30,7 +37,9 @@ const OnboardingHelloPanel = ({id}) => {
                         className="yellow-gradient"
                         size="xl"
                         stretched
-                        onClick={() => {setOnboardingPanel("role_panel")}}
+                        onClick={() => {
+                            setOnboardingPanel("role_panel")
+                        }}
                     >
                         Вперед!
                     </Button>
@@ -38,7 +47,15 @@ const OnboardingHelloPanel = ({id}) => {
                         size="m"
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
-                        onClick={() => setOnboardingPanel("thanks_panel")}
+                        onClick={() => {
+                            setUserRole(prev => prev || "Интересующийся")
+                            bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
+                            if (!accessToken){
+                                setOnboardingPanel("thanks_panel")
+                            } else {
+                                setActiveView("epic_view")
+                            }
+                        }}
                     >
                         Пропустить
                     </Button>

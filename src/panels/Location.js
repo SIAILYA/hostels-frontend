@@ -79,13 +79,13 @@ const LocationPanel = ({id, user}) => {
                                                                          onClose={setLocationSnackbar}
                                                                          duration={1000}/>)
                                 } else {
-                                    if (user.country){
+                                    if (user.country.title){
                                         setCountry(user.country)
                                     }
-                                    if (user.city){
+                                    if (user.city.title){
                                         setCity(user.city)
                                     }
-                                    if (user.university){
+                                    if (user.university.title){
                                         setUniversity(user.university)
                                     }
                                     setLocationSnackbar(<FailedSnackbar caption="В профиле не хватает информации, заполните недостающие поля вручную"
@@ -115,7 +115,7 @@ const LocationPanel = ({id, user}) => {
                             go({currentTarget: {dataset: {goto: 'addPanel_dormitory_panel'}}})
                         }
                         }
-                        disabled={!(selectedCountry && selectedCity && selectedUniversity)}
+                        disabled={!(selectedCountry.title && selectedCity.title && selectedUniversity.title)}
                     >
                         Дальше
                     </Button>
