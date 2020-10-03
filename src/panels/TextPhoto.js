@@ -10,8 +10,7 @@ import {
     FormLayout, FormLayoutGroup,
     FormStatus,
     Panel,
-    PanelHeader, Placeholder, Spinner,
-    Textarea, PanelSpinner, ScreenSpinner
+    PanelHeader, Placeholder, Textarea, ScreenSpinner
 } from "@vkontakte/vkui";
 
 import Icon24CameraOutline from '@vkontakte/icons/dist/24/camera_outline';
@@ -152,6 +151,7 @@ const TextPhotoPanel = ({id}) => {
                         setPopout(<ScreenSpinner size='large' />)
                         uploadPhotos(userPhotos).then(res => {
                             setPhotoURLs(res.data)
+                            review.photos = res.data
                             sendReview(review).then(res => {
                                 setPopout(null)
                                 if (res.status === 200){

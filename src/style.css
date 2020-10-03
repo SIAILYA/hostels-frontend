@@ -128,6 +128,11 @@
     font-weight: 500;
 }
 
+.circle-text-xs {
+    font-size: 16px;
+    font-weight: 500;
+}
+
 .upload-photo .Placeholder__in{
     padding: 12px 32px;
 }

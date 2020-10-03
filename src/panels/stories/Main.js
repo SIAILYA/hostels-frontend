@@ -22,7 +22,7 @@ import bridge from "@vkontakte/vk-bridge";
 
 const Main = ({onStoryChange}) => {
     const {lastReviews, reviewsLoading} = useContext(ReviewsContext)
-    const {searchBanner} = useContext(Navigation)
+    const {searchBanner, go} = useContext(Navigation)
 
     return (
         <Panel id="main_panel">
@@ -101,7 +101,7 @@ const Main = ({onStoryChange}) => {
                                 return (
                                     <div
                                         key={index}
-                                        style={{padding: "0 3%"}}
+                                        style={{paddingLeft: "10px"}}
                                     >
                                         <Card
                                             size="l"
@@ -117,7 +117,17 @@ const Main = ({onStoryChange}) => {
                                                     </Caption>
                                                 }
                                                 multiline
-                                                actions={<Button className='yellow-gradient' size={'m'}>Читать полностью</Button>}
+                                                actions={
+                                                    <Button
+                                                        className='yellow-gradient'
+                                                        size={'m'}
+                                                        onClick={() => {
+                                                            go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                        }}
+                                                    >
+                                                        Читать полностью
+                                                    </Button>
+                                                }
                                             >
                                                 {review.author_name} {review.author_surname}
                                             </RichCell>

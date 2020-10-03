@@ -104,8 +104,12 @@ const QuestionsPanel = ({id}) => {
                             Можно оплатить картой или в интернет-банке
                         </Checkbox>
                     </Group>
-                    <FormLayoutGroup top="Стоимость за месяц" bottom="Укажите валюту, если оплата не в российских рублях">
-                        <Input type='text'
+                    <FormLayoutGroup
+                        top="Стоимость за месяц"
+                        // bottom="Укажите валюту, если оплата не в российских рублях"
+                    >
+                        <Input type='number'
+                               max={100000}
                                value={cost}
                                onChange={e => setCost(e.target.value)}/>
                     </FormLayoutGroup>
@@ -209,6 +213,7 @@ const QuestionsPanel = ({id}) => {
                     className='yellow-gradient'
                     data-goto='addPanel_text_photo_panel'
                     onClick={go}
+                    disabled={!cost || !peopleInRoom || !(workAlways || (closedStart && closedEnd))}
                 >
                     Дальше
                 </Button>

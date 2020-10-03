@@ -23,8 +23,7 @@ import {
 	TabbarItem,
 	View,
 	Placeholder,
-	ScreenSpinner,
-	usePlatform
+	ScreenSpinner
 } from '@vkontakte/vkui';
 
 import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
@@ -57,20 +56,23 @@ import RolePanel from "./panels/onboarding/Role";
 import ThanksPanel from "./panels/onboarding/Thanks";
 import WhereStudyPanel from "./panels/onboarding/ChooseUniversity";
 import PreviewPanel from "./panels/PreviewPanel";
+import DormitoryReviews from "./panels/DormitoryReviews";
+import ReviewModal from "./panels/ReviewModal";
 
 
 const App = () => {
 	let [history, setHistory] = useState(['story_main'])
-	const [scheme, setScheme] = useState(["bright_light"])
+	const [scheme, setScheme] = useState("bright_light")
 
 	const [fetchedUser, setUser] = useState(null);
 	const [accessToken, setToken] = useState('');
 
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
-	// const [popout, setPopout] = useState(null);
-	// TODO: Сделать несколько попапов
+	const [onboardingPopup, setOnboardingPopup] = useState('');
 
 	const [locationSnackbar, setLocationSnackbar] = useState(null)
+	const [onboardingSnackbar, setOnboardingSnackbar] = useState('');
+
 	const [searchBanner, setSearchBanner] = useState({
 		title: 'Заголовок',
 		domain: 'vk.com',
@@ -90,11 +92,11 @@ const App = () => {
 	const [activeView, setActiveView] = useState(INIT_VIEW);
 	const [activePanel, setActivePanel] = useState(INIT_PANEL);
 	const [activeAddPanel, setActiveAddPanel] = useState(INIT_ADD_PANEL);
+	const [activeReviewPanel, setActiveReviewPanel] = useState('dormitory_reviews_panel')
 	const [activeModal, setActiveModal] = useState('');
 	const [activeAddModal, setActiveAddModal] = useState('');
+	const [activeReviewModal, setReviewModal] = useState(null);
 	const [activeOnboardingPanel, setOnboardingPanel] = useState("hello_panel");
-	const [onboardingPopup, setOnboardingPopup] = useState('');
-	const [onboardingSnackbar, setOnboardingSnackbar] = useState('');
 
 	const [photoCard, setPhotoCard] = useState('');
 	const [photoCaptionIndex, setPhotoCaptionIndex] = useState('');
@@ -102,7 +104,6 @@ const App = () => {
 	const [userPhotos, setUserPhotos] = useState([]);
 
 	const [countryList, setCountryList] = useState(COUNTRIES);
-
 	const [citiesList, setCitiesList] = useState([]);
 	const [uniList, setUniList] = useState([]);
 	const [dormitoryList, setDormitoryList] = useState([]);
@@ -145,6 +146,9 @@ const App = () => {
 
 	const [lastReviews, setLastReviews] = useState([]);
 	const [reviewsLoading, setReviewsLoading] = useState(true);
+
+	const [modalUserInfo, setModalUserInfo] = useState('')
+	const [modalDormitoryInfo, setModalDormitoryInfo] = useState('')
 
 
 	useEffect(() => {
@@ -377,6 +381,14 @@ const App = () => {
 			setActiveAddPanel(panel)
 		} else
 
+		if (goTo.slice(0, 11) === 'reviewPanel') {
+			const panel = goTo.slice(12, goTo.length)
+			window.history.pushState( {panel: 'reviewPanel_' + panel}, 'reviewPanel_' + panel );
+			history.push( 'reviewPanel_' + panel );
+			setActiveView("dormitory_reviews_view")
+			setActiveReviewPanel(panel)
+		} else
+
 		if (goTo.slice(0, 15) === 'onboardingPanel') {
 			const panel = goTo.slice(16, goTo.length)
 			window.history.pushState( {panel: 'addPanel_' + panel}, 'addPanel_' + panel );
@@ -396,6 +408,13 @@ const App = () => {
 			window.history.pushState( {panel: 'epicModal_' + modal}, 'epicModal_' + modal );
 			history.push( 'epicModal_' + modal );
 			setActiveModal(modal)
+		} else
+
+		if (goTo.slice(0, 11) === 'reviewModal') {
+			const modal = goTo.slice(12, goTo.length)
+			window.history.pushState( {panel: 'reviewModal_' + modal}, 'reviewModal_' + modal );
+			history.push( 'reviewModal_' + modal );
+			setReviewModal(modal)
 		}
 	};
 
@@ -424,9 +443,16 @@ const App = () => {
 				}
 			} else
 
+			if (goBackTo.slice(0, 11) === 'reviewPanel') {
+				setActiveView("dormitory_reviews_view")
+				setActiveReviewPanel(goBackTo.slice(12, goBackTo.length))
+				setReviewModal(null)
+			}
+
 			if (last.slice(0, 8) === 'addModal') {
 				setActiveAddModal(null)
 			} else
+
 
 			if (last.slice(0, 9) === 'epicModal') {
 				setActiveModal(null)
@@ -458,8 +484,6 @@ const App = () => {
 		}
 	};
 
-	const platform = usePlatform()
-
 
 	return (
 		<ConfigProvider
@@ -471,9 +495,11 @@ const App = () => {
 				activeView, setActiveView, activeModal, setActiveModal,
 				activePanel, activeAddPanel, activeAddModal,
 				setActivePanel, setActiveAddPanel, setActiveAddModal,
+                activeReviewPanel, setActiveReviewPanel,
 				setPopout, accessToken, fetchedUser, activeOnboardingPanel, setOnboardingPanel,
 				searchBanner, onboardingPopup, setOnboardingPopup,
-				setOnboardingSnackbar, onboardingSnackbar
+				setOnboardingSnackbar, onboardingSnackbar,
+				activeReviewModal, setReviewModal
 			}}>
 			<LocationContext.Provider value={{
 				countryList, citiesList, uniList, dormitoryList,
@@ -515,7 +541,12 @@ const App = () => {
 				electricity, setElectricity,
 				internet, setInternet
 			}}>
-			<ReviewsContext.Provider value={{lastReviews, reviewsLoading, userRole, setUserRole, review, setPhotoURLs}}>
+			<ReviewsContext.Provider value={{
+				lastReviews, reviewsLoading, userRole, setUserRole,
+				review, setPhotoURLs,
+				modalUserInfo, setModalUserInfo,
+				modalDormitoryInfo, setModalDormitoryInfo
+			}}>
 				<Root activeView={activeView}>
 				<View
 					id="epic_view"
@@ -608,6 +639,10 @@ const App = () => {
 					<CityChoosePanel id="city_choose"/>
 					<UniversityChoosePanel id="uni_choose"/>
 				</View>
+
+                <View id="dormitory_reviews_view" activePanel={activeReviewPanel} popout={popout} modal={<ReviewModal/>}>
+                    <DormitoryReviews id="dormitory_reviews_panel"/>
+                </View>
 				<View id="empty_view" activePanel="spinner_panel">
 					<Panel id='spinner_panel'>
 						<Placeholder

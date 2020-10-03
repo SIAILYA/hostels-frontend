@@ -1,0 +1,685 @@
+[{
+  "_id": {
+    "$oid": "5f71520424fcad0149a28c59"
+  },
+  "author_id": 223632391,
+  "author_name": "Илья",
+  "author_surname": "Самойлов",
+  "anonymous": false,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "title": "Общежитие №3",
+    "address": "пр-кт Ударников, 29к1",
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "customs": {
+      "title": "",
+      "address": "",
+      "coordinates": {
+        "lat": 0,
+        "lng": 0
+      }
+    }
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "Отзыв отзыв отзыв отзыв отзыв отзыв отзыв отзыв отзыв отзыв"
+  },
+  "photos": [
+    "http://res.cloudinary.com/ftit/image/upload/v1601260596/p6hqokqzfx5zoqwa4t3k.jpg"
+  ],
+  "captions": [
+    ""
+  ],
+  "date": {
+    "$date": "2020-09-28T03:01:24.769Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f72d76639201b8b8437365b"
+  },
+  "author_id": 223632391,
+  "author_name": "Вася",
+  "author_surname": "Пупкин",
+  "author_photo": "https://sun9-58.userapi.com/impg/c857232/v857232325/19ca16/Dr1Pi13YTuA.jpg?size=200x0&quality=88&crop=13,0,591,591&sign=e340de31f48fdf4f779bc818d6e6621f&ava=1",
+  "anonymous": true,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 4.599999904632568,
+      "condition": 5,
+      "personal": 4,
+      "location": 5,
+      "noise": 5,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "Сотка тыщ на бэг ЛВ"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-09-29T06:42:46.944Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f72dacd67502586cc982e58"
+  },
+  "author_id": 223632391,
+  "author_name": "Вася",
+  "author_surname": "Пупкин",
+  "author_photo": "https://api.adorable.io/avatars/face/eyes2/nose1/mouth2/F2994A",
+  "anonymous": true,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": ""
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-09-29T06:57:17.562Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f762519894d7d949ca0a3e4"
+  },
+  "author_id": 594147037,
+  "author_name": "Юрий",
+  "author_surname": "Панфилов",
+  "author_photo": "https://sun9-38.userapi.com/impg/c857024/v857024837/13da9d/yNJ8v2VlicM.jpg?size=200x0&quality=88&crop=8,6,1455,1455&sign=a03439bebe90dd994ad25066f04e80e1&ava=1",
+  "anonymous": false,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "khjsbdfjmnf"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-01T18:51:05.795Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f7625ebf99b9d03d57cd34f"
+  },
+  "author_id": 594147037,
+  "author_name": "Вася",
+  "author_surname": "Пупкин",
+  "author_photo": "https://api.adorable.io/avatars/face/eyes4/nose2/mouth4/F2994A",
+  "anonymous": true,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "setLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbarsetLocationSnackbar"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-01T18:54:35.961Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f762b7d894d7d949ca0a3e6"
+  },
+  "author_id": 223632391,
+  "author_name": "Вася",
+  "author_surname": "Пупкин",
+  "author_photo": "https://api.adorable.io/avatars/face/eyes4/nose1/mouth4/F2994A",
+  "anonymous": true,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "coordinates": {},
+      "grades": [],
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 4.090000152587891,
+      "condition": 5,
+      "personal": 4,
+      "location": 2,
+      "noise": 4,
+      "cost": 5
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "Привет, я оставлю отзыв?"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-01T19:18:21.182Z"
+  },
+  "rating": 0
+},{
+  "_id": {
+    "$oid": "5f776996909e73a91efb6e8b"
+  },
+  "author_id": 223632391,
+  "author_name": "Илья",
+  "author_surname": "Самойлов",
+  "author_photo": "https://sun9-58.userapi.com/impg/c857232/v857232325/19ca16/Dr1Pi13YTuA.jpg?size=200x0&quality=88&crop=13,0,591,591&sign=e340de31f48fdf4f779bc818d6e6621f&ava=1",
+  "anonymous": false,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "123"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-02T17:55:34.643Z"
+  },
+  "rating": 1
+},{
+  "_id": {
+    "$oid": "5f777271909e73a91efb6e8c"
+  },
+  "author_id": 223632391,
+  "author_name": "Илья",
+  "author_surname": "Самойлов",
+  "author_photo": "https://sun9-58.userapi.com/impg/c857232/v857232325/19ca16/Dr1Pi13YTuA.jpg?size=200x0&quality=88&crop=13,0,591,591&sign=e340de31f48fdf4f779bc818d6e6621f&ava=1",
+  "anonymous": false,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "Фото тест"
+  },
+  "photos": [],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-02T18:33:21.642Z"
+  },
+  "rating":  0
+},{
+  "_id": {
+    "$oid": "5f7772ebc0d5281f35587224"
+  },
+  "author_id": 223632391,
+  "author_name": "Илья",
+  "author_surname": "Самойлов",
+  "author_photo": "https://sun9-58.userapi.com/impg/c857232/v857232325/19ca16/Dr1Pi13YTuA.jpg?size=200x0&quality=88&crop=13,0,591,591&sign=e340de31f48fdf4f779bc818d6e6621f&ava=1",
+  "anonymous": false,
+  "country": {
+    "id": 1,
+    "title": "Россия"
+  },
+  "city": {
+    "id": 2,
+    "title": "Санкт-Петербург"
+  },
+  "university": {
+    "id": 66,
+    "title": "СПбГУПТД (бывш. СПГУТД)"
+  },
+  "dormitory": {
+    "selected": {
+      "address": "Санкт-Петербург, проспект Ударников, 29к1",
+      "id": 1,
+      "title": "Общежитие №3",
+      "university_id": 66,
+      "university_title": "СПбГУПТД (бывш. СПГУТД)"
+    },
+    "address": "Санкт-Петербург, проспект Ударников, 29к1",
+    "title": "Общежитие №3"
+  },
+  "review": {
+    "rating": {
+      "main": 3.2100000381469727,
+      "condition": 5,
+      "personal": 3,
+      "location": 2,
+      "noise": 1,
+      "cost": 4
+    },
+    "main_info": {
+      "type": "Блочный",
+      "pay_type": "Раз в месяц",
+      "cost": "",
+      "card_pay": false
+    },
+    "rooms": {
+      "two_level_bed": false,
+      "balcony": false,
+      "plastic_windows": false,
+      "people_in_room": ""
+    },
+    "operating": {
+      "work_always": false,
+      "closed": {
+        "start": "",
+        "end": ""
+      }
+    },
+    "comfort": {
+      "smoking": false,
+      "electricity": false,
+      "internet": false
+    },
+    "text": "Фото тест 2"
+  },
+  "photos": [
+    "https://res.cloudinary.com/ftit/image/upload/v1601663720/eepoo7higfomc93ezhth.jpg",
+    "https://res.cloudinary.com/ftit/image/upload/v1601663721/mnjwdwx0fx7taxwjnard.jpg",
+    "https://res.cloudinary.com/ftit/image/upload/v1601663722/echy5qbz7dlbdkwwfxz3.jpg"
+  ],
+  "captions": [],
+  "date": {
+    "$date": "2020-10-02T18:35:23.555Z"
+  },
+  "rating": 0
+}]

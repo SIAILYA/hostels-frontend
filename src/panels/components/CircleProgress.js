@@ -42,12 +42,12 @@ class CircularProgressBar extends React.Component {
                         strokeDashoffset: dashOffset
                     }} />
                 <text
-                    className={this.props.sm ? "circle-text-sm" : "circle-text"}
+                    className={this.props.xs ? "circle-text-xs" : this.props.sm ? "circle-text-sm" : "circle-text"}
                     x="50%"
                     y="50%"
                     dy=".3em"
                     textAnchor="middle"
-                    style={{color: 'var(--text_primary)'}}
+                    style={{fill: 'var(--text_primary)'}}
                 >
                     {(this.props.percentage / 100 * 5).toFixed(1)}
                 </text>

@@ -1,0 +1,46 @@
+{
+  "_id": {
+    "$oid": "5f6f2b7de9d57a4878aa6dd7"
+  },
+  "id": 1,
+  "university_id": 66,
+  "university_title": "СПбГУПТД (бывш. СПГУТД)",
+  "title": "Общежитие №3",
+  "address": "Санкт-Петербург, проспект Ударников, 29к1",
+  "coordinates": {},
+  "grades": {
+    "main":       [3.4, 3.8, 1.6, 3.4],
+    "condition":  [5, 5, 1, 3],
+    "cost":       [4, 5, 2, 3],
+    "location":   [2, 4, 1, 4],
+    "personal":   [3, 3, 2, 4],
+    "noise":      [3, 2, 2, 3]
+  },
+  "info": {
+    "main_info": {
+      "type": ["Блочный", "Блочный", "Блочный", "Коридорный"],
+      "pay_type": ["Раз в год", "Раз в год", "Раз в год", "Раз в год"],
+      "cost": [900, 2900, 2900, 900],
+      "card_pay": [false, true, true, false]
+    },
+    "rooms": {
+      "two_level_bed": [true, true, false, true],
+      "balcony": [true, false, false, false],
+      "plastic_windows": [false, false, false, false],
+      "people_in_room": [2, 2, 2, 2]
+    },
+    "operating": {
+      "work_always": [false, true, false, false]
+    },
+    "comfort": {
+      "smoking": [false, false, false, false],
+      "electricity": [false, false, true, false],
+      "internet": [true, true, true, true]
+    }
+  },
+  "photos": [
+    "https://res.cloudinary.com/ftit/image/upload/v1601663722/echy5qbz7dlbdkwwfxz3.jpg",
+    "https://res.cloudinary.com/ftit/image/upload/v1601663721/mnjwdwx0fx7taxwjnard.jpg",
+    "https://res.cloudinary.com/ftit/image/upload/v1601663720/eepoo7higfomc93ezhth.jpg"
+  ]
+}

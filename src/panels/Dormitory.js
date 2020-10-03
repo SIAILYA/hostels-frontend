@@ -29,6 +29,8 @@ const DormitoryPanel = ({id}) => {
                         <Group>
                             {
                                 dormitoryList.map((item, index) => {
+                                    delete item.grades;
+                                    delete item.coordinates;
                                     return (
                                         <SimpleCell
                                             onClick={() => {setDormitory(item)}}
