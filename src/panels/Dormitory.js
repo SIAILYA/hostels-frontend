@@ -31,6 +31,10 @@ const DormitoryPanel = ({id}) => {
                                 dormitoryList.map((item, index) => {
                                     delete item.grades;
                                     delete item.coordinates;
+                                    delete item.info;
+                                    delete item.photos;
+                                    delete item.rating;
+
                                     return (
                                         <SimpleCell
                                             onClick={() => {setDormitory(item)}}

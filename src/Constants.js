@@ -56,7 +56,7 @@ export const COUNTRIES = [
     }
 ];
 
-export const DEV_BACKEND_URL = "";
+export const DEV_BACKEND_URL = "https://85a2dffb4d43.ngrok.io/";
 export const BACKEND_URL = DEV_BACKEND_URL || "https://your-dormitory.herokuapp.com/";
 
 export const INIT_VIEW = "empty_view";

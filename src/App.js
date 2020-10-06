@@ -34,7 +34,7 @@ import Icon56DownloadSquareOutline from '@vkontakte/icons/dist/56/download_squar
 
 import Main from './panels/stories/Main'
 import Add from './panels/stories/Add'
-import Search from "./panels/stories/Search";
+import SearchStory from "./panels/stories/SearchStory";
 import Rating from './panels/stories/Rating'
 
 import LocationPanel from "./panels/Location";
@@ -50,7 +50,7 @@ import AddModal from "./panels/AddModal";
 import OnboardingHelloPanel from "./panels/onboarding/Hello"
 
 import {COUNTRIES, INIT_ADD_PANEL, INIT_PANEL, INIT_VIEW} from "./Constants";
-import {getLastReviews, getUniDormitories} from "./Backend";
+import {getLastReviews, getRating, getUniDormitories, getUserReviews} from "./Backend";
 
 import RolePanel from "./panels/onboarding/Role";
 import ThanksPanel from "./panels/onboarding/Thanks";
@@ -107,6 +107,10 @@ const App = () => {
 	const [citiesList, setCitiesList] = useState([]);
 	const [uniList, setUniList] = useState([]);
 	const [dormitoryList, setDormitoryList] = useState([]);
+	const [dormitoryRating, setDormitoryRating] = useState([])
+	const [ratingLoading, setRatingLoading] = useState(true)
+	const [userReviews, setUserReviews] = useState([])
+	const [userReviewsLoading, setUserReviewsLoading] = useState(true)
 
 	const [selectedCountry, setCountry] = useState('');
 	const [selectedCity, setCity] = useState('');
@@ -152,170 +156,190 @@ const App = () => {
 
 
 	useEffect(() => {
-		window.addEventListener('popstate', () => goBack());
+			window.addEventListener('popstate', () => goBack());
 
-		bridge.subscribe(({ detail: { type, data }}) => {
-			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-				setScheme(data.scheme ? data.scheme : "bright_light")
-			} else
+			bridge.subscribe(({ detail: { type, data }}) => {
+				if (type === 'VKWebAppUpdateConfig') {
+					const schemeAttribute = document.createAttribute('scheme');
+					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+					document.body.attributes.setNamedItem(schemeAttribute);
+					setScheme(data.scheme ? data.scheme : "bright_light")
+				} else
 
-			if (type === 'VKWebAppAccessTokenReceived') {
-				setToken(data.access_token)
-			} else
+				if (type === 'VKWebAppAccessTokenReceived') {
+					setToken(data.access_token)
+				} else
 
-			if (type === "VKWebAppCallAPIMethodResult"){
-				if (data.request_id === "getCities"){
-					setCitiesList(data.response.items)
+				if (type === "VKWebAppCallAPIMethodResult"){
+					if (data.request_id === "getCities"){
+						setCitiesList(data.response.items)
+					}
+
+					if (data.request_id === "getUniversities"){
+						setUniList(data.response.items)
+					}
+				} else
+
+				if (type === "VKWebAppStorageSetResult" ||
+					type === "VKWebAppStorageGetResult" ||
+					type === "VKWebAppGetUserInfoResult" ||
+					type === "VKWebAppInitResult"){
+
+				} else
+
+				{
+					console.log(type)
+					console.log(data)
+				}
+			});
+
+			async function fetchStorageInit() {
+				const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
+				if (onboarding_showed.keys[0].value === "true"){
+					setActiveView("epic_view")
+				} else {
+					setActiveView("onboarding_view")
 				}
 
-				if (data.request_id === "getUniversities"){
-					setUniList(data.response.items)
+				const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role", "allow_access"]})
+
+				if (defaults.keys[0].value !== ""){
+					const default_location = JSON.parse(defaults.keys[0].value)
+					setCountry(default_location.country)
+					setCity(default_location.city)
+					setUniversity(default_location.university)
+					bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": "true"})
 				}
-			} else
 
-			if (type === "VKWebAppStorageSetResult" ||
-				type === "VKWebAppStorageGetResult" ||
-				type === "VKWebAppGetUserInfoResult" ||
-				type === "VKWebAppInitResult"){
+				if (defaults.keys[1].value !== ""){
+					setUserRole(defaults.keys[1].value)
+				}
 
-			} else
+				if (defaults.keys[2].value === "true" && onboarding_showed.keys[0].value === "true"){
+					getToken()
+				}
 
-			{
-				console.log(type)
-				console.log(data)
-			}
-		});
-
-		async function fetchStorageInit() {
-			const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
-			if (onboarding_showed.keys[0].value === "true"){
-				setActiveView("epic_view")
-			} else {
-				setActiveView("onboarding_view")
+				setPopout(null)
 			}
 
-			const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role", "allow_access"]})
-
-			if (defaults.keys[0].value !== ""){
-				const default_location = JSON.parse(defaults.keys[0].value)
-				setCountry(default_location.country)
-				setCity(default_location.city)
-				setUniversity(default_location.university)
-				bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": "true"})
+			async function fetchData() {
+				const user = await bridge.send('VKWebAppGetUserInfo', );
+				setUser(user);
+				setPopout(null)
 			}
 
-			if (defaults.keys[1].value !== ""){
-				setUserRole(defaults.keys[1].value)
+			function fetchReviews () {
+				getLastReviews().then(res => {
+					setLastReviews(res);
+					setReviewsLoading(false)
+				})
 			}
 
-			if (defaults.keys[2].value === "true" && onboarding_showed.keys[0].value === "true"){
-				getToken()
-			}
+			fetchData();
+			fetchStorageInit();
+			fetchReviews();
+			fetchRating();
 
-			setPopout(null)
-		}
-
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo', );
-			setUser(user);
-			setPopout(null)
-		}
-
-		function fetchReviews () {
-			getLastReviews().then(res => {
-				setLastReviews(res);
-				setReviewsLoading(false)
-			})
-		}
-
-		fetchData();
-		fetchStorageInit();
-		fetchReviews();
-
-		setInterval(() => {
-			fetchReviews()
-		}, 120000)
-	},
+			setInterval(() => {
+				fetchReviews()
+			}, 120000)
+		},
 		[]);
 
-	useEffect(() => {
-		setReview({
-			author_id: fetchedUser ? fetchedUser.id : null,
-			author_name: anonReview ? "Вася" : fetchedUser ? fetchedUser.first_name : null,
-			author_surname: anonReview? "Пупкин" : fetchedUser ? fetchedUser.last_name : null,
-			author_photo:anonReview
-				? `https://api.adorable.io/avatars/face/eyes${Math.round(Math.random() * 4)}/nose${Math.round(Math.random() * 4)}/mouth${Math.round(Math.random() * 4)}/F2994A`
-				: fetchedUser ? fetchedUser.photo_200 : null,
-			author_role: userRole,
-			anonymous: anonReview,
-			country: selectedCountry,
-			city: selectedCity,
-			university: selectedUniversity,
-			dormitory: {
-				selected: selectedDormitory,
-				address: selectedDormitory.address || customAddress,
-				title: selectedDormitory.title || customTitle,
-				coordinates: selectedDormitory.coordinates || customCoordinates
-			},
-			review:{
-				rating: {
-					main: mainRating,
-					condition: ratingCondition,
-					personal: ratingPersonal,
-					location: ratingLocation,
-					noise: ratingNoise,
-					cost: ratingCost
-				},
-				main_info: {
-					type: dormitoryType,
-					pay_type: payType,
-					cost: cost,
-					card_pay: cardPay,
-				},
-				rooms: {
-					two_level_bed: twoLevelBed,
-					balcony: balcony,
-					plastic_windows: plasticWindows,
-					people_in_room: peopleInRoom,
-				},
-				operating: {
-					work_always: workAlways,
-					closed:{
-						start: closedStart,
-						end: closedEnd
-					},
-				},
-				comfort: {
-					smoking: smoking,
-					electricity: electricity,
-					internet: internet,
-				},
-				text: textReview
-			},
-			photos: photoURLs,
-			captions: photoCaptions.slice(0, photoURLs.length)
+	function fetchRating() {
+		setRatingLoading(true)
+		getRating().then(res => {
+			setDormitoryRating(res.data)
+			setRatingLoading(false)
 		})
-
-	},
-		[
-		photoCaptions, selectedCountry, selectedCity,selectedUniversity,
-		selectedDormitory, customAddress, customTitle, customCoordinates,
-		ratingCondition, ratingCost, ratingPersonal, ratingLocation,
-		ratingNoise, mainRating, dormitoryType, payType,
-		cost, cardPay, twoLevelBed, balcony, plasticWindows,
-		peopleInRoom, workAlways, closedStart, closedEnd,
-		smoking, electricity, internet, userPhotos, anonReview, fetchedUser,
-		textReview, photoURLs, userRole
-	])
+	}
 
 	useEffect(() => {
-		if (selectedUniversity){
-			getUniDormitories(selectedUniversity.id).then(res => setDormitoryList(res))
+		if (fetchedUser){
+			setUserReviewsLoading(true)
+			getUserReviews(fetchedUser.id).then(res => {
+				console.log(res)
+				setUserReviews(res.data)
+				setUserReviewsLoading(false)
+			})
 		}
-	},
+	}, [fetchedUser])
+
+	useEffect(() => {
+			setReview({
+				author_id: fetchedUser ? fetchedUser.id : null,
+				author_name: anonReview ? "Вася" : fetchedUser ? fetchedUser.first_name : null,
+				author_surname: anonReview? "Пупкин" : fetchedUser ? fetchedUser.last_name : null,
+				author_photo:anonReview
+					? `https://api.adorable.io/avatars/face/eyes${Math.round(Math.random() * 4)}/nose${Math.round(Math.random() * 4)}/mouth${Math.round(Math.random() * 4)}/F2994A`
+					: fetchedUser ? fetchedUser.photo_200 : null,
+				author_role: userRole,
+				anonymous: anonReview,
+				country: selectedCountry,
+				city: selectedCity,
+				university: selectedUniversity,
+				dormitory: {
+					selected: selectedDormitory,
+					address: selectedDormitory.address || customAddress,
+					title: selectedDormitory.title || customTitle,
+					coordinates: selectedDormitory.coordinates || customCoordinates
+				},
+				review:{
+					rating: {
+						main: mainRating,
+						condition: ratingCondition,
+						personal: ratingPersonal,
+						location: ratingLocation,
+						noise: ratingNoise,
+						cost: ratingCost
+					},
+					main_info: {
+						type: dormitoryType,
+						pay_type: payType,
+						cost: cost,
+						card_pay: cardPay,
+					},
+					rooms: {
+						two_level_bed: twoLevelBed,
+						balcony: balcony,
+						plastic_windows: plasticWindows,
+						people_in_room: peopleInRoom,
+					},
+					operating: {
+						work_always: workAlways,
+						closed:{
+							start: closedStart,
+							end: closedEnd
+						},
+					},
+					comfort: {
+						smoking: smoking,
+						electricity: electricity,
+						internet: internet,
+					},
+					text: textReview
+				},
+				photos: photoURLs,
+				captions: photoCaptions.slice(0, photoURLs.length)
+			})
+
+		},
+		[
+			photoCaptions, selectedCountry, selectedCity,selectedUniversity,
+			selectedDormitory, customAddress, customTitle, customCoordinates,
+			ratingCondition, ratingCost, ratingPersonal, ratingLocation,
+			ratingNoise, mainRating, dormitoryType, payType,
+			cost, cardPay, twoLevelBed, balcony, plasticWindows,
+			peopleInRoom, workAlways, closedStart, closedEnd,
+			smoking, electricity, internet, userPhotos, anonReview, fetchedUser,
+			textReview, photoURLs, userRole
+		])
+
+	useEffect(() => {
+			if (selectedUniversity){
+				getUniDormitories(selectedUniversity.id).then(res => setDormitoryList(res))
+			}
+		},
 		[selectedUniversity])
 
 	function getToken() {
@@ -495,173 +519,176 @@ const App = () => {
 				activeView, setActiveView, activeModal, setActiveModal,
 				activePanel, activeAddPanel, activeAddModal,
 				setActivePanel, setActiveAddPanel, setActiveAddModal,
-                activeReviewPanel, setActiveReviewPanel,
+				activeReviewPanel, setActiveReviewPanel,
 				setPopout, accessToken, fetchedUser, activeOnboardingPanel, setOnboardingPanel,
 				searchBanner, onboardingPopup, setOnboardingPopup,
 				setOnboardingSnackbar, onboardingSnackbar,
 				activeReviewModal, setReviewModal
 			}}>
-			<LocationContext.Provider value={{
-				countryList, citiesList, uniList, dormitoryList,
-				setDormitoryList,
-				setCountry, setCity, setUniversity, setDormitory,
-				setCoordinates, setAddress, setTitle,
-				selectedCountry, selectedCity, selectedUniversity, selectedDormitory,
-				customCoordinates, customAddress, customTitle,
-				locationSnackbar, setLocationSnackbar,
-				setEducation, setTextReview, textReview, anonReview, setAnon,
-				getUniDormitories
-			}}>
-			<RatingContext.Provider value={{
-				ratingCondition, setConditionRating,
-				ratingCost, setCostRating,
-				ratingPersonal, setPersonalRating,
-				ratingLocation, setLocationRating,
-				ratingNoise, setNoiseRating,
-				mainRating, setMainRating
-			}}>
-			<ModalContext.Provider value={{
-				photoCard, photoCaptionIndex,
-				setPhotoCard, setPhotoCaptionIndex,
-				photoCaptions, userPhotos, setUserPhotos
-			}}>
-			<QuestionsContext.Provider value={{
-				dormitoryType, setDormitoryType,
-				payType, setPayType,
-				cardPay, setCardPay,
-				cost, setCost,
-				twoLevelBed, setTwoLevelBed,
-				balcony, setBalcony,
-				plasticWindows, setPlasticWindows,
-				peopleInRoom, setPeopleInRoom,
-				workAlways, setWorkAlways,
-				closedStart, setClosedStart,
-				closedEnd, setClosedEnd,
-				smoking, setSmoking,
-				electricity, setElectricity,
-				internet, setInternet
-			}}>
-			<ReviewsContext.Provider value={{
-				lastReviews, reviewsLoading, userRole, setUserRole,
-				review, setPhotoURLs,
-				modalUserInfo, setModalUserInfo,
-				modalDormitoryInfo, setModalDormitoryInfo
-			}}>
-				<Root activeView={activeView}>
-				<View
-					id="epic_view"
-					activePanel="epic_panel"
-					popout={popout}
-					header={null}
-					onSwipeBack={() => goBack()}
-				>
-					<Panel id="epic_panel">
-						<Epic
-							activeStory={activeStory}
-							tabbar={
-								<Tabbar>
-									<TabbarItem
-										onClick={onStoryChange}
-										selected={activeStory === 'main'}
-										data-story="main"
-									>
-										<Icon28AllCategoriesOutline />
-									</TabbarItem>
-									<TabbarItem
-										onClick={onStoryChange}
-										selected={activeStory === 'add'}
-										data-story="add"
-									>
-										<Icon28AddCircleOutline />
-									</TabbarItem>
-									<TabbarItem
-										onClick={onStoryChange}
-										selected={activeStory === 'search'}
-										data-story="search"
-									>
-										<Icon28SearchOutline />
-									</TabbarItem>
-									<TabbarItem
-										onClick={onStoryChange}
-										selected={activeStory === 'rating'}
-										data-story="rating"
-									>
-										<Icon28StatisticsOutline />
-									</TabbarItem>
-								</Tabbar>
-							}
-						>
-							<View id="main" activePanel="search_panel">
-								<Main id="search_panel" onStoryChange={onStoryChange}/>
-							</View>
-							<View id="add" activePanel="add_panel">
-								<Add id="add_panel" go={go}/>
-							</View>
-							<View id="search" activePanel="search_panel">
-								<Search id="search_panel" onStoryChange={onStoryChange}/>
-							</View>
-							<View id="rating" activePanel="rating_panel">
-								<Rating id="rating_panel"/>
-							</View>
-						</Epic>
-					</Panel>
-				</View>
+				<LocationContext.Provider value={{
+					countryList, citiesList, uniList, dormitoryList,
+					setDormitoryList,
+					setCountry, setCity, setUniversity, setDormitory,
+					setCoordinates, setAddress, setTitle,
+					selectedCountry, selectedCity, selectedUniversity, selectedDormitory,
+					customCoordinates, customAddress, customTitle,
+					locationSnackbar, setLocationSnackbar,
+					setEducation, setTextReview, textReview, anonReview, setAnon,
+					getUniDormitories
+				}}>
+					<RatingContext.Provider value={{
+						ratingCondition, setConditionRating,
+						ratingCost, setCostRating,
+						ratingPersonal, setPersonalRating,
+						ratingLocation, setLocationRating,
+						ratingNoise, setNoiseRating,
+						mainRating, setMainRating
+					}}>
+						<ModalContext.Provider value={{
+							photoCard, photoCaptionIndex,
+							setPhotoCard, setPhotoCaptionIndex,
+							photoCaptions, userPhotos, setUserPhotos
+						}}>
+							<QuestionsContext.Provider value={{
+								dormitoryType, setDormitoryType,
+								payType, setPayType,
+								cardPay, setCardPay,
+								cost, setCost,
+								twoLevelBed, setTwoLevelBed,
+								balcony, setBalcony,
+								plasticWindows, setPlasticWindows,
+								peopleInRoom, setPeopleInRoom,
+								workAlways, setWorkAlways,
+								closedStart, setClosedStart,
+								closedEnd, setClosedEnd,
+								smoking, setSmoking,
+								electricity, setElectricity,
+								internet, setInternet
+							}}>
+								<ReviewsContext.Provider value={{
+									lastReviews, reviewsLoading, userRole, setUserRole,
+									review, setPhotoURLs,
+									modalUserInfo, setModalUserInfo,
+									modalDormitoryInfo, setModalDormitoryInfo,
+									dormitoryRating, setDormitoryRating,
+									fetchRating, ratingLoading,
+									userReviews, userReviewsLoading
+								}}>
+									<Root activeView={activeView}>
+										<View
+											id="epic_view"
+											activePanel="epic_panel"
+											popout={popout}
+											header={null}
+											onSwipeBack={() => goBack()}
+										>
+											<Panel id="epic_panel">
+												<Epic
+													activeStory={activeStory}
+													tabbar={
+														<Tabbar>
+															<TabbarItem
+																onClick={onStoryChange}
+																selected={activeStory === 'main'}
+																data-story="main"
+															>
+																<Icon28AllCategoriesOutline />
+															</TabbarItem>
+															<TabbarItem
+																onClick={onStoryChange}
+																selected={activeStory === 'add'}
+																data-story="add"
+															>
+																<Icon28AddCircleOutline />
+															</TabbarItem>
+															<TabbarItem
+																onClick={onStoryChange}
+																selected={activeStory === 'search'}
+																data-story="search"
+															>
+																<Icon28SearchOutline />
+															</TabbarItem>
+															<TabbarItem
+																onClick={onStoryChange}
+																selected={activeStory === 'rating'}
+																data-story="rating"
+															>
+																<Icon28StatisticsOutline />
+															</TabbarItem>
+														</Tabbar>
+													}
+												>
+													<View id="main" activePanel="search_panel">
+														<Main id="search_panel" onStoryChange={onStoryChange}/>
+													</View>
+													<View id="add" activePanel="add_panel">
+														<Add id="add_panel" go={go}/>
+													</View>
+													<View id="search" activePanel="search_panel">
+														<SearchStory id="search_panel" onStoryChange={onStoryChange}/>
+													</View>
+													<View id="rating" activePanel="rating_panel">
+														<Rating id="rating_panel"/>
+													</View>
+												</Epic>
+											</Panel>
+										</View>
 
-				<View
-					id="add_review_view"
-					activePanel={activeAddPanel}
-					modal={<AddModal/>}
-					popout={popout}
-				>
-					<LocationPanel id="location_panel" user={fetchedUser}/>
+										<View
+											id="add_review_view"
+											activePanel={activeAddPanel}
+											modal={<AddModal/>}
+											popout={popout}
+										>
+											<LocationPanel id="location_panel" user={fetchedUser}/>
 
-					<CountryChoosePanel id="country_choose"/>
-					<CityChoosePanel id="city_choose"/>
-					<UniversityChoosePanel id="uni_choose"/>
+											<CountryChoosePanel id="country_choose"/>
+											<CityChoosePanel id="city_choose"/>
+											<UniversityChoosePanel id="uni_choose"/>
 
-					<DormitoryPanel id="dormitory_panel"/>
-					<CustomDormitoryPanel id="custom_dormitory_panel"/>
+											<DormitoryPanel id="dormitory_panel"/>
+											<CustomDormitoryPanel id="custom_dormitory_panel"/>
 
-					<GradesPanel id="grades_panel"/>
-					<QuestionsPanel id="questions_panel"/>
-					<TextPhotoPanel id="text_photo_panel"/>
+											<GradesPanel id="grades_panel"/>
+											<QuestionsPanel id="questions_panel"/>
+											<TextPhotoPanel id="text_photo_panel"/>
 
-					<PreviewPanel id="preview_review_panel"/>
-				</View>
+											<PreviewPanel id="preview_review_panel"/>
+										</View>
 
-				<View id="onboarding_view" activePanel={activeOnboardingPanel} popout={onboardingPopup}>
-					<OnboardingHelloPanel id="hello_panel"/>
-					<RolePanel id="role_panel"/>
-					<ThanksPanel id="thanks_panel"/>
-					<WhereStudyPanel id="university_panel"/>
+										<View id="onboarding_view" activePanel={activeOnboardingPanel} popout={onboardingPopup}>
+											<OnboardingHelloPanel id="hello_panel"/>
+											<RolePanel id="role_panel"/>
+											<ThanksPanel id="thanks_panel"/>
+											<WhereStudyPanel id="university_panel"/>
 
-					<CountryChoosePanel id="country_choose"/>
-					<CityChoosePanel id="city_choose"/>
-					<UniversityChoosePanel id="uni_choose"/>
-				</View>
+											<CountryChoosePanel id="country_choose"/>
+											<CityChoosePanel id="city_choose"/>
+											<UniversityChoosePanel id="uni_choose"/>
+										</View>
 
-                <View id="dormitory_reviews_view" activePanel={activeReviewPanel} popout={popout} modal={<ReviewModal/>}>
-                    <DormitoryReviews id="dormitory_reviews_panel"/>
-                </View>
-				<View id="empty_view" activePanel="spinner_panel">
-					<Panel id='spinner_panel'>
-						<Placeholder
-							stretched
-							icon={<Icon56DownloadSquareOutline width="120" height="120" className="yellow-gradient-text"/>}
-							header="Загрузка..."
-							style={{color: 'var(--yellow)'}}
-						>
-							Грузим картиночки и скрипты...
-							<PanelSpinner />
-						</Placeholder>
-					</Panel>
-				</View>
-				</Root>
-			</ReviewsContext.Provider>
-			</QuestionsContext.Provider>
-			</ModalContext.Provider>
-			</RatingContext.Provider>
-			</LocationContext.Provider>
+										<View id="dormitory_reviews_view" activePanel={activeReviewPanel} popout={popout} modal={<ReviewModal/>}>
+											<DormitoryReviews id="dormitory_reviews_panel"/>
+										</View>
+										<View id="empty_view" activePanel="spinner_panel">
+											<Panel id='spinner_panel'>
+												<Placeholder
+													stretched
+													icon={<Icon56DownloadSquareOutline width="120" height="120" className="yellow-gradient-text"/>}
+													header="Загрузка..."
+													style={{color: 'var(--yellow)'}}
+												>
+													Грузим картиночки и скрипты...
+													<PanelSpinner />
+												</Placeholder>
+											</Panel>
+										</View>
+									</Root>
+								</ReviewsContext.Provider>
+							</QuestionsContext.Provider>
+						</ModalContext.Provider>
+					</RatingContext.Provider>
+				</LocationContext.Provider>
 			</Navigation.Provider>
 		</ConfigProvider>
 	);

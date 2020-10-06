@@ -1,15 +1,36 @@
 import React, {useContext} from "react";
+import bridge from "@vkontakte/vk-bridge"
 
-import {Group, Div, Panel, PanelHeader, Button, Placeholder, Avatar, Header, Cell} from "@vkontakte/vkui";
+import {
+    Group,
+    Div,
+    Panel,
+    PanelHeader,
+    Button,
+    Placeholder,
+    Avatar,
+    Header,
+    Cell,
+    PanelSpinner,
+    SimpleCell, Card, List, HorizontalScroll, Link
+} from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
 import Icon28WriteOutline from '@vkontakte/icons/dist/28/write_outline';
 import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline';
+import {
+    Icon28ArrowRightOutline, Icon28CancelCircleOutline,
+    Icon28ChatsOutline,
+    Icon28DoneOutline, Icon28PrivacyOutline,
+    Icon28ShareOutline,
+    Icon28SyncOutline
+} from "@vkontakte/icons";
+import RatingProgress from "../components/RatingProgress";
 
 
 const Add = ({go}) => {
     const {fetchedUser, accessToken, getToken} = useContext(Navigation)
-    const {userRole} = useContext(ReviewsContext)
+    const {userRole, userReviews, userReviewsLoading} = useContext(ReviewsContext)
     const {selectedUniversity} = useContext(LocationContext)
 
     const getDescription = () => {
@@ -20,44 +41,197 @@ const Add = ({go}) => {
 
     const description = getDescription()
 
+    function moderatedStatus(moderated) {
+        if (moderated === 0){
+            return [<Icon28SyncOutline fill="var(--yellow)"/>, "Отзыв ждет проверки"]
+        } else if (moderated === 1) {
+            return [<Icon28DoneOutline fill="var(--green)"/>, "Отзыв принят"]
+        } else if (moderated === 2){
+            return [<Icon28PrivacyOutline fill="var(--orange)"/>, "Отзыв проверяется"]
+        }
+        return [<Icon28CancelCircleOutline fill="var(--red)"/>, "Отзыв отклонен"]
+    }
+
     return (
         <Panel id="add_panel">
             <PanelHeader>Добавить</PanelHeader>
-                <Div>
-                    <Group header={<Header mode="secondary">Добро пожаловать!</Header>} separator="show">
-                        <Cell
-                            before={<Avatar size={40} src={fetchedUser.photo_200}/>}
-                            size="m"
-                            description={description}
-                            asideContent={<Icon28WriteOutline className="yellow-gradient-text"/>}
-                            data-goto="onboarding"
-                            onClick={go}
-                        >
-                            {fetchedUser.first_name} {fetchedUser.last_name}
-                        </Cell>
-                    </Group>
-                </Div>
-            <Placeholder
-                icon={<Icon56AddCircleOutline width="120" height="120" className="yellow-gradient-text" />}
-                header='Ваши отзывы'
-                action={
-                    <Button
-                        size="xl"
-                        mode="primary"
-                        className='yellow-gradient'
-                        onClick={accessToken ? go : () => {
-                            getToken()
-                            go( {currentTarget: {dataset: {goto: "view_add_review_view"}}})
-                        }
-                        }
-                        data-goto='view_add_review_view'
+            <Div>
+                <Group header={<Header mode="secondary">Добро пожаловать!</Header>} separator="show">
+                    <Cell
+                        before={<Avatar size={40} src={fetchedUser.photo_200}/>}
+                        size="m"
+                        description={description}
+                        asideContent={<Icon28WriteOutline className="yellow-gradient-text"/>}
+                        data-goto="onboarding"
+                        onClick={go}
                     >
-                        Написать отзыв
-                    </Button>
+                        {fetchedUser.first_name} {fetchedUser.last_name}
+                    </Cell>
+                    <Cell
+                        size="m"
+                        asideContent={<Icon28ShareOutline className="yellow-gradient-text"/>}
+                        onClick={() => {
+                            bridge.send("VKWebAppShare")
+                        }}
+                    >
+                        Поделиться с друзьями
+                    </Cell>
+                    <Cell
+                        size="m"
+                        asideContent={<Icon28ChatsOutline className="yellow-gradient-text"/>}
+                        href="https://vk.me/yourdormitory"
+                        target="_blank"
+                    >
+                        Связь с разработчиками
+                    </Cell>
+                </Group>
+            </Div>
+
+            {
+                userReviewsLoading &&
+                <PanelSpinner/>
+            }
+            {
+                !userReviewsLoading && userReviews.length === 0 &&
+                <Placeholder
+                    icon={<Icon56AddCircleOutline width="120" height="120" className="yellow-gradient-text" />}
+                    header='Отзывы отсутствуют'
+                    action={
+                        <Button
+                            size="xl"
+                            mode="primary"
+                            className='yellow-gradient'
+                            onClick={accessToken ? go : () => {
+                                getToken()
+                                go( {currentTarget: {dataset: {goto: "view_add_review_view"}}})
+                            }
+                            }
+                            data-goto='view_add_review_view'
+                        >
+                            Написать отзыв
+                        </Button>
+                    }
+                >
+                    Вы еще не оставили ни одного отзыва
+                </Placeholder>
+            }
+                <Div>
+            {
+                !userReviewsLoading && userReviews.length !== 0 &&
+                <div>
+                <Button
+                    size="xl"
+                    mode="primary"
+                    className='yellow-gradient'
+                    onClick={accessToken ? go : () => {
+                        getToken()
+                        go( {currentTarget: {dataset: {goto: "view_add_review_view"}}})
+                    }
+                    }
+                    data-goto='view_add_review_view'
+                >
+                    Написать отзыв
+                </Button>
+                <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
+                    {
+                    userReviews.map((review, index) => {
+                    return(
+                        <div key={index}>
+                            <Card style={{marginBottom: "18px"}}>
+                                <SimpleCell
+                                    description={review.dormitory.address}
+                                    after={<Icon28ArrowRightOutline className="yellow-gradient-text"/>}
+                                >
+                                    {review.dormitory.title}
+                                </SimpleCell>
+                                <Group header={<Header mode="secondary">Оценки</Header>}>
+                                    <Div>
+                                        <HorizontalScroll>
+                                            <div style={{display: "flex"}}>
+                                                <Button
+                                                    className='yellow-gradient gradeBtn'
+                                                    style={{fontSize: 10}}
+                                                    disabled
+                                                >
+                                                    Состояние:&#160;{review.review.rating.condition}
+                                                </Button>
+                                                <Button
+                                                    className='yellow-gradient gradeBtn'
+                                                    style={{fontSize: 10}}
+                                                    disabled
+                                                >
+                                                    Цена:&#160;{review.review.rating.cost}
+                                                </Button>
+                                                <Button
+                                                    className='yellow-gradient gradeBtn'
+                                                    style={{fontSize: 10}}
+                                                    disabled
+                                                >
+                                                    Персонал:&#160;{review.review.rating.personal}
+                                                </Button>
+                                                <Button
+                                                    className='yellow-gradient gradeBtn'
+                                                    style={{fontSize: 10}}
+                                                    disabled
+                                                >
+                                                    Расположение:&#160;{review.review.rating.location}
+                                                </Button>
+                                                <Button
+                                                    className='yellow-gradient gradeBtn'
+                                                    style={{fontSize: 10}}
+                                                    disabled
+                                                >
+                                                    Шумоизоляция:&#160;{review.review.rating.noise}
+                                                </Button>
+                                            </div>
+                                        </HorizontalScroll>
+                                    </Div>
+                                </Group>
+
+                                <Group header={<Header mode="secondary">Отзыв</Header>}>
+                                    <Div>
+                                        {review.review.text}
+                                    </Div>
+                                </Group>
+
+                                {
+                                    review.photos.length > 0 &&
+                                    <Group header={<Header mode="secondary">Фото</Header>}>
+                                        <HorizontalScroll>
+                                            <Div
+                                                style={{display: "flex"}}
+                                            >
+                                                {
+                                                    review.photos.map((photo, index) => {
+                                                        return (
+                                                            <div key={index} style={{marginRight: 8}}>
+                                                                <Avatar key={index} size={60} mode="app" src={photo}/>
+                                                            </div>
+
+                                                        )
+                                                    })
+                                                }
+                                            </Div>
+                                        </HorizontalScroll>
+                                    </Group>
+                                }
+                                <SimpleCell
+                                    before={moderatedStatus(review.moderated)[0]}
+                                    disabled
+                                    multiline
+                                    after={<p style={{marginRight: "5px"}}>123</p>}
+                                >
+                                    {moderatedStatus(review.moderated)[1]} {review.moderated === 3 && <Link href="https://vk.me/yourdormitory" target="_blank" style={{fontSize: "10px"}}>Почему?</Link>}
+                                </SimpleCell>
+                            </Card>
+                        </div>
+                    )}
+                )
                 }
-            >
-                Вы еще не оставили ни одного отзыва
-            </Placeholder>
+                </Group>
+                </div>
+            }
+                </Div>
         </Panel>
     )
 }
