@@ -18,11 +18,12 @@ import {
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 import bridge from "@vkontakte/vk-bridge";
+import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner";
 
 
 const Main = ({onStoryChange}) => {
-    const {lastReviews, reviewsLoading} = useContext(ReviewsContext)
-    const {searchBanner, go} = useContext(Navigation)
+    const {lastReviews, reviewsLoading, fetchDormitoryReviews} = useContext(ReviewsContext)
+    const {searchBanner, go, setPopout} = useContext(Navigation)
 
     return (
         <Panel id="main_panel">
@@ -122,7 +123,11 @@ const Main = ({onStoryChange}) => {
                                                         className='yellow-gradient'
                                                         size={'m'}
                                                         onClick={() => {
-                                                            go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                            setPopout(<ScreenSpinner size='large' />)
+                                                            fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                                go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                            }
+                                                            )
                                                         }}
                                                     >
                                                         Читать полностью

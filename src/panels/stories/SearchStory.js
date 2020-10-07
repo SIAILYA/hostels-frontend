@@ -10,7 +10,7 @@ import {
     SimpleCell
 } from "@vkontakte/vkui";
 import React, {useContext, useEffect, useState} from "react";
-import {ReviewsContext} from "../../Contexts";
+import {Navigation, ReviewsContext} from "../../Contexts";
 import {searchDormitories} from "../../Backend";
 import CircularProgressBar from "../components/CircleProgress";
 
@@ -19,7 +19,8 @@ const SearchStory = ({id}) => {
     const [intervalId, setIntervalId] = useState(0)
     const [dormitoriesSearch, setDormitoriesSearch] = useState('');
     const [loading, setLoading] = useState(true)
-    const {dormitoryRating, setDormitoryRating} = useContext(ReviewsContext)
+    const {dormitoryRating, setDormitoryRating, fetchDormitoryReviews} = useContext(ReviewsContext)
+    const {go} = useContext(Navigation)
 
     useEffect(() => {
         searchDormitories(dormitoriesSearch)
@@ -87,6 +88,12 @@ const SearchStory = ({id}) => {
                                                             xs={true}
                                                         />
                                                     </div>
+                                                }
+                                                onClick={() => {
+                                                        fetchDormitoryReviews(item.id, () => {
+                                                            go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                        })
+                                                    }
                                                 }
                                             >
                                                 {item.title}

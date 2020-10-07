@@ -65,3 +65,10 @@ export const getUserReviews = (author_id) => {
         {author_id: author_id}
     )
 }
+
+export const getDormitoryReviews = (dormitory_id) => {
+    return axios.post(
+        BACKEND_URL + "api/v1/get_reviews",
+        {id: dormitory_id}
+    )
+}

@@ -10,8 +10,9 @@ import {
     SimpleCell,
     Subhead
 } from "@vkontakte/vkui";
-import {ReviewsContext} from "../../Contexts";
+import {Navigation, ReviewsContext} from "../../Contexts";
 import CircularProgressBar from "../components/CircleProgress";
+import {Icon56CameraOffOutline} from "@vkontakte/icons";
 
 
 export function getPostfix(length) {
@@ -23,8 +24,8 @@ export function getPostfix(length) {
 
 
 const Rating = () => {
-    const {dormitoryRating, fetchRating, ratingLoading} = useContext(ReviewsContext)
-
+    const {go} = useContext(Navigation)
+    const {dormitoryRating, fetchRating, ratingLoading, fetchDormitoryReviews} = useContext(ReviewsContext)
 
 
     return (
@@ -34,7 +35,7 @@ const Rating = () => {
                 <Group>
                     <List>
                         {
-                            dormitoryRating.map((item, index) => {
+                            dormitoryRating.sort((a, b) => {return(a.rating > b.rating ? -1 : 1)}).map((item, index, all) => {
                                 return(
                                     <div key={index}>
                                         <SimpleCell
@@ -43,7 +44,9 @@ const Rating = () => {
                                             before={
                                                 item.photos[0] ?
                                                     <Avatar size={48} src={item.photos[0]}/> :
-                                                    <Avatar size={48} src={"https://picsum.photos/200"}/>
+                                                    <Avatar size={48}>
+                                                        <Icon56CameraOffOutline className="yellow-gradient-text" size={120}/>
+                                                    </Avatar>
                                             }
                                             after={
                                                 <CircularProgressBar
@@ -52,6 +55,12 @@ const Rating = () => {
                                                     percentage={Math.round(item.rating / 5 * 100)}
                                                     xs={true}
                                                 />
+                                            }
+                                            onClick={() => {
+                                                fetchDormitoryReviews(item.id, () => {
+                                                    go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                })
+                                            }
                                             }
                                         >
                                             <Subhead

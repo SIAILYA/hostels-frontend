@@ -23,7 +23,7 @@ import {
 	TabbarItem,
 	View,
 	Placeholder,
-	ScreenSpinner
+	ScreenSpinner, Link, Button
 } from '@vkontakte/vkui';
 
 import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
@@ -50,7 +50,7 @@ import AddModal from "./panels/AddModal";
 import OnboardingHelloPanel from "./panels/onboarding/Hello"
 
 import {COUNTRIES, INIT_ADD_PANEL, INIT_PANEL, INIT_VIEW} from "./Constants";
-import {getLastReviews, getRating, getUniDormitories, getUserReviews} from "./Backend";
+import {getDormitoryReviews, getLastReviews, getRating, getUniDormitories, getUserReviews} from "./Backend";
 
 import RolePanel from "./panels/onboarding/Role";
 import ThanksPanel from "./panels/onboarding/Thanks";
@@ -58,6 +58,7 @@ import WhereStudyPanel from "./panels/onboarding/ChooseUniversity";
 import PreviewPanel from "./panels/PreviewPanel";
 import DormitoryReviews from "./panels/DormitoryReviews";
 import ReviewModal from "./panels/ReviewModal";
+import {Icon56ErrorOutline} from "@vkontakte/icons";
 
 
 const App = () => {
@@ -112,6 +113,9 @@ const App = () => {
 	const [userReviews, setUserReviews] = useState([])
 	const [userReviewsLoading, setUserReviewsLoading] = useState(true)
 
+	const [dormitoryObject, setDormitoryObject] = useState({})
+	const [dormitoryReviews, setDormitoryReviews] = useState([])
+
 	const [selectedCountry, setCountry] = useState('');
 	const [selectedCity, setCity] = useState('');
 	const [selectedUniversity, setUniversity] = useState('');
@@ -157,9 +161,11 @@ const App = () => {
 
 	useEffect(() => {
 			window.addEventListener('popstate', () => goBack());
+			bridge.send("VKWebAppInit");
 
 			bridge.subscribe(({ detail: { type, data }}) => {
 				if (type === 'VKWebAppUpdateConfig') {
+					console.log(data)
 					const schemeAttribute = document.createAttribute('scheme');
 					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 					document.body.attributes.setNamedItem(schemeAttribute);
@@ -254,11 +260,54 @@ const App = () => {
 		})
 	}
 
+	function fetchDormitoryReviews(dormitory_id, callback) {
+		setPopout(<ScreenSpinner size='large' />)
+		getDormitoryReviews(dormitory_id).then(res => {
+			setDormitoryObject(res.data.dormitory)
+			setDormitoryReviews(res.data.reviews)
+			callback()
+			setPopout(null)
+		}).catch(() => {
+			go({currentTarget: {dataset: {goto: "view_server_error"}}})
+			setPopout(null)
+		})
+	}
+
+	function clearData() {
+		setDormitory('')
+		setAddress('')
+		setTitle('')
+		setCoordinates({lat: 0, lng: 0})
+		setConditionRating(0)
+		setCostRating(0)
+		setPersonalRating(0)
+		setLocationRating(0)
+		setNoiseRating(0)
+		setMainRating(0)
+		setDormitoryType('Блочный')
+		setPayType('Раз в месяц')
+		setCost('')
+		setCardPay(false)
+		setTwoLevelBed(false)
+		setBalcony(false)
+		setPlasticWindows(false)
+		setPeopleInRoom('')
+		setWorkAlways(false)
+		setClosedStart('')
+		setClosedEnd('')
+		setSmoking(false)
+		setElectricity(false)
+		setInternet(false)
+		setAnon(false)
+		setTextReview('')
+		setPhotoURLs([])
+		setReview({})
+	}
+
 	useEffect(() => {
 		if (fetchedUser){
 			setUserReviewsLoading(true)
 			getUserReviews(fetchedUser.id).then(res => {
-				console.log(res)
 				setUserReviews(res.data)
 				setUserReviewsLoading(false)
 			})
@@ -572,7 +621,10 @@ const App = () => {
 									modalDormitoryInfo, setModalDormitoryInfo,
 									dormitoryRating, setDormitoryRating,
 									fetchRating, ratingLoading,
-									userReviews, userReviewsLoading
+									userReviews, userReviewsLoading,
+									dormitoryObject, dormitoryReviews,
+									fetchDormitoryReviews,
+									clearData
 								}}>
 									<Root activeView={activeView}>
 										<View
@@ -680,6 +732,28 @@ const App = () => {
 												>
 													Грузим картиночки и скрипты...
 													<PanelSpinner />
+												</Placeholder>
+											</Panel>
+										</View>
+										<View id="server_error" activePanel={"server"}>
+											<Panel id="server">
+												<Placeholder
+													stretched
+													icon={<Icon56ErrorOutline width="120" height="120" className="yellow-gradient-text"/>}
+													header="Что-то пошло не по плану"
+													style={{color: 'var(--yellow)'}}
+													action={
+														<Button
+															onClick={goBack}
+															size="l"
+															className="yellow-gradient"
+														>
+															Вернуться
+														</Button>
+													}
+												>
+													Сервер вернул ошибку, чтобы разобраться в проблеме,&#160;
+													<Link href="https://vk.me/yourdormitory" className="yellow-gradient-text">напишите нам</Link>
 												</Placeholder>
 											</Panel>
 										</View>

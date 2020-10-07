@@ -105,13 +105,21 @@ const QuestionsPanel = ({id}) => {
                         </Checkbox>
                     </Group>
                     <FormLayoutGroup
-                        top="Стоимость за месяц"
+                        top={<div>Стоимость за месяц&#160;<a style={{color: "var(--red)"}}>*</a></div>}
                         // bottom="Укажите валюту, если оплата не в российских рублях"
                     >
                         <Input type='number'
                                max={100000}
+                               min={1}
                                value={cost}
-                               onChange={e => setCost(e.target.value)}/>
+                               pattern="[0-9]{1,5}"
+                               maxLength={5}
+                               onChange={e => {
+                                   e.target.value <= 10000 ?
+                                       setCost(e.target.value)
+                                       : console.log("<= 10000")
+                               }}
+                        />
                     </FormLayoutGroup>
                     <Separator/>
 
@@ -139,17 +147,24 @@ const QuestionsPanel = ({id}) => {
                         </Checkbox>
 
                     </Group>
-                    <FormLayoutGroup top="Количество человек в комнатах">
+                    <FormLayoutGroup top={<div>Количество человек в комнатах&#160;<a style={{color: "var(--red)"}}>*</a></div>}>
                         <Input
                             type='number'
                             max={20}
+                            min={1}
+                            pattern="[0-9]{1,2}"
                             value={peopleInRoom}
-                            onChange={e => setPeopleInRoom(e.target.value)}
+                            maxLength={2}
+                            onChange={e => {
+                                e.target.value <= 20 ?
+                                setPeopleInRoom(e.target.value)
+                                : console.log("<= 20")
+                            }}
                         />
                     </FormLayoutGroup>
                     <Separator/>
 
-                    <Group header={<Header mode='secondary'>Комендантский час</Header>} separator='hide'>
+                    <Group header={<Header mode='secondary'>Комендантский час&#160;<a style={{color: "var(--red)"}}>*</a></Header>} separator='hide'>
                         <Checkbox
                             name='check_work_always'
                             value={workAlways}
@@ -194,7 +209,8 @@ const QuestionsPanel = ({id}) => {
                             value={electricity}
                             onChange={() => setElectricity(prev => !prev)}
                         >
-                            В комнатах можно использовать электроприборы (например, чайник)</Checkbox>
+                            В комнатах можно использовать электроприборы (например, чайник или микроволновку)
+                        </Checkbox>
                         <Checkbox
                             name='check_internet'
                             value={internet}

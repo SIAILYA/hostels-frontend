@@ -12,7 +12,7 @@ import {
     Header,
     Cell,
     PanelSpinner,
-    SimpleCell, Card, List, HorizontalScroll, Link
+    SimpleCell, Card, HorizontalScroll, Link
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
@@ -25,7 +25,6 @@ import {
     Icon28ShareOutline,
     Icon28SyncOutline
 } from "@vkontakte/icons";
-import RatingProgress from "../components/RatingProgress";
 
 
 const Add = ({go}) => {
@@ -135,97 +134,100 @@ const Add = ({go}) => {
                 <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
                     {
                     userReviews.map((review, index) => {
-                    return(
-                        <div key={index}>
-                            <Card style={{marginBottom: "18px"}}>
-                                <SimpleCell
-                                    description={review.dormitory.address}
-                                    after={<Icon28ArrowRightOutline className="yellow-gradient-text"/>}
-                                >
-                                    {review.dormitory.title}
-                                </SimpleCell>
-                                <Group header={<Header mode="secondary">Оценки</Header>}>
-                                    <Div>
-                                        <HorizontalScroll>
-                                            <div style={{display: "flex"}}>
-                                                <Button
-                                                    className='yellow-gradient gradeBtn'
-                                                    style={{fontSize: 10}}
-                                                    disabled
-                                                >
-                                                    Состояние:&#160;{review.review.rating.condition}
-                                                </Button>
-                                                <Button
-                                                    className='yellow-gradient gradeBtn'
-                                                    style={{fontSize: 10}}
-                                                    disabled
-                                                >
-                                                    Цена:&#160;{review.review.rating.cost}
-                                                </Button>
-                                                <Button
-                                                    className='yellow-gradient gradeBtn'
-                                                    style={{fontSize: 10}}
-                                                    disabled
-                                                >
-                                                    Персонал:&#160;{review.review.rating.personal}
-                                                </Button>
-                                                <Button
-                                                    className='yellow-gradient gradeBtn'
-                                                    style={{fontSize: 10}}
-                                                    disabled
-                                                >
-                                                    Расположение:&#160;{review.review.rating.location}
-                                                </Button>
-                                                <Button
-                                                    className='yellow-gradient gradeBtn'
-                                                    style={{fontSize: 10}}
-                                                    disabled
-                                                >
-                                                    Шумоизоляция:&#160;{review.review.rating.noise}
-                                                </Button>
-                                            </div>
-                                        </HorizontalScroll>
-                                    </Div>
-                                </Group>
-
-                                <Group header={<Header mode="secondary">Отзыв</Header>}>
-                                    <Div>
-                                        {review.review.text}
-                                    </Div>
-                                </Group>
-
-                                {
-                                    review.photos.length > 0 &&
-                                    <Group header={<Header mode="secondary">Фото</Header>}>
-                                        <HorizontalScroll>
-                                            <Div
-                                                style={{display: "flex"}}
-                                            >
-                                                {
-                                                    review.photos.map((photo, index) => {
-                                                        return (
-                                                            <div key={index} style={{marginRight: 8}}>
-                                                                <Avatar key={index} size={60} mode="app" src={photo}/>
-                                                            </div>
-
-                                                        )
-                                                    })
-                                                }
-                                            </Div>
-                                        </HorizontalScroll>
+                        return (
+                            <div key={index}>
+                                <Card style={{marginBottom: "18px"}}>
+                                    <SimpleCell
+                                        description={review.dormitory.address}
+                                        after={<Icon28ArrowRightOutline className="yellow-gradient-text"/>}
+                                    >
+                                        {review.dormitory.title}
+                                    </SimpleCell>
+                                    <Group header={<Header mode="secondary">Оценки</Header>}>
+                                        <Div>
+                                            <HorizontalScroll>
+                                                <div style={{display: "flex"}}>
+                                                    <Button
+                                                        className='yellow-gradient gradeBtn'
+                                                        style={{fontSize: 10}}
+                                                        disabled
+                                                    >
+                                                        Состояние:&#160;{review.review.rating.condition}
+                                                    </Button>
+                                                    <Button
+                                                        className='yellow-gradient gradeBtn'
+                                                        style={{fontSize: 10}}
+                                                        disabled
+                                                    >
+                                                        Цена:&#160;{review.review.rating.cost}
+                                                    </Button>
+                                                    <Button
+                                                        className='yellow-gradient gradeBtn'
+                                                        style={{fontSize: 10}}
+                                                        disabled
+                                                    >
+                                                        Персонал:&#160;{review.review.rating.personal}
+                                                    </Button>
+                                                    <Button
+                                                        className='yellow-gradient gradeBtn'
+                                                        style={{fontSize: 10}}
+                                                        disabled
+                                                    >
+                                                        Расположение:&#160;{review.review.rating.location}
+                                                    </Button>
+                                                    <Button
+                                                        className='yellow-gradient gradeBtn'
+                                                        style={{fontSize: 10}}
+                                                        disabled
+                                                    >
+                                                        Шумоизоляция:&#160;{review.review.rating.noise}
+                                                    </Button>
+                                                </div>
+                                            </HorizontalScroll>
+                                        </Div>
                                     </Group>
-                                }
-                                <SimpleCell
-                                    before={moderatedStatus(review.moderated)[0]}
-                                    disabled
-                                    multiline
-                                    after={<p style={{marginRight: "5px"}}>123</p>}
-                                >
-                                    {moderatedStatus(review.moderated)[1]} {review.moderated === 3 && <Link href="https://vk.me/yourdormitory" target="_blank" style={{fontSize: "10px"}}>Почему?</Link>}
-                                </SimpleCell>
-                            </Card>
-                        </div>
-                    )}
+
+                                    <Group header={<Header mode="secondary">Отзыв</Header>}>
+                                        <Div>
+                                            {review.review.text}
+                                        </Div>
+                                    </Group>
+
+                                    {
+                                        review.photos.length > 0 &&
+                                        <Group header={<Header mode="secondary">Фото</Header>}>
+                                            <HorizontalScroll>
+                                                <Div
+                                                    style={{display: "flex"}}
+                                                >
+                                                    {
+                                                        review.photos.map((photo, index) => {
+                                                            return (
+                                                                <div key={index} style={{marginRight: 8}}>
+                                                                    <Avatar key={index} size={60} mode="app"
+                                                                            src={photo}/>
+                                                                </div>
+
+                                                            )
+                                                        })
+                                                    }
+                                                </Div>
+                                            </HorizontalScroll>
+                                        </Group>
+                                    }
+                                    <SimpleCell
+                                        before={moderatedStatus(review.moderated)[0]}
+                                        disabled
+                                        multiline
+                                        after={<p style={{marginRight: "5px"}}>123</p>}
+                                    >
+                                        {moderatedStatus(review.moderated)[1]} {review.moderated === 3 &&
+                                    <Link href="https://vk.me/yourdormitory" target="_blank"
+                                          style={{fontSize: "10px"}}>Почему?</Link>}
+                                    </SimpleCell>
+                                </Card>
+                            </div>
+                        );}
                 )
                 }
                 </Group>

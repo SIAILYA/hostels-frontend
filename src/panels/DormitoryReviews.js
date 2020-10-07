@@ -10,7 +10,7 @@ import {
     PanelHeaderContent,
     PanelHeaderBack,
     Card,
-    Cell, FixedLayout
+    Cell, SimpleCell, Subhead, Placeholder
 } from "@vkontakte/vkui";
 
 import Icon28PollSquareOutline from "@vkontakte/icons/dist/28/poll_square_outline";
@@ -19,15 +19,16 @@ import CircularProgressBar from "./components/CircleProgress";
 import Review from "./components/Review";
 import RatingProgress from "./components/RatingProgress";
 
-import reviews from "./reviews.json"
-import dormitory from "./dormitory.json"
+// import reviews from "./reviews.json"
+// import dormitory from "./dormitoryObject.json"
 import {Navigation, ReviewsContext} from "../Contexts";
+import {Icon56CameraOffOutline} from "@vkontakte/icons";
 
 
 
 const DormitoryReviews = ({id}) => {
     const {go, goBack} = useContext(Navigation)
-    const {setModalDormitoryInfo} = useContext(ReviewsContext)
+    const {setModalDormitoryInfo, dormitoryObject, dormitoryReviews} = useContext(ReviewsContext)
 
     const sum = (arr) => {
         let sum = 0;
@@ -42,12 +43,12 @@ const DormitoryReviews = ({id}) => {
     }
 
     const averages = useRef({
-        main: avg(dormitory.grades.main),
-        condition: avg(dormitory.grades.condition),
-        cost: avg(dormitory.grades.cost),
-        location: avg(dormitory.grades.location),
-        personal: avg(dormitory.grades.personal),
-        noise: avg(dormitory.grades.noise)
+        main: avg(dormitoryObject.grades.main),
+        condition: avg(dormitoryObject.grades.condition),
+        cost: avg(dormitoryObject.grades.cost),
+        location: avg(dormitoryObject.grades.location),
+        personal: avg(dormitoryObject.grades.personal),
+        noise: avg(dormitoryObject.grades.noise)
     })
 
 
@@ -57,13 +58,30 @@ const DormitoryReviews = ({id}) => {
                 left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
             >
                 <PanelHeaderContent
-                    status="СПбГУПТД, Общежитие №3"
+                    status={dormitoryObject.university_title}
                 >
                     Отзывы
                 </PanelHeaderContent>
             </PanelHeader>
 
+            <Div
+                style={{overflow: "hidden", paddingBottom: 0}}
+            >
+                <SimpleCell
+                    multiline
+                >
+                    <Header className="header-centered">
+                            {dormitoryObject.title}
+                    </Header>
+                    <Subhead weight="regular" style={{textAlign: "center"}}>
+                            {dormitoryObject.address}
+                    </Subhead>
+                </SimpleCell>
+            </Div>
+
             <Div>
+                {
+                    dormitoryObject.photos.length > 0 &&
                 <Group>
                     <Gallery
                         slideWidth="100%"
@@ -72,21 +90,9 @@ const DormitoryReviews = ({id}) => {
                         align="center"
                     >
                         {
-                            dormitory.photos.map((item, index) => {
+                            dormitoryObject.photos.map((item, index) => {
                                 return(
                                     <div className="Gallery__slide" key={index}>
-                                        {
-                                            index === 0 &&
-                                            <FixedLayout
-                                                style={{marginTop: 0, padding: "0", width: "100%", textAlign: "center"}}
-                                            >
-                                                <Div
-                                                    style={{background: "linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))", overflow: "hidden", padding: "24px 0", color: "#f9f9f9"}}
-                                                >
-                                                    {dormitory.title}, {dormitory.address}
-                                                </Div>
-                                            </FixedLayout>
-                                        }
                                         <img
                                             src={item}
                                             alt=""
@@ -98,6 +104,16 @@ const DormitoryReviews = ({id}) => {
                         }
                     </Gallery>
                 </Group>
+                }
+                {
+                    dormitoryObject.photos.length === 0 &&
+                    <Placeholder
+                        icon={<Icon56CameraOffOutline className="yellow-gradient-text"/>}
+                        header="Нет фоток общежития"
+                    >
+                        Никто не добавил фото общежития. Вы можете стать первым!
+                    </Placeholder>
+                }
             </Div>
             <Div>
                 <Card
@@ -126,7 +142,7 @@ const DormitoryReviews = ({id}) => {
                         description="Режим работы, удобства, стоимость"
                         asideContent={<Icon28PollSquareOutline className="yellow-gradient-text"/>}
                         onClick={() => {
-                            setModalDormitoryInfo(dormitory)
+                            setModalDormitoryInfo(dormitoryObject)
                             go({currentTarget: {dataset: {goto: "reviewModal_dormitory_info"}}})
                         }}
                     >
@@ -139,7 +155,7 @@ const DormitoryReviews = ({id}) => {
                     header={<Header mode="secondary">Отзывы</Header>}
                 >
                     {
-                        reviews.map((review, index) => {
+                        dormitoryReviews.map((review, index) => {
                             return(
                                 <Review review={review} key={index}/>
                             )

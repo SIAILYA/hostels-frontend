@@ -24,7 +24,9 @@ const Review = ({review}) => {
                         xs={true}
                     />
                 }
-                description={new Date(review.date.$date).toLocaleDateString("ru-RU", { year: 'numeric', month: 'long', day: 'numeric' })}
+                description={new Date(review.date).toLocaleDateString("ru-RU", { year: 'numeric', month: 'long', day: 'numeric' })}
+                href={review.author_id ? "https://vk.com/id" + review.author_id : ""}
+                target="_blank"
             >
                 {review.author_name} {review.author_surname}
             </Cell>

@@ -32,6 +32,7 @@ const TextPhotoPanel = ({id}) => {
 
     const [previews, setPreviews] = useState([])
     const prevUserPhotos = useRef([])
+    const textareaRef = useRef('')
 
     useEffect(() => {
         setPreviews([])
@@ -52,19 +53,25 @@ const TextPhotoPanel = ({id}) => {
                     Напишите небольшой отзыв, который увидят все пользователи сервиса.<br/><br/>
                     <i>- О чем написать?</i><br/>
                     - Расскажите о том, как долго добираетесь до места учебы, с какими трудностями столкнулись при заселении,
-                    отметьте плюсы и минусы общежития.
+                    отметьте плюсы и минусы общежития<br/><br/>
+                    <b>Не забудьте прикрепить фото - лучше один раз увидеть, чем сто раз услышать!</b>
                 </FormStatus>
 
                 {/*{...getRootProps({ className: 'dropzone' })}*/}
                 <FormLayout>
-                    <Textarea
-                        top="Отзыв об общежитии"
-                        placeholder="Я (не) люблю это обжежитие за..."
-                        defaultValue={textReview}
-                        onChange={e => {
-                            setTextReview(e.target.value)
-                        }}
-                    />
+                    <FormLayoutGroup bottom={<div style={{textAlign: "right"}}>{textareaRef.current.value ? textareaRef.current.value.length : 0}/2000</div>}>
+                        <Textarea
+                            top="Отзыв об общежитии"
+                            placeholder="Я (не) люблю это обжежитие за..."
+                            defaultValue={textReview}
+                            getRef={textareaRef}
+                            maxLength="2000"
+                            onChange={e => {
+                                setTextReview(e.target.value)
+                            }}
+                        />
+                    </FormLayoutGroup>
+                </FormLayout>
                     <Div>
                         <div
                             style={{
@@ -98,7 +105,6 @@ const TextPhotoPanel = ({id}) => {
                             />
                         </div>
                     </Div>
-                </FormLayout>
                 <FormLayout>
                     <FormLayoutGroup top="Загруженные фото" bottom={previews.length > 0 && "Нажмите на фото чтобы добавить описание"}>
                         {/*TODO: Удаление фото*/}
@@ -147,6 +153,7 @@ const TextPhotoPanel = ({id}) => {
                     stretched
                     className="yellow-gradient"
                     data-goto="addPanel_preview_review_panel"
+                    disabled={!textReview}
                     onClick={() => {
                         setPopout(<ScreenSpinner size='large' />)
                         uploadPhotos(userPhotos).then(res => {

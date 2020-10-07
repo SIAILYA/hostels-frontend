@@ -20,8 +20,8 @@ import CircularProgressBar from "./components/CircleProgress";
 
 
 const PreviewPanel = ({id}) => {
-    const {review} = useContext(ReviewsContext)
-    const {go} = useContext(Navigation)
+    const {review, clearData} = useContext(ReviewsContext)
+    const {go, history} = useContext(Navigation)
 
 
     return (
@@ -38,6 +38,8 @@ const PreviewPanel = ({id}) => {
                 </FormStatus>
             </Div>
             <Div>
+                {
+                    review.review &&
                 <Card
                     mode="outline"
                 >
@@ -146,13 +148,17 @@ const PreviewPanel = ({id}) => {
                         </Group>
                     </Div>
                 </Card>
+                }
             </Div>
 
             <Div>
-                {/*TODO: Сделать сброс всех стейтов*/}
                 <Button
                     data-goto="view_epic_view"
-                    onClick={go}
+                    onClick={() => {
+                        history.splice(history.indexOf("view_add_review_view") - 1, 7)
+                        go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
+                        clearData()
+                    }}
                     stretched
                     size="xl"
                     className="yellow-gradient"

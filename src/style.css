@@ -109,7 +109,7 @@
 }
 
 .circle-background {
-    stroke: #ddd;
+    stroke: var(--icon_secondary);
 }
 
 .circle-progress {
@@ -181,3 +181,13 @@
 .gradeBtn[disabled]{
     opacity: 1!important;
 }
+.header-centered .Header__in .Header__content{
+    margin: auto;
+    padding: 0;
+    text-align: center;
+}
+
+.Avatar__children{
+    overflow: hidden;
+}
+
