@@ -13,6 +13,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {Navigation, ReviewsContext} from "../../Contexts";
 import {searchDormitories} from "../../Backend";
 import CircularProgressBar from "../components/CircleProgress";
+import {Icon56CameraOffOutline} from "@vkontakte/icons";
 
 
 const SearchStory = ({id}) => {
@@ -75,7 +76,9 @@ const SearchStory = ({id}) => {
                                                 before={
                                                     item.photos[0] ?
                                                         <Avatar size={48} src={item.photos[0]}/> :
-                                                        <Avatar size={48} src={"https://picsum.photos/200"}/>
+                                                        <Avatar size={48}>
+                                                            <Icon56CameraOffOutline className="yellow-gradient-text" size={120}/>
+                                                        </Avatar>
                                                 }
                                                 after={
                                                     <div

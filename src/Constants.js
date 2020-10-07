@@ -53,10 +53,13 @@ export const COUNTRIES = [
     }, {
         id: 18,
         title: 'Узбекистан',
-    }
+    }, {
+        id: 207,
+        title: "Финляндия"
+    },
 ];
 
-export const DEV_BACKEND_URL = "https://85a2dffb4d43.ngrok.io/";
+export const DEV_BACKEND_URL = "";
 export const BACKEND_URL = DEV_BACKEND_URL || "https://your-dormitory.herokuapp.com/";
 
 export const INIT_VIEW = "empty_view";
