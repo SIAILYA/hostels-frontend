@@ -21,10 +21,11 @@ import {LocationContext, ModalContext, Navigation, ReviewsContext} from "../Cont
 
 import {sendReview, uploadPhotos} from "../Backend";
 import {FailedSnackbar} from "./components/Snackbars";
+import PanelHeaderBack from "@vkontakte/vkui/src/components/PanelHeaderBack/PanelHeaderBack";
 
 
 const TextPhotoPanel = ({id}) => {
-    const {go, setPopout} = useContext(Navigation)
+    const {go, goBack, setPopout} = useContext(Navigation)
     const {setPhotoCaptionIndex, setPhotoCard, photoCaptions, userPhotos, setUserPhotos} = useContext(ModalContext)
     const {locationSnackbar, setTextReview, textReview, anonReview, setAnon, setLocationSnackbar} = useContext(LocationContext)
     const {setPhotoURLs, review} = useContext(ReviewsContext)
@@ -46,7 +47,7 @@ const TextPhotoPanel = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader>Отзыв</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>Отзыв</PanelHeader>
 
             <Div>
                 <FormStatus mode='default' header='Скажите пару слов'>
