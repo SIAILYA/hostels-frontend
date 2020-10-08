@@ -7,13 +7,14 @@ import {
     PanelSpinner,
     Search,
     Separator,
-    SimpleCell
+    SimpleCell, Subhead
 } from "@vkontakte/vkui";
 import React, {useContext, useEffect, useState} from "react";
 import {Navigation, ReviewsContext} from "../../Contexts";
 import {searchDormitories} from "../../Backend";
 import CircularProgressBar from "../components/CircleProgress";
 import {Icon56CameraOffOutline} from "@vkontakte/icons";
+import {getPostfix} from "./Rating";
 
 
 const SearchStory = ({id}) => {
@@ -99,7 +100,13 @@ const SearchStory = ({id}) => {
                                                     }
                                                 }
                                             >
-                                                {item.title}
+                                                <Subhead
+                                                    weight="medium"
+                                                >
+                                                    {item.title}
+                                                </Subhead>
+                                                {typeof(item.university_title) === 'string' ? item.university_title : item.university_title.length + " ВУЗ" + getPostfix(item.university_title.length) }
+
                                             </SimpleCell>
                                             <Separator/>
                                         </div>

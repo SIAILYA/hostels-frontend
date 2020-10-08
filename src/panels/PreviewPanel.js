@@ -21,7 +21,7 @@ import CircularProgressBar from "./components/CircleProgress";
 
 const PreviewPanel = ({id}) => {
     const {review, clearData} = useContext(ReviewsContext)
-    const {go, history, goBack} = useContext(Navigation)
+    const {go, history} = useContext(Navigation)
 
 
     return (

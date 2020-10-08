@@ -10,7 +10,6 @@ import {
     Button,
     Banner,
     Header,
-    Gallery,
     Avatar,
     RichCell,
     Caption, PanelSpinner, PromoBanner, usePlatform, IOS, Link
@@ -61,7 +60,7 @@ const Main = ({onStoryChange}) => {
                     mode="image"
                     size="m"
                     header="Искать общежитие"
-                    subheader={<span>Узнайте более чем<br />о 200 общежитиях ВУЗов</span>}
+                    subheader={<span>Узнайте о жизни в<br />общежитиях ВУЗов</span>}
                     background={
                         <div
                             className='search'
@@ -102,56 +101,59 @@ const Main = ({onStoryChange}) => {
                         reviewsLoading ?
                         <PanelSpinner/>
                         :
-                        <Gallery
-                            slideWidth="90%"
-                            align="center"
+                        <CardScroll
                             style={{ height: '105%'}}
                         >
+                            <div style={{display: "flex"}}>
+
                         {
                             lastReviews.map((review, index) => {
                                 return (
-                                    <div
-                                        key={index}
-                                        style={{paddingLeft: "10px"}}
-                                    >
+
                                         <Card
                                             size="l"
                                             mode="outline"
-                                            style={{overflow: "hidden"}}
+                                            key={index}
+                                            style={{overflow: "hidden", width: "80vw"}}
                                         >
+                                            <div style={{display: "flex", flexDirection: "column"}}>
+
                                             <RichCell
+                                                // disabled
                                                 before={<Avatar size={48} src={review.author_photo}/>}
-                                                text={review.review.text.slice(0, 50) + '...'}
+                                                text={review.review.text.length > 50 ? review.review.text.slice(0, 50).trim()+ '...' : review.review.text}
                                                 caption={
                                                     <Caption level="3" weight="medium" style={{ marginTop: 7 }}>
                                                         {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address}
                                                     </Caption>
                                                 }
                                                 multiline
-                                                actions={
-                                                    <Button
-                                                        className='yellow-gradient'
-                                                        size={'m'}
-                                                        onClick={() => {
-                                                            setPopout(<ScreenSpinner size='large' />)
-                                                            fetchDormitoryReviews(review.dormitory.selected.id, () => {
-                                                                go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
-                                                            }
-                                                            )
-                                                        }}
-                                                    >
-                                                        Читать полностью
-                                                    </Button>
-                                                }
+                                                style={{height: "100%"}}
+                                                onClick={() => {
+                                                    setPopout(<ScreenSpinner size='large' />)
+                                                    fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                            go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                        }
+                                                    )
+                                                }}
                                             >
                                                 {review.author_name} {review.author_surname}
                                             </RichCell>
+                                            {/*<div style={{textAlign: "center"}}>*/}
+                                            {/*    <Button*/}
+                                            {/*        className='yellow-gradient'*/}
+                                            {/*        size={'m'}*/}
+                                            {/*    >*/}
+                                            {/*        Читать полностью*/}
+                                            {/*    </Button>*/}
+                                            {/*</div>*/}
+                                            </div>
                                         </Card>
-                                    </div>
                                 )
                             })
                         }
-                    </Gallery>
+                        </div>
+                    </CardScroll>
                     }
                 </Group>
             </Div>
