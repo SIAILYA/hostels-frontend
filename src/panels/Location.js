@@ -6,7 +6,7 @@ import {
     FormLayout,
     FormLayoutGroup, FormStatus,
     Panel,
-    PanelHeader,
+    PanelHeader, PanelHeaderBack,
     SelectMimicry,
 } from "@vkontakte/vkui";
 
@@ -21,11 +21,11 @@ const LocationPanel = ({id, user}) => {
         selectedCountry, selectedCity, selectedUniversity,
         setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity
     } = useContext(LocationContext)
-    const {go} = useContext(Navigation)
+    const {go, goBack} = useContext(Navigation)
 
     return (
         <Panel id={id}>
-            <PanelHeader>Расположение</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>Расположение</PanelHeader>
             <Div>
                 <FormStatus header="Местоположение общежития">
                     Для начала расскажите, где расположено ваше общежитие и к какому ВУЗу оно относится

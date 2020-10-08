@@ -1,4 +1,14 @@
-import {Button, Div, FixedLayout, FormLayout, FormLayoutGroup, Input, Panel, PanelHeader} from "@vkontakte/vkui";
+import {
+    Button,
+    Div,
+    FixedLayout,
+    FormLayout,
+    FormLayoutGroup,
+    Input,
+    Panel,
+    PanelHeader,
+    PanelHeaderBack
+} from "@vkontakte/vkui";
 import GoogleMapReact from "google-map-react";
 import React, {useContext} from "react";
 import {LocationContext, Navigation} from "../Contexts";
@@ -30,7 +40,7 @@ const CustomDormitoryPanel = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>
                 Ввод адреса
             </PanelHeader>
 

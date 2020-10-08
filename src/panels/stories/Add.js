@@ -219,7 +219,7 @@ const Add = ({go}) => {
                                         before={moderatedStatus(review.moderated)[0]}
                                         disabled
                                         multiline
-                                        after={<p style={{marginRight: "5px"}}>123</p>}
+                                        // after={<p style={{marginRight: "5px"}}>123</p>}
                                     >
                                         {moderatedStatus(review.moderated)[1]} {review.moderated === 3 &&
                                     <Link href="https://vk.me/yourdormitory" target="_blank"

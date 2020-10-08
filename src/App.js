@@ -467,6 +467,7 @@ const App = () => {
 			window.history.pushState( {panel: 'addPanel_' + panel}, 'addPanel_' + panel );
 			history.push( 'onboardingPanel_' + panel );
 			setOnboardingPanel(panel)
+			console.log(history)
 		} else
 
 		if (goTo.slice(0, 8) === 'addModal') {
@@ -507,12 +508,8 @@ const App = () => {
 			} else
 
 			if (last.slice(0, 15) === "onboardingPanel"){
-				switch (last.slice(16, last.length)) {
-					case "uni_choose":
-					case "city_choose":
-					case "country_choose": {
-						setOnboardingPanel("university_panel")
-					}
+				if (["uni_choose", "city_choose", "country_choose"].indexOf(last.slice(16, last.length)) !== -1){
+					setOnboardingPanel("university_panel")
 				}
 			} else
 
@@ -520,12 +517,11 @@ const App = () => {
 				setActiveView("dormitory_reviews_view")
 				setActiveReviewPanel(goBackTo.slice(12, goBackTo.length))
 				setReviewModal(null)
-			}
+			} else
 
 			if (last.slice(0, 8) === 'addModal') {
 				setActiveAddModal(null)
 			} else
-
 
 			if (last.slice(0, 9) === 'epicModal') {
 				setActiveModal(null)

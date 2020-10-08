@@ -13,7 +13,7 @@ import {
     Gallery,
     Avatar,
     RichCell,
-    Caption, PanelSpinner, PromoBanner
+    Caption, PanelSpinner, PromoBanner, usePlatform, IOS, Link
 } from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
@@ -24,6 +24,7 @@ import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenS
 const Main = ({onStoryChange}) => {
     const {lastReviews, reviewsLoading, fetchDormitoryReviews} = useContext(ReviewsContext)
     const {searchBanner, go, setPopout} = useContext(Navigation)
+    const platform = usePlatform()
 
     return (
         <Panel id="main_panel">
@@ -31,18 +32,27 @@ const Main = ({onStoryChange}) => {
 
             <Group separator='hide'>
                 <CardScroll>
-                    <Card size="s" className='rating'>
+                    <Card size="s" className='rating' onClick={onStoryChange} data-story="rating">
                         <div style={{ width: 96, height: 96 }}/>
                     </Card>
-                    <Card size="s" className='grades'>
-                        <div style={{ width: 96, height: 96 }} />
-                    </Card>
-                    <Card size="s" className='gift'>
-                        <div style={{ width: 96, height: 96 }} />
-                    </Card>
-                    <Card size="s" className='review'>
-                        <div style={{ width: 96, height: 96 }} />
-                    </Card>
+                    <Link href="https://vk.com/@yourdormitory-kak-my-schitaem-reiting" target="_blank" style={{marginRight: 8}}>
+                        <Card size="s" className='grades'>
+                            <div style={{ width: 96, height: 96 }} />
+                        </Card>
+                    </Link>
+                    {
+                        platform !== IOS &&
+                        <Card size="s" href="" target="_blank" className='gift' onClick={() => {
+                            bridge.send("VKWebAppOpenPayForm", {"app_id": 7582793, "action": "pay-to-user", "params": {"user_id": 223632391, "amount": 1, "description": "На чай, пиццу и все остальное :)"}})
+                        }}>
+                            <div style={{ width: 96, height: 96 }} />
+                        </Card>
+                    }
+                    <Link href="https://vk.com/@yourdormitory-week-review" target="_blank" style={{marginRight: 8}}>
+                        <Card size="s" className='review'>
+                            <div style={{ width: 96, height: 96 }} />
+                        </Card>
+                    </Link>
                 </CardScroll>
             </Group>
 
@@ -150,22 +160,22 @@ const Main = ({onStoryChange}) => {
                 <PromoBanner bannerData={searchBanner} isCloseButtonHidden/>
             </Div>
 
-            <Group
-                header={<Header mode='secondary'>Интересное и полезное</Header>}
-                description='Подборка интересных статей для абитуриентов и заселяющихся'
-            >
-                <CardScroll>
-                    <Card size="m">
-                        <div style={{ width: 224, height: 96 }} />
-                    </Card>
-                    <Card size="m">
-                        <div style={{ width: 224, height: 96 }} />
-                    </Card>
-                    <Card size="m">
-                        <div style={{ width: 224, height: 96 }} />
-                    </Card>
-                </CardScroll>
-            </Group>
+            {/*<Group*/}
+            {/*    header={<Header mode='secondary'>Интересное и полезное</Header>}*/}
+            {/*    description='Подборка интересных статей для абитуриентов и заселяющихся'*/}
+            {/*>*/}
+            {/*    <CardScroll>*/}
+            {/*        <Card size="m">*/}
+            {/*            <div style={{ width: 224, height: 96 }} />*/}
+            {/*        </Card>*/}
+            {/*        <Card size="m">*/}
+            {/*            <div style={{ width: 224, height: 96 }} />*/}
+            {/*        </Card>*/}
+            {/*        <Card size="m">*/}
+            {/*            <div style={{ width: 224, height: 96 }} />*/}
+            {/*        </Card>*/}
+            {/*    </CardScroll>*/}
+            {/*</Group>*/}
 
             <div style={{textAlign: "center", marginBottom: "20px"}}>
                 <Button

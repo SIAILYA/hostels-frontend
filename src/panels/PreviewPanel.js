@@ -21,7 +21,7 @@ import CircularProgressBar from "./components/CircleProgress";
 
 const PreviewPanel = ({id}) => {
     const {review, clearData} = useContext(ReviewsContext)
-    const {go, history} = useContext(Navigation)
+    const {go, history, goBack} = useContext(Navigation)
 
 
     return (
@@ -31,10 +31,9 @@ const PreviewPanel = ({id}) => {
             </PanelHeader>
             <Div>
                 <FormStatus
-                    header="Отзыв уже отправлен на модерацию"
+                    header="Отзыв уже отправлен на модерацию!"
                 >
-                    Постараемся как можно быстрее обработать ваш отзыв, чтобы его могли увидеть другие пользователи.
-                    После модерации на экране добавления вы сможете редактировать и дополнять ваш отзыв
+                    Постараемся как можно быстрее обработать ваш отзыв, чтобы его могли увидеть другие пользователи!
                 </FormStatus>
             </Div>
             <Div>

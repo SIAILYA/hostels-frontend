@@ -1,4 +1,14 @@
-import {Button, Div, FixedLayout, Group, Panel, PanelHeader, Placeholder, SimpleCell} from "@vkontakte/vkui";
+import {
+    Button,
+    Div,
+    FixedLayout,
+    Group,
+    Panel,
+    PanelHeader,
+    PanelHeaderBack,
+    Placeholder,
+    SimpleCell
+} from "@vkontakte/vkui";
 import Icon28DoneOutline from "@vkontakte/icons/dist/28/done_outline";
 import Icon56ErrorOutline from "@vkontakte/icons/dist/56/error_outline";
 import React, {useContext} from "react";
@@ -6,12 +16,12 @@ import {LocationContext, Navigation} from "../Contexts";
 
 
 const DormitoryPanel = ({id}) => {
-    const {go} = useContext(Navigation)
+    const {go, goBack} = useContext(Navigation)
     const {dormitoryList, setDormitory, selectedDormitory} = useContext(LocationContext)
 
     return(
         <Panel id={id}>
-            <PanelHeader>Выбор общежития</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>Выбор общежития</PanelHeader>
 
             {
                 dormitoryList.length > 0 ?

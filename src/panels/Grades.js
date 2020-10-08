@@ -1,4 +1,4 @@
-import {Button, Div, FormStatus, Panel, PanelHeader} from "@vkontakte/vkui";
+import {Button, Div, FormStatus, Panel, PanelHeader, PanelHeaderBack} from "@vkontakte/vkui";
 import CircularProgressBar from "./components/CircleProgress";
 import Stars from "./components/Stars";
 import React, {useContext, useEffect} from "react";
@@ -11,7 +11,7 @@ const GradesPanel = ({id}) => {
         ratingLocation, setLocationRating,
         ratingNoise, setNoiseRating,
         mainRating, setMainRating} = useContext(RatingContext)
-    const {go} = useContext(Navigation)
+    const {go, goBack} = useContext(Navigation)
 
     useEffect(() => {
         setMainRating(Math.fround((
@@ -25,7 +25,7 @@ const GradesPanel = ({id}) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>Оценка общежития</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>Оценка общежития</PanelHeader>
             <Div>
                 <FormStatus mode='default' header='Оцените ваше общежитие'>
                     Расставьте оценки по нескольким критериям, которые будут влиять на общий рейтинг общежития.
