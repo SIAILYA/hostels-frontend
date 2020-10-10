@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {
     Button, Caption,
     Checkbox,
@@ -8,13 +8,13 @@ import {
     Group,
     Header, Input, Panel,
     PanelHeader,
-    Radio, Separator
+    Radio, Separator, PanelHeaderBack
 } from "@vkontakte/vkui";
 import {Navigation, QuestionsContext} from "../Contexts";
 
 
 const QuestionsPanel = ({id}) => {
-    const {go} = useContext(Navigation)
+    const {go, goBack} = useContext(Navigation)
     const {dormitoryType, setDormitoryType,
         payType, setPayType,
         cardPay, setCardPay,
@@ -30,10 +30,14 @@ const QuestionsPanel = ({id}) => {
         electricity, setElectricity,
         internet, setInternet} = useContext(QuestionsContext)
 
+    const [costStatus, setCostStatus] = useState('default')
+    const [pirStatus, setPirStatus] = useState('default')
+
+
 
     return(
         <Panel id={id}>
-            <PanelHeader>Отзыв</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}>Отзыв</PanelHeader>
 
             <Div>
                 <FormStatus mode='default' header='Еще несколько вопросов...'>
@@ -106,19 +110,28 @@ const QuestionsPanel = ({id}) => {
                     </Group>
                     <FormLayoutGroup
                         top={<div>Стоимость за месяц&#160;<a style={{color: "var(--red)"}}>*</a></div>}
-                        // bottom="Укажите валюту, если оплата не в российских рублях"
+                        bottom={<p>Одно число - сколько вы платите в <b>месяц</b></p>}
                     >
-                        <Input type='number'
+                        <Input type='text'
                                max={100000}
                                min={1}
                                value={cost}
-                               pattern="[0-9]{1,5}"
+                               placeholder={2200}
                                maxLength={5}
                                onChange={e => {
-                                   e.target.value <= 10000 ?
-                                       setCost(e.target.value)
-                                       : console.log("<= 10000")
+                                   if (e.target.value.length > 0){
+                                       if (e.target.value <= 10000 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+                                           setCost(parseInt(e.target.value))
+                                           setCostStatus('valid')
+                                       } else {
+                                           console.log("Ввод только 1 числа до 10000")
+                                       }
+                                   } else {
+                                       setCost(0)
+                                       setCostStatus('error')
+                                   }
                                }}
+                               status={costStatus}
                         />
                     </FormLayoutGroup>
                     <Separator/>
@@ -147,19 +160,29 @@ const QuestionsPanel = ({id}) => {
                         </Checkbox>
 
                     </Group>
-                    <FormLayoutGroup top={<div>Количество человек в комнатах&#160;<a style={{color: "var(--red)"}}>*</a></div>}>
+                    <FormLayoutGroup top={<div>Количество человек в комнатах&#160;<a style={{color: "var(--red)"}}>*</a></div>} bottom={<p>Одно число - количество человек в <b>вашей</b> комнате</p>}>
                         <Input
-                            type='number'
+                            type='text'
                             max={20}
                             min={1}
                             pattern="[0-9]{1,2}"
                             value={peopleInRoom}
                             maxLength={2}
+                            placeholder={3}
                             onChange={e => {
-                                e.target.value <= 20 ?
-                                setPeopleInRoom(e.target.value)
-                                : console.log("<= 20")
+                                if (e.target.value.length > 0){
+                                    if (e.target.value <= 20 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+                                        setPeopleInRoom(parseInt(e.target.value))
+                                        setPirStatus('valid')
+                                    } else {
+                                        console.log("Ввод только 1 числа до 20")
+                                    }
+                                } else {
+                                    setPeopleInRoom(0)
+                                    setPirStatus('error')
+                                }
                             }}
+                            status={pirStatus}
                         />
                     </FormLayoutGroup>
                     <Separator/>
@@ -173,7 +196,7 @@ const QuestionsPanel = ({id}) => {
                             Общежитие работает круглосуточно
                         </Checkbox>
                     </Group>
-                    <FormLayoutGroup top="Общежитие закрывают на ночь" bottom='Укажите период, в который обжщежитие закрыто'>
+                    <FormLayoutGroup top="Общежитие закрывают на ночь" bottom='Укажите период, в который обжщежитие закрыто, либо отметьте круглосуточную работу'>
                             <label>
                                 <Input
                                     type='time'

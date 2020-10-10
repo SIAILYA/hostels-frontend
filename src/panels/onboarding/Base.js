@@ -5,10 +5,10 @@ import {Button, Div, FixedLayout, Panel} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 
-import logo from "../../img/logo.svg"
+import population from "../../img/population.svg"
 
 
-const OnboardingHelloPanel = ({id}) => {
+const Base = ({id}) => {
     const {setOnboardingPanel, accessToken, setActiveView} = useContext(Navigation)
     const {userRole, setUserRole} = useContext(ReviewsContext)
 
@@ -16,17 +16,17 @@ const OnboardingHelloPanel = ({id}) => {
     return(
         <Panel id={id}>
             <Div>
-                <div className="yellow-gradient-text hello" style={{textAlign: "center", marginTop: "5vh"}}>
-                    Привет!
+                <div className="yellow-gradient-text how" style={{textAlign: "center", marginTop: "5vh"}}>
+                    Как это работает?
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>
-                    Это "Твоё общежитие"
+                    Делитесь и узнавайте!
                 </div>
                 <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
-                    <img src={logo} alt="" width="200vh"/>
+                    <img src={population} alt="" width="200vh"/>
                 </div>
                 <div style={{textAlign: "center", marginTop: "25px"}}>
-                    Сервис, который покажет десятки студенческих общежитий изнутри!
+                    База обжежитий постоянно растет благодаря пользователям - присоединяйтесь к нашему сообществу!
                 </div>
             </Div>
             <FixedLayout
@@ -38,7 +38,7 @@ const OnboardingHelloPanel = ({id}) => {
                         size="xl"
                         stretched
                         onClick={() => {
-                            setOnboardingPanel("base_panel")
+                            setOnboardingPanel("role_panel")
                         }}
                     >
                         Вперед!
@@ -65,4 +65,4 @@ const OnboardingHelloPanel = ({id}) => {
     )
 }
 
-export default OnboardingHelloPanel;
+export default Base;

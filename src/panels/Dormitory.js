@@ -2,7 +2,7 @@ import {
     Button,
     Div,
     FixedLayout,
-    Group,
+    Group, Header,
     Panel,
     PanelHeader,
     PanelHeaderBack,
@@ -36,7 +36,7 @@ const DormitoryPanel = ({id}) => {
                                 Общежития нет в списке?
                             </Button>
                         </Div>
-                        <Group>
+                        <Group header={<Header mode="secondary">Выберете общежитие</Header>}>
                             {
                                 dormitoryList.map((item, index) => {
                                     delete item.grades;
@@ -58,6 +58,18 @@ const DormitoryPanel = ({id}) => {
                                 })
                             }
                         </Group>
+                        <Header className="header-centered" mode="secondary">Или</Header>
+                        <Div style={{margin: "auto", textAlign: "center"}}>
+                            <Button
+                                size="xl"
+                                mode="primary"
+                                className='yellow-gradient'
+                                onClick={go}
+                                data-goto='addPanel_custom_dormitory_panel'
+                            >
+                                Другое общежитие
+                            </Button>
+                        </Div>
                     </div>
                     :
                     <Div>

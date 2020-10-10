@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
+import {Animated} from "react-animated-css";
+
 import "./style.css"
 
 import {
@@ -58,7 +60,8 @@ import WhereStudyPanel from "./panels/onboarding/ChooseUniversity";
 import PreviewPanel from "./panels/PreviewPanel";
 import DormitoryReviews from "./panels/DormitoryReviews";
 import ReviewModal from "./panels/ReviewModal";
-import {Icon56ErrorOutline} from "@vkontakte/icons";
+import {Icon56ErrorOutline, Icon56WifiOutline} from "@vkontakte/icons";
+import Base from "./panels/onboarding/Base";
 
 
 const App = () => {
@@ -91,6 +94,7 @@ const App = () => {
 
 	const [activeStory, setActiveStory] = useState('main');
 	const [activeView, setActiveView] = useState(INIT_VIEW);
+	const [lastOnlineView, setLastOnlineView] = useState('')
 	const [activePanel, setActivePanel] = useState(INIT_PANEL);
 	const [activeAddPanel, setActiveAddPanel] = useState(INIT_ADD_PANEL);
 	const [activeReviewPanel, setActiveReviewPanel] = useState('dormitory_reviews_panel')
@@ -159,8 +163,14 @@ const App = () => {
 	const [modalDormitoryInfo, setModalDormitoryInfo] = useState('')
 
 
+	function setOnline() {
+		!navigator.onLine ? go({currentTarget: {dataset: {goto: "view_offline"}}}) : goBack()
+	}
+
 	useEffect(() => {
 			window.addEventListener('popstate', () => goBack());
+			window.addEventListener('online', () => setOnline());
+			window.addEventListener('offline', () => setOnline());
 			bridge.send("VKWebAppInit");
 
 			bridge.subscribe(({ detail: { type, data }}) => {
@@ -493,11 +503,15 @@ const App = () => {
 	};
 
 	const goBack = () => {
-		if( history.length === 1 ) {  // Если в массиве одно значение:
-			bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
-		} else if( history.length > 1 ) { // Если в массиве больше одного значения:
-			const last = history.pop() // удаляем последний элемент в массиве.
+		if( history.length === 1 ) {
+			bridge.send("VKWebAppClose", {"status": "success"});
+		} else if( history.length > 1 && navigator.onLine ) {
+			const last = history.pop()
 			const goBackTo = history[history.length - 1]
+
+			console.log(last)
+			console.log(history)
+
 
 			if (last === "onboarding"){
 				if (activeView !== "epic_view"){
@@ -706,6 +720,7 @@ const App = () => {
 
 										<View id="onboarding_view" activePanel={activeOnboardingPanel} popout={onboardingPopup}>
 											<OnboardingHelloPanel id="hello_panel"/>
+											<Base id="base_panel"/>
 											<RolePanel id="role_panel"/>
 											<ThanksPanel id="thanks_panel"/>
 											<WhereStudyPanel id="university_panel"/>
@@ -750,6 +765,18 @@ const App = () => {
 												>
 													Сервер вернул ошибку, чтобы разобраться в проблеме,&#160;
 													<Link href="https://vk.me/yourdormitory" className="yellow-gradient-text">напишите нам</Link>
+												</Placeholder>
+											</Panel>
+										</View>
+										<View id="offline" activePanel="status">
+											<Panel id="status">
+												<Placeholder
+													stretched
+													icon={<Icon56WifiOutline width="120" height="120" className="yellow-gradient-text"/>}
+													header="Кажется, вы оффлайн"
+													style={{color: 'var(--yellow)'}}
+												>
+													Все данные сохранятся, просто подключитесь к сети
 												</Placeholder>
 											</Panel>
 										</View>

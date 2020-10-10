@@ -3,7 +3,7 @@ import {
     Div,
     FixedLayout,
     FormLayout,
-    FormLayoutGroup,
+    FormLayoutGroup, FormStatus,
     Input,
     Panel,
     PanelHeader,
@@ -45,6 +45,14 @@ const CustomDormitoryPanel = ({id}) => {
             </PanelHeader>
 
             <div>
+                <Div>
+                    <FormStatus mode='default' header='Общежитие не нашлось в списке?'>
+                        База общежитий постоянно растет благодаря нашим пользователям.
+                        Если не нашли своего общежития в списке - побудьте частью нашего сообщества и укажите, пожалуйста, его название и адрес вручную.
+                        Общежитие будет проверено вместе с отзывом и добавлено в базу!
+                    </FormStatus>
+                </Div>
+
                 <FormLayout>
                     <FormLayoutGroup top="Название/номер общежития">
                         <Input type='text'
@@ -52,36 +60,39 @@ const CustomDormitoryPanel = ({id}) => {
                                    setTitle(e.currentTarget.value)
                                }}
                                name='custom_title'
+                               placeholder="Общежитие №1"
                         />
                     </FormLayoutGroup>
                     <FormLayoutGroup top="Адрес общежития"
-                                     bottom="Введите адрес в произвольной форме или выберете точку на карте:">
+                                     // bottom="Введите адрес общежития"
+                    >
                         <Input type='text'
                                onChange={e => {
                                    setAddress(e.currentTarget.value)
                                }}
+                               placeholder="Москва, улица Пушкина, 7к3"
                                name='custom_address'
                         />
                     </FormLayoutGroup>
                 </FormLayout>
             </div>
-            <Div style={{height: '30vh', borderRadius: '15px', overflow: 'hidden', padding: 0, margin: '12px'}}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{key: 'AIzaSyCTGj2Q0pCF-W-VAh8i2GImSUhXuxZF8yI'}}
-                    defaultCenter={{
-                        'lat': 59.95,
-                        'lng': 30.33
-                    }}
-                    defaultZoom={11}
-                    onClick={({lat, lng}) => setCoordinates({lat: lat, lng: lng})}
-                >
-                    <GoogleMap
-                        lat={customCoordinates.lat}
-                        lng={customCoordinates.lng}
-                    />
+            {/*<Div style={{height: '30vh', borderRadius: '15px', overflow: 'hidden', padding: 0, margin: '12px'}}>*/}
+            {/*    <GoogleMapReact*/}
+            {/*        bootstrapURLKeys={{key: 'AIzaSyCTGj2Q0pCF-W-VAh8i2GImSUhXuxZF8yI'}}*/}
+            {/*        defaultCenter={{*/}
+            {/*            'lat': 59.95,*/}
+            {/*            'lng': 30.33*/}
+            {/*        }}*/}
+            {/*        defaultZoom={11}*/}
+            {/*        onClick={({lat, lng}) => setCoordinates({lat: lat, lng: lng})}*/}
+            {/*    >*/}
+            {/*        <GoogleMap*/}
+            {/*            lat={customCoordinates.lat}*/}
+            {/*            lng={customCoordinates.lng}*/}
+            {/*        />*/}
 
-                </GoogleMapReact>
-            </Div>
+            {/*    </GoogleMapReact>*/}
+            {/*</Div>*/}
 
             <FixedLayout vertical='bottom'>
                 <Div>

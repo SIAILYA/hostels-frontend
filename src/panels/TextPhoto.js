@@ -10,7 +10,7 @@ import {
     FormLayout, FormLayoutGroup,
     FormStatus,
     Panel,
-    PanelHeader, Placeholder, Textarea, ScreenSpinner
+    PanelHeader, Placeholder, Textarea, ScreenSpinner, PanelHeaderBack
 } from "@vkontakte/vkui";
 
 import Icon24CameraOutline from '@vkontakte/icons/dist/24/camera_outline';
@@ -21,7 +21,6 @@ import {LocationContext, ModalContext, Navigation, ReviewsContext} from "../Cont
 
 import {sendReview, uploadPhotos} from "../Backend";
 import {FailedSnackbar} from "./components/Snackbars";
-import PanelHeaderBack from "@vkontakte/vkui/src/components/PanelHeaderBack/PanelHeaderBack";
 
 
 const TextPhotoPanel = ({id}) => {
