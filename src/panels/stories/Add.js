@@ -21,15 +21,16 @@ import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline'
 import {
     Icon28ArrowRightOutline, Icon28CancelCircleOutline,
     Icon28ChatsOutline,
-    Icon28DoneOutline, Icon28PrivacyOutline,
+    Icon28DoneOutline, Icon28ErrorOutline, Icon28PrivacyOutline,
     Icon28ShareOutline,
     Icon28SyncOutline
 } from "@vkontakte/icons";
+import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner";
 
 
 const Add = ({go}) => {
-    const {fetchedUser, accessToken, getToken} = useContext(Navigation)
-    const {userRole, userReviews, userReviewsLoading, fetchUserReviews} = useContext(ReviewsContext)
+    const {fetchedUser, accessToken, getToken, setPopout} = useContext(Navigation)
+    const {userRole, userReviews, userReviewsLoading, fetchUserReviews, fetchDormitoryReviews} = useContext(ReviewsContext)
     const {selectedUniversity} = useContext(LocationContext)
 
     const [, updateState] = React.useState();
@@ -143,10 +144,18 @@ const Add = ({go}) => {
                     userReviews.map((review, index) => {
                         return (
                             <div key={index}>
-                                <Card style={{marginBottom: "18px"}}>
+                                <Card style={{marginBottom: "18px", overflow: "hidden"}}>
                                     <SimpleCell
                                         description={review.dormitory.address}
-                                        after={<Icon28ArrowRightOutline className="yellow-gradient-text"/>}
+                                        disabled={review.moderated !== 1}
+                                        after={review.moderated === 1 ? <Icon28ArrowRightOutline className="yellow-gradient-text"/> : null}
+                                        onClick={() => {
+                                            setPopout(<ScreenSpinner size='large' />)
+                                            fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                    go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                }
+                                            )
+                                        }}
                                     >
                                         {review.dormitory.title}
                                     </SimpleCell>

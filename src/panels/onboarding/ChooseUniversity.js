@@ -1,7 +1,16 @@
 import React, {useContext} from "react";
 import bridge from '@vkontakte/vk-bridge';
 
-import {Panel, Div, Button, FixedLayout, FormLayoutGroup, SelectMimicry, FormLayout} from "@vkontakte/vkui";
+import {
+    Panel,
+    Div,
+    Button,
+    FixedLayout,
+    FormLayoutGroup,
+    SelectMimicry,
+    FormLayout,
+    PanelHeader
+} from "@vkontakte/vkui";
 
 import Icon24UserOutgoing from "@vkontakte/icons/dist/24/user_outgoing";
 
@@ -18,7 +27,8 @@ const WhereStudyPanel = ({id}) => {
     } = useContext(LocationContext)
 
     return(
-        <Panel id={id} style={{marginTop: '52px'}}>
+        <Panel id={id}>
+            <PanelHeader separator={false} transparent={true}/>
             <Div>
                 <div className="yellow-gradient-text where-are-you" style={{textAlign: "center"}}>
                     А где учитесь?

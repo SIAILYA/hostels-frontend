@@ -13,7 +13,7 @@ const Week = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader>Отзыв опубликован!</PanelHeader>
+            <PanelHeader separator={false} transparent={true}/>
             <Div style={{paddingBottom: "20vh"}}>
                 <div className="yellow-gradient-text how" style={{textAlign: "center"}}>
                     Опубликовано!

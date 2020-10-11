@@ -15,7 +15,7 @@ const Base = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader separator={false}/>
+            <PanelHeader separator={false} transparent={true}/>
             <Div>
                 <div className="yellow-gradient-text how" style={{textAlign: "center"}}>
                     Как это работает?

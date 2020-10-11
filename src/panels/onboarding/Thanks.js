@@ -15,7 +15,7 @@ const ThanksPanel = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader separator={false}/>
+            <PanelHeader separator={false} transparent={true}/>
             <Div>
                 <div className="yellow-gradient-text super" style={{textAlign: "center"}}>
                     Отлично!

@@ -19,7 +19,7 @@ const RolePanel = ({id}) => {
 
     return(
         <Panel id={id}>
-            <PanelHeader separator={false}/>
+            <PanelHeader separator={false} transparent={true}/>
             <Div>
                 <div className="yellow-gradient-text who-are-you" style={{textAlign: "center"}}>
                     Кто вы?
