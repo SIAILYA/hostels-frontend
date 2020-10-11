@@ -18,9 +18,9 @@ const WhereStudyPanel = ({id}) => {
     } = useContext(LocationContext)
 
     return(
-        <Panel id={id}>
+        <Panel id={id} style={{marginTop: '52px'}}>
             <Div>
-                <div className="yellow-gradient-text where-are-you" style={{textAlign: "center", marginTop: "5vh"}}>
+                <div className="yellow-gradient-text where-are-you" style={{textAlign: "center"}}>
                     А где учитесь?
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>
@@ -64,7 +64,7 @@ const WhereStudyPanel = ({id}) => {
                 </FormLayoutGroup>
             </FormLayout>
 
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', paddingBotton: '5vh'}}>
                 <Button
                     mode='outline'
                     style={{color: 'var(--yellow)!important', margin: 'auto'}}

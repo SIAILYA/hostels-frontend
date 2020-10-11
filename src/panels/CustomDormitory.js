@@ -56,8 +56,9 @@ const CustomDormitoryPanel = ({id}) => {
                 <FormLayout>
                     <FormLayoutGroup top="Название/номер общежития">
                         <Input type='text'
+                               value={customTitle}
                                onChange={e => {
-                                   setTitle(e.currentTarget.value)
+                                   setTitle(e.currentTarget.value.substr(0, 200))
                                }}
                                name='custom_title'
                                placeholder="Общежитие №1"
@@ -67,8 +68,9 @@ const CustomDormitoryPanel = ({id}) => {
                                      // bottom="Введите адрес общежития"
                     >
                         <Input type='text'
+                               value={customAddress}
                                onChange={e => {
-                                   setAddress(e.currentTarget.value)
+                                   setAddress(e.currentTarget.value.substr(0, 200))
                                }}
                                placeholder="Москва, улица Пушкина, 7к3"
                                name='custom_address'

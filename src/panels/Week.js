@@ -3,31 +3,29 @@ import bridge from "@vkontakte/vk-bridge";
 
 import {Button, Div, FixedLayout, Panel, PanelHeader} from "@vkontakte/vkui";
 
-import {Navigation, ReviewsContext} from "../../Contexts";
+import {Navigation, ReviewsContext} from "../Contexts";
+import meter from "../img/meter.svg"
 
-import population from "../../img/population.svg"
-
-
-const Base = ({id}) => {
-    const {setOnboardingPanel, accessToken, setActiveView} = useContext(Navigation)
+const Week = ({id}) => {
+    const {setOnboardingPanel, accessToken, setActiveView, go, fetchMessagesAllow} = useContext(Navigation)
     const {userRole, setUserRole} = useContext(ReviewsContext)
 
 
     return(
         <Panel id={id}>
-            <PanelHeader separator={false}/>
-            <Div>
+            <PanelHeader>Отзыв опубликован!</PanelHeader>
+            <Div style={{paddingBottom: "20vh"}}>
                 <div className="yellow-gradient-text how" style={{textAlign: "center"}}>
-                    Как это работает?
+                    Опубликовано!
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>
-                    Делитесь и узнавайте!
+                    Поучаствуйте в "Отзыве недели"!
                 </div>
                 <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
-                    <img src={population} alt="" width="200vh"/>
+                    <img src={meter} alt="" width="250vh"/>
                 </div>
                 <div style={{textAlign: "center", marginTop: "25px"}}>
-                    База обжежитий постоянно растет благодаря пользователям - присоединяйтесь к нашему сообществу!
+                    Нши креативометры зашкаливают, вам явно нужно поучаствовать в битве за лучший отзыв! Для этого нужно разрешить сообществу отправлять вам сообщения. Обещаем без лишних рассылок!
                 </div>
             </Div>
             <FixedLayout
@@ -39,26 +37,24 @@ const Base = ({id}) => {
                         size="xl"
                         stretched
                         onClick={() => {
-                            setOnboardingPanel("role_panel")
+                            fetchMessagesAllow().then(res => {
+                                if (res.result === true) {
+                                    go({currentTarget: {dataset: {goto: "addPanel_preview_review_panel"}}})
+                                }
+                            })
                         }}
                     >
-                        Вперед!
+                        Предоставить
                     </Button>
                     <Button
                         size="m"
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
                         onClick={() => {
-                            setUserRole(prev => prev || "Интересующийся")
-                            bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
-                            if (!accessToken){
-                                setOnboardingPanel("thanks_panel")
-                            } else {
-                                setActiveView("epic_view")
-                            }
+                            go({currentTarget: {dataset: {goto: "addPanel_preview_review_panel"}}})
                         }}
                     >
-                        Пропустить
+                        Не хочу участвовать
                     </Button>
                 </Div>
             </FixedLayout>
@@ -66,4 +62,4 @@ const Base = ({id}) => {
     )
 }
 
-export default Base;
+export default Week;

@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import bridge from "@vkontakte/vk-bridge";
 
-import {Button, Div, FixedLayout, Panel} from "@vkontakte/vkui";
+import {Button, Div, FixedLayout, Panel, PanelHeader} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 
@@ -15,8 +15,9 @@ const OnboardingHelloPanel = ({id}) => {
 
     return(
         <Panel id={id}>
+            <PanelHeader separator={false}/>
             <Div>
-                <div className="yellow-gradient-text hello" style={{textAlign: "center", marginTop: "5vh"}}>
+                <div className="yellow-gradient-text hello" style={{textAlign: "center"}}>
                     Привет!
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>

@@ -20,14 +20,14 @@ import CircularProgressBar from "./components/CircleProgress";
 
 
 const PreviewPanel = ({id}) => {
-    const {review, clearData} = useContext(ReviewsContext)
+    const {review, clearData, fetchReviews} = useContext(ReviewsContext)
     const {go, history} = useContext(Navigation)
 
 
     return (
         <Panel id={id}>
             <PanelHeader>
-                Отзыв готов!
+                Превью отзыва
             </PanelHeader>
             <Div>
                 <FormStatus
@@ -157,6 +157,7 @@ const PreviewPanel = ({id}) => {
                         history.splice(history.indexOf("view_add_review_view") - 1, 7)
                         go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
                         clearData()
+                        fetchReviews()
                     }}
                     stretched
                     size="xl"

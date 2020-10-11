@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import bridge from "@vkontakte/vk-bridge"
 
 import {
@@ -12,7 +12,7 @@ import {
     Header,
     Cell,
     PanelSpinner,
-    SimpleCell, Card, HorizontalScroll, Link
+    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
@@ -29,8 +29,11 @@ import {
 
 const Add = ({go}) => {
     const {fetchedUser, accessToken, getToken} = useContext(Navigation)
-    const {userRole, userReviews, userReviewsLoading} = useContext(ReviewsContext)
+    const {userRole, userReviews, userReviewsLoading, fetchUserReviews} = useContext(ReviewsContext)
     const {selectedUniversity} = useContext(LocationContext)
+
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
 
     const getDescription = () => {
         if (userRole !== "Студент") return userRole
@@ -50,6 +53,10 @@ const Add = ({go}) => {
         }
         return [<Icon28CancelCircleOutline fill="var(--red)"/>, "Отзыв отклонен"]
     }
+
+    useEffect(() => {
+        forceUpdate()
+    }, [userReviews])
 
     return (
         <Panel id="add_panel">
@@ -86,10 +93,10 @@ const Add = ({go}) => {
                 </Group>
             </Div>
 
-            {
-                userReviewsLoading &&
-                <PanelSpinner/>
-            }
+            {/*{*/}
+            {/*    userReviewsLoading &&*/}
+            {/*    <PanelSpinner/>*/}
+            {/*}*/}
             {
                 !userReviewsLoading && userReviews.length === 0 &&
                 <Placeholder
@@ -115,8 +122,7 @@ const Add = ({go}) => {
                 </Placeholder>
             }
                 <Div>
-            {
-                !userReviewsLoading && userReviews.length !== 0 &&
+
                 <div>
                 <Button
                     size="xl"
@@ -131,7 +137,8 @@ const Add = ({go}) => {
                 >
                     Написать отзыв
                 </Button>
-                <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
+                <PullToRefresh onRefresh={fetchUserReviews} isFetching={userReviewsLoading}>
+                    <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
                     {
                     userReviews.map((review, index) => {
                         return (
@@ -231,8 +238,9 @@ const Add = ({go}) => {
                 )
                 }
                 </Group>
+                </PullToRefresh>
                 </div>
-            }
+
                 </Div>
         </Panel>
     )

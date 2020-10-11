@@ -59,15 +59,15 @@ const TextPhotoPanel = ({id}) => {
 
                 {/*{...getRootProps({ className: 'dropzone' })}*/}
                 <FormLayout>
-                    <FormLayoutGroup bottom={<div style={{textAlign: "right"}}>{textareaRef.current.value ? textareaRef.current.value.length : 0}/2000</div>}>
+                    <FormLayoutGroup bottom={<div style={{textAlign: "right"}}>{textReview.length ? textReview.length : 0}/2000</div>}>
                         <Textarea
                             top="Отзыв об общежитии"
                             placeholder="Я (не) люблю это обжежитие за..."
-                            defaultValue={textReview}
+                            value={textReview}
                             getRef={textareaRef}
-                            maxLength="2000"
+                            // maxLength="2000"
                             onChange={e => {
-                                setTextReview(e.target.value)
+                                setTextReview(e.target.value.substr(0, 2000))
                             }}
                         />
                     </FormLayoutGroup>
@@ -92,6 +92,7 @@ const TextPhotoPanel = ({id}) => {
                                           controlSize="l"
                                           multiple
                                           accept="image/*"
+                                          disabled={previews.length >= 5}
                                           onInput={e => setUserPhotos(prev => [...prev, ...e.currentTarget.files])}
                                     >
                                         Открыть галерею
@@ -162,7 +163,7 @@ const TextPhotoPanel = ({id}) => {
                             sendReview(review).then(res => {
                                 setPopout(null)
                                 if (res.status === 200){
-                                    go({currentTarget: {dataset: {goto: "addPanel_preview_review_panel"}}})
+                                    go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
                                 } else {
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                 }

@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import bridge from '@vkontakte/vk-bridge';
 
-import {Div, Avatar, Button, Cell, FixedLayout, Panel, Radio, SimpleCell} from "@vkontakte/vkui";
+import {Div, Avatar, Button, Cell, FixedLayout, Panel, Radio, SimpleCell, PanelHeader} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 
@@ -19,8 +19,9 @@ const RolePanel = ({id}) => {
 
     return(
         <Panel id={id}>
+            <PanelHeader separator={false}/>
             <Div>
-                <div className="yellow-gradient-text who-are-you" style={{textAlign: "center", marginTop: "5vh"}}>
+                <div className="yellow-gradient-text who-are-you" style={{textAlign: "center"}}>
                     Кто вы?
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>

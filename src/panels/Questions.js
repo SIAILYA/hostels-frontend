@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     Button, Caption,
     Checkbox,
@@ -33,6 +33,24 @@ const QuestionsPanel = ({id}) => {
     const [costStatus, setCostStatus] = useState('default')
     const [pirStatus, setPirStatus] = useState('default')
 
+
+    useEffect(() => {
+        if (cost === ''){
+        } else
+        if (cost > 0){
+            setCostStatus('valid')
+        } else {
+            setCostStatus('error')
+        }
+
+        if (peopleInRoom === ''){
+        } else
+        if (peopleInRoom > 0){
+            setPirStatus('valid')
+        } else {
+            setPirStatus('error')
+        }
+    }, [peopleInRoom, cost])
 
 
     return(
@@ -121,8 +139,7 @@ const QuestionsPanel = ({id}) => {
                                onChange={e => {
                                    if (e.target.value.length > 0){
                                        if (e.target.value <= 10000 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-                                           setCost(parseInt(e.target.value))
-                                           setCostStatus('valid')
+                                           setCost(parseInt(e.target.value.trim('0')))
                                        } else {
                                            console.log("Ввод только 1 числа до 10000")
                                        }
@@ -172,8 +189,7 @@ const QuestionsPanel = ({id}) => {
                             onChange={e => {
                                 if (e.target.value.length > 0){
                                     if (e.target.value <= 20 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-                                        setPeopleInRoom(parseInt(e.target.value))
-                                        setPirStatus('valid')
+                                        setPeopleInRoom(parseInt(e.target.value.trim('0')))
                                     } else {
                                         console.log("Ввод только 1 числа до 20")
                                     }
@@ -204,7 +220,7 @@ const QuestionsPanel = ({id}) => {
                                     disabled={!!workAlways}
                                     onChange={e => setClosedStart(e.target.value)}
                                 />
-                                <Caption className="FormLayout__row-top">С</Caption>
+                                <Caption className="FormLayout__row-top">Со скольки</Caption>
                             </label>
                             <label>
                                 <Input
@@ -213,7 +229,7 @@ const QuestionsPanel = ({id}) => {
                                     disabled={!!workAlways}
                                     onChange={e => setClosedEnd(e.target.value)}
                                 />
-                                <Caption className="FormLayout__row-top">До</Caption>
+                                <Caption className="FormLayout__row-top">До скольки</Caption>
                             </label>
                     </FormLayoutGroup>
                     <Separator/>

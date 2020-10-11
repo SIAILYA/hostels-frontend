@@ -2,30 +2,24 @@ import React, {useEffect, useState} from 'react';
 
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
-import {Animated} from "react-animated-css";
 
 import "./style.css"
 
-import {
-	LocationContext,
-	ModalContext,
-	Navigation,
-	QuestionsContext,
-	RatingContext,
-	ReviewsContext
-} from "./Contexts";
+import {LocationContext, ModalContext, Navigation, QuestionsContext, RatingContext, ReviewsContext} from "./Contexts";
 
 import {
+	Button,
 	ConfigProvider,
 	Epic,
+	Link,
 	Panel,
 	PanelSpinner,
+	Placeholder,
 	Root,
+	ScreenSpinner,
 	Tabbar,
 	TabbarItem,
-	View,
-	Placeholder,
-	ScreenSpinner, Link, Button
+	View
 } from '@vkontakte/vkui';
 
 import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
@@ -62,6 +56,7 @@ import DormitoryReviews from "./panels/DormitoryReviews";
 import ReviewModal from "./panels/ReviewModal";
 import {Icon56ErrorOutline, Icon56WifiOutline} from "@vkontakte/icons";
 import Base from "./panels/onboarding/Base";
+import Week from "./panels/Week";
 
 
 const App = () => {
@@ -162,6 +157,9 @@ const App = () => {
 	const [modalUserInfo, setModalUserInfo] = useState('')
 	const [modalDormitoryInfo, setModalDormitoryInfo] = useState('')
 
+	const [, updateState] = React.useState();
+	const forceUpdate = React.useCallback(() => updateState({}), []);
+
 
 	function setOnline() {
 		!navigator.onLine ? go({currentTarget: {dataset: {goto: "view_offline"}}}) : goBack()
@@ -244,13 +242,6 @@ const App = () => {
 				setPopout(null)
 			}
 
-			function fetchReviews () {
-				getLastReviews().then(res => {
-					setLastReviews(res);
-					setReviewsLoading(false)
-				})
-			}
-
 			fetchData();
 			fetchStorageInit();
 			fetchReviews();
@@ -267,6 +258,19 @@ const App = () => {
 		getRating().then(res => {
 			setDormitoryRating(res.data)
 			setRatingLoading(false)
+		})
+	}
+
+	async function fetchMessagesAllow() {
+		return await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198896747})
+	}
+
+	function fetchReviews () {
+		setReviewsLoading(true)
+		getLastReviews().then(res => {
+			setLastReviews(res);
+			setReviewsLoading(false)
+			forceUpdate()
 		})
 	}
 
@@ -323,6 +327,14 @@ const App = () => {
 			})
 		}
 	}, [fetchedUser])
+
+	function fetchUserReviews(){
+		setUserReviewsLoading(true)
+		getUserReviews(fetchedUser.id).then(res => {
+			setUserReviews(res.data)
+			setUserReviewsLoading(false)
+		})
+	}
 
 	useEffect(() => {
 			setReview({
@@ -582,7 +594,7 @@ const App = () => {
 				setPopout, accessToken, fetchedUser, activeOnboardingPanel, setOnboardingPanel,
 				searchBanner, onboardingPopup, setOnboardingPopup,
 				setOnboardingSnackbar, onboardingSnackbar,
-				activeReviewModal, setReviewModal
+				activeReviewModal, setReviewModal, fetchMessagesAllow
 			}}>
 				<LocationContext.Provider value={{
 					countryList, citiesList, uniList, dormitoryList,
@@ -634,7 +646,8 @@ const App = () => {
 									userReviews, userReviewsLoading,
 									dormitoryObject, dormitoryReviews,
 									fetchDormitoryReviews,
-									clearData
+									clearData,
+									fetchReviews, fetchUserReviews
 								}}>
 									<Root activeView={activeView}>
 										<View
@@ -714,6 +727,7 @@ const App = () => {
 											<GradesPanel id="grades_panel"/>
 											<QuestionsPanel id="questions_panel"/>
 											<TextPhotoPanel id="text_photo_panel"/>
+											<Week id='week_panel'/>
 
 											<PreviewPanel id="preview_review_panel"/>
 										</View>

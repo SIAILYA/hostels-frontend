@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import bridge from '@vkontakte/vk-bridge';
 
-import {Button, FixedLayout, Panel, Div, Alert} from "@vkontakte/vkui";
+import {Button, FixedLayout, Panel, Div, Alert, PanelHeader} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 import phone from "../../img/phone.svg"
@@ -15,8 +15,9 @@ const ThanksPanel = ({id}) => {
 
     return(
         <Panel id={id}>
+            <PanelHeader separator={false}/>
             <Div>
-                <div className="yellow-gradient-text super" style={{textAlign: "center", marginTop: "5vh"}}>
+                <div className="yellow-gradient-text super" style={{textAlign: "center"}}>
                     Отлично!
                 </div>
                 <div className="description-header" style={{textAlign: "center"}}>
@@ -26,7 +27,7 @@ const ThanksPanel = ({id}) => {
                     <img src={phone} alt="" width="120vw"/>
                 </div>
                 <div style={{textAlign: "center", marginTop: "25px"}}>
-                    Чтобы все корректно работало предоставьте доступ к вашей общей информации
+                    Чтобы все работало, предоставьте доступ к вашей информации
                 </div>
             </Div>
 
