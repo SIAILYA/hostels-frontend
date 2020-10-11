@@ -8,7 +8,7 @@ import {LocationContext, Navigation} from "../../Contexts";
 
 const CountryChoosePanel = ({id}) => {
     const {goBack, accessToken} = useContext(Navigation)
-    const {countryList, setCountry} = useContext(LocationContext)
+    const {countryList, setCountry, setUniversity, setCity} = useContext(LocationContext)
 
     return (
         <Panel id={id}>
@@ -20,6 +20,8 @@ const CountryChoosePanel = ({id}) => {
                             <SimpleCell
                                 onClick={() => {
                                     goBack();
+                                    setCity('')
+                                    setUniversity('')
                                     setCountry(item);
                                     bridge.send(
                                         "VKWebAppCallAPIMethod",

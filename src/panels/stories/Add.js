@@ -122,135 +122,140 @@ const Add = ({go}) => {
                     Вы еще не оставили ни одного отзыва
                 </Placeholder>
             }
+            {
+                userReviews.length > 0 &&
                 <Div>
+                    <div>
+                        <Button
+                            size="xl"
+                            mode="primary"
+                            className='yellow-gradient'
+                            onClick={accessToken ? go : () => {
+                                getToken()
+                                go({currentTarget: {dataset: {goto: "view_add_review_view"}}})
+                            }
+                            }
+                            data-goto='view_add_review_view'
+                        >
+                            Написать отзыв
+                        </Button>
+                        <PullToRefresh onRefresh={fetchUserReviews} isFetching={userReviewsLoading}>
+                            <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
+                                {
+                                    userReviews.map((review, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <Card style={{marginBottom: "18px", overflow: "hidden"}}>
+                                                        <SimpleCell
+                                                            description={review.dormitory.address}
+                                                            disabled={review.moderated !== 1}
+                                                            after={review.moderated === 1 ? <Icon28ArrowRightOutline
+                                                                className="yellow-gradient-text"/> : null}
+                                                            onClick={() => {
+                                                                setPopout(<ScreenSpinner size='large'/>)
+                                                                fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                                        go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                                    }
+                                                                )
+                                                            }}
+                                                        >
+                                                            {review.dormitory.title}
+                                                        </SimpleCell>
+                                                        <Group header={<Header mode="secondary">Оценки</Header>}>
+                                                            <Div>
+                                                                <HorizontalScroll>
+                                                                    <div style={{display: "flex"}}>
+                                                                        <Button
+                                                                            className='yellow-gradient gradeBtn'
+                                                                            style={{fontSize: 10}}
+                                                                            disabled
+                                                                        >
+                                                                            Состояние:&#160;{review.review.rating.condition}
+                                                                        </Button>
+                                                                        <Button
+                                                                            className='yellow-gradient gradeBtn'
+                                                                            style={{fontSize: 10}}
+                                                                            disabled
+                                                                        >
+                                                                            Цена:&#160;{review.review.rating.cost}
+                                                                        </Button>
+                                                                        <Button
+                                                                            className='yellow-gradient gradeBtn'
+                                                                            style={{fontSize: 10}}
+                                                                            disabled
+                                                                        >
+                                                                            Персонал:&#160;{review.review.rating.personal}
+                                                                        </Button>
+                                                                        <Button
+                                                                            className='yellow-gradient gradeBtn'
+                                                                            style={{fontSize: 10}}
+                                                                            disabled
+                                                                        >
+                                                                            Расположение:&#160;{review.review.rating.location}
+                                                                        </Button>
+                                                                        <Button
+                                                                            className='yellow-gradient gradeBtn'
+                                                                            style={{fontSize: 10}}
+                                                                            disabled
+                                                                        >
+                                                                            Шумоизоляция:&#160;{review.review.rating.noise}
+                                                                        </Button>
+                                                                    </div>
+                                                                </HorizontalScroll>
+                                                            </Div>
+                                                        </Group>
 
-                <div>
-                <Button
-                    size="xl"
-                    mode="primary"
-                    className='yellow-gradient'
-                    onClick={accessToken ? go : () => {
-                        getToken()
-                        go( {currentTarget: {dataset: {goto: "view_add_review_view"}}})
-                    }
-                    }
-                    data-goto='view_add_review_view'
-                >
-                    Написать отзыв
-                </Button>
-                <PullToRefresh onRefresh={fetchUserReviews} isFetching={userReviewsLoading}>
-                    <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
-                    {
-                    userReviews.map((review, index) => {
-                        return (
-                            <div key={index}>
-                                <Card style={{marginBottom: "18px", overflow: "hidden"}}>
-                                    <SimpleCell
-                                        description={review.dormitory.address}
-                                        disabled={review.moderated !== 1}
-                                        after={review.moderated === 1 ? <Icon28ArrowRightOutline className="yellow-gradient-text"/> : null}
-                                        onClick={() => {
-                                            setPopout(<ScreenSpinner size='large' />)
-                                            fetchDormitoryReviews(review.dormitory.selected.id, () => {
-                                                    go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
-                                                }
-                                            )
-                                        }}
-                                    >
-                                        {review.dormitory.title}
-                                    </SimpleCell>
-                                    <Group header={<Header mode="secondary">Оценки</Header>}>
-                                        <Div>
-                                            <HorizontalScroll>
-                                                <div style={{display: "flex"}}>
-                                                    <Button
-                                                        className='yellow-gradient gradeBtn'
-                                                        style={{fontSize: 10}}
-                                                        disabled
-                                                    >
-                                                        Состояние:&#160;{review.review.rating.condition}
-                                                    </Button>
-                                                    <Button
-                                                        className='yellow-gradient gradeBtn'
-                                                        style={{fontSize: 10}}
-                                                        disabled
-                                                    >
-                                                        Цена:&#160;{review.review.rating.cost}
-                                                    </Button>
-                                                    <Button
-                                                        className='yellow-gradient gradeBtn'
-                                                        style={{fontSize: 10}}
-                                                        disabled
-                                                    >
-                                                        Персонал:&#160;{review.review.rating.personal}
-                                                    </Button>
-                                                    <Button
-                                                        className='yellow-gradient gradeBtn'
-                                                        style={{fontSize: 10}}
-                                                        disabled
-                                                    >
-                                                        Расположение:&#160;{review.review.rating.location}
-                                                    </Button>
-                                                    <Button
-                                                        className='yellow-gradient gradeBtn'
-                                                        style={{fontSize: 10}}
-                                                        disabled
-                                                    >
-                                                        Шумоизоляция:&#160;{review.review.rating.noise}
-                                                    </Button>
+                                                        <Group header={<Header mode="secondary">Отзыв</Header>}>
+                                                            <Div>
+                                                                {review.review.text}
+                                                            </Div>
+                                                        </Group>
+
+                                                        {
+                                                            review.photos.length > 0 &&
+                                                            <Group header={<Header mode="secondary">Фото</Header>}>
+                                                                <HorizontalScroll>
+                                                                    <Div
+                                                                        style={{display: "flex"}}
+                                                                    >
+                                                                        {
+                                                                            review.photos.map((photo, index) => {
+                                                                                return (
+                                                                                    <div key={index}
+                                                                                         style={{marginRight: 8}}>
+                                                                                        <Avatar key={index} size={60}
+                                                                                                mode="app"
+                                                                                                src={photo}/>
+                                                                                    </div>
+
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </Div>
+                                                                </HorizontalScroll>
+                                                            </Group>
+                                                        }
+                                                        <SimpleCell
+                                                            before={moderatedStatus(review.moderated)[0]}
+                                                            disabled
+                                                            multiline
+                                                            // after={<p style={{marginRight: "5px"}}>123</p>}
+                                                        >
+                                                            {moderatedStatus(review.moderated)[1]} {review.moderated === 3 &&
+                                                        <Link href="https://vk.me/yourdormitory" target="_blank"
+                                                              style={{fontSize: "10px"}}>Почему?</Link>}
+                                                        </SimpleCell>
+                                                    </Card>
                                                 </div>
-                                            </HorizontalScroll>
-                                        </Div>
-                                    </Group>
-
-                                    <Group header={<Header mode="secondary">Отзыв</Header>}>
-                                        <Div>
-                                            {review.review.text}
-                                        </Div>
-                                    </Group>
-
-                                    {
-                                        review.photos.length > 0 &&
-                                        <Group header={<Header mode="secondary">Фото</Header>}>
-                                            <HorizontalScroll>
-                                                <Div
-                                                    style={{display: "flex"}}
-                                                >
-                                                    {
-                                                        review.photos.map((photo, index) => {
-                                                            return (
-                                                                <div key={index} style={{marginRight: 8}}>
-                                                                    <Avatar key={index} size={60} mode="app"
-                                                                            src={photo}/>
-                                                                </div>
-
-                                                            )
-                                                        })
-                                                    }
-                                                </Div>
-                                            </HorizontalScroll>
-                                        </Group>
-                                    }
-                                    <SimpleCell
-                                        before={moderatedStatus(review.moderated)[0]}
-                                        disabled
-                                        multiline
-                                        // after={<p style={{marginRight: "5px"}}>123</p>}
-                                    >
-                                        {moderatedStatus(review.moderated)[1]} {review.moderated === 3 &&
-                                    <Link href="https://vk.me/yourdormitory" target="_blank"
-                                          style={{fontSize: "10px"}}>Почему?</Link>}
-                                    </SimpleCell>
-                                </Card>
-                            </div>
-                        );}
-                )
-                }
-                </Group>
-                </PullToRefresh>
-                </div>
-
+                                            );
+                                        }
+                                    )
+                                }
+                            </Group>
+                        </PullToRefresh>
+                    </div>
                 </Div>
+            }
         </Panel>
     )
 }
