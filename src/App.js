@@ -792,6 +792,19 @@ const App = () => {
 													icon={<Icon56WifiOutline width="120" height="120" className="yellow-gradient-text"/>}
 													header="Кажется, вы оффлайн"
 													style={{color: 'var(--yellow)'}}
+													action={
+														<Button
+															className="yellow-gradient"
+															onClick={() => {
+																	if (navigator.onLine){
+																		goBack()
+																	}
+																}
+															}
+														>
+															Проверить соединение
+														</Button>
+													}
 												>
 													Все данные сохранятся, просто подключитесь к сети
 												</Placeholder>

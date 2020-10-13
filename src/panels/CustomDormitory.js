@@ -14,6 +14,7 @@ import React, {useContext} from "react";
 import {LocationContext, Navigation} from "../Contexts";
 import Icon36HomeOutline from "@vkontakte/icons/dist/36/home_outline";
 
+
 const CustomDormitoryPanel = ({id}) => {
     const {goBack} = useContext(Navigation)
     const {

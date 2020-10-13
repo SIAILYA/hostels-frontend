@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import bridge from "@vkontakte/vk-bridge";
 
 import {Button, Div, FixedLayout, Panel, PanelHeader} from "@vkontakte/vkui";
 
@@ -7,8 +6,7 @@ import {Navigation, ReviewsContext} from "../Contexts";
 import meter from "../img/meter.svg"
 
 const Week = ({id}) => {
-    const {setOnboardingPanel, accessToken, setActiveView, go, fetchMessagesAllow} = useContext(Navigation)
-    const {userRole, setUserRole} = useContext(ReviewsContext)
+    const {go, fetchMessagesAllow} = useContext(Navigation)
 
 
     return(

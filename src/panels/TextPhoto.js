@@ -167,6 +167,9 @@ const TextPhotoPanel = ({id}) => {
                                 } else {
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                 }
+                            }).catch(() => {
+                                setPopout(null)
+                                setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                             })
                         })
                     }}

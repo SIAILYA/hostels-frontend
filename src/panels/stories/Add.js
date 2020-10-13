@@ -11,7 +11,6 @@ import {
     Avatar,
     Header,
     Cell,
-    PanelSpinner,
     SimpleCell, Card, HorizontalScroll, Link, PullToRefresh
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
@@ -19,13 +18,12 @@ import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 import Icon28WriteOutline from '@vkontakte/icons/dist/28/write_outline';
 import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline';
 import {
-    Icon28ArrowRightOutline, Icon28CancelCircleOutline,
+    Icon28CancelCircleOutline,
     Icon28ChatsOutline,
-    Icon28DoneOutline, Icon28ErrorOutline, Icon28PrivacyOutline,
+    Icon28DoneOutline, Icon28PrivacyOutline,
     Icon28ShareOutline,
     Icon28SyncOutline
 } from "@vkontakte/icons";
-import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner";
 
 
 const Add = ({go}) => {
@@ -139,6 +137,7 @@ const Add = ({go}) => {
                         >
                             Написать отзыв
                         </Button>
+
                         <PullToRefresh onRefresh={fetchUserReviews} isFetching={userReviewsLoading}>
                             <Group header={<Header mode="secondary">Ваши отзывы</Header>}>
                                 {
