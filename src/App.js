@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
+import axios from "axios"
 
 import "./style.css"
 
@@ -169,6 +170,8 @@ const App = () => {
 			window.addEventListener('popstate', () => goBack());
 			window.addEventListener('online', () => setOnline());
 			window.addEventListener('offline', () => setOnline());
+			axios.defaults.headers.common['Vk-Check-Launch-Params'] = window.location.search;
+
 			bridge.send("VKWebAppInit");
 
 			bridge.subscribe(({ detail: { type, data }}) => {

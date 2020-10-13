@@ -148,16 +148,16 @@ const Add = ({go}) => {
                                                     <Card style={{marginBottom: "18px", overflow: "hidden"}}>
                                                         <SimpleCell
                                                             description={review.dormitory.address}
-                                                            disabled={review.moderated !== 1}
-                                                            after={review.moderated === 1 ? <Icon28ArrowRightOutline
-                                                                className="yellow-gradient-text"/> : null}
-                                                            onClick={() => {
-                                                                setPopout(<ScreenSpinner size='large'/>)
-                                                                fetchDormitoryReviews(review.dormitory.selected.id, () => {
-                                                                        go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
-                                                                    }
-                                                                )
-                                                            }}
+                                                            disabled={true}
+                                                            // after={review.moderated === 1 ? <Icon28ArrowRightOutline
+                                                            //     className="yellow-gradient-text"/> : null}
+                                                            // onClick={() => {
+                                                            //     setPopout(<ScreenSpinner size='large'/>)
+                                                            //     fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                            //             go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
+                                                            //         }
+                                                            //     )
+                                                            // }}
                                                         >
                                                             {review.dormitory.title}
                                                         </SimpleCell>

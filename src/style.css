@@ -12,6 +12,10 @@
     --tabbar_active_icon: var(--yellow)!important;
 }
 
+.Header__content, .Subhead, .Icon{
+    user-select: none;
+}
+
 ::selection{
     background: var(--yellow);
     color: #2c2d2e;
