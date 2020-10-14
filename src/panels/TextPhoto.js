@@ -67,7 +67,7 @@ const TextPhotoPanel = ({id}) => {
                             getRef={textareaRef}
                             // maxLength="2000"
                             onChange={e => {
-                                setTextReview(e.target.value.substr(0, 2000))
+                                setTextReview(e.target.value.replaceAll(RegExp("[<,>]", "g"), "").substr(0, 2000))
                             }}
                         />
                     </FormLayoutGroup>
