@@ -11,7 +11,7 @@ import {
     Avatar,
     Header,
     Cell,
-    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh
+    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh, PanelSpinner
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
@@ -119,6 +119,10 @@ const Add = ({go}) => {
                 >
                     Вы еще не оставили ни одного отзыва
                 </Placeholder>
+            }
+            {
+                userReviews.length === 0 && userReviewsLoading &&
+                <PanelSpinner size="large"/>
             }
             {
                 userReviews.length > 0 &&

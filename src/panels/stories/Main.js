@@ -179,19 +179,19 @@ const Main = ({onStoryChange}) => {
             {/*    </CardScroll>*/}
             {/*</Group>*/}
 
-            <div style={{textAlign: "center", marginBottom: "20px"}}>
-                <Button
-                    className="yellow-gradient"
-                    onClick={() => {
-                        bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": ""});
-                        bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": ""});
-                        bridge.send("VKWebAppStorageSet", {"key": "onboarding_showed", "value": ""});
-                        bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": ""});
-                    }}
-                >
-                    Сбросить Storage
-                </Button>
-            </div>
+            {/*<div style={{textAlign: "center", marginBottom: "20px"}}>*/}
+            {/*    <Button*/}
+            {/*        className="yellow-gradient"*/}
+            {/*        onClick={() => {*/}
+            {/*            bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": ""});*/}
+            {/*            bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": ""});*/}
+            {/*            bridge.send("VKWebAppStorageSet", {"key": "onboarding_showed", "value": ""});*/}
+            {/*            bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": ""});*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*        Сбросить Storage*/}
+            {/*    </Button>*/}
+            {/*</div>*/}
 
         </Panel>
     )

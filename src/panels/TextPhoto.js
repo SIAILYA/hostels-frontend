@@ -157,9 +157,26 @@ const TextPhotoPanel = ({id}) => {
                     disabled={!textReview}
                     onClick={() => {
                         setPopout(<ScreenSpinner size='large' />)
-                        uploadPhotos(userPhotos).then(res => {
-                            setPhotoURLs(res.data)
-                            review.photos = res.data
+                        if (userPhotos.length > 0){
+                            uploadPhotos(userPhotos).then(res => {
+                                setPhotoURLs(res.data)
+                                review.photos = res.data
+                                sendReview(review).then(res => {
+                                    setPopout(null)
+                                    if (res.status === 200){
+                                        go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
+                                    } else {
+                                        setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                    }
+                                }).catch(() => {
+                                    setPopout(null)
+                                    setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                })
+                            }).catch(() => {
+                                setPopout(null)
+                                setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                            })
+                        } else {
                             sendReview(review).then(res => {
                                 setPopout(null)
                                 if (res.status === 200){
@@ -171,7 +188,7 @@ const TextPhotoPanel = ({id}) => {
                                 setPopout(null)
                                 setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                             })
-                        })
+                        }
                     }}
                 >
                     Опубликовать

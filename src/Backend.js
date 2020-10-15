@@ -72,3 +72,9 @@ export const getDormitoryReviews = (dormitory_id) => {
         {id: dormitory_id}
     )
 }
+
+export const checkServer = () => {
+    return axios.get(
+        BACKEND_URL + "api/v1/check"
+    )
+}

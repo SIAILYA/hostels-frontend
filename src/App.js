@@ -47,7 +47,14 @@ import AddModal from "./panels/AddModal";
 import OnboardingHelloPanel from "./panels/onboarding/Hello"
 
 import {COUNTRIES, INIT_ADD_PANEL, INIT_PANEL, INIT_VIEW} from "./Constants";
-import {getDormitoryReviews, getLastReviews, getRating, getUniDormitories, getUserReviews} from "./Backend";
+import {
+	checkServer,
+	getDormitoryReviews,
+	getLastReviews,
+	getRating,
+	getUniDormitories,
+	getUserReviews
+} from "./Backend";
 
 import RolePanel from "./panels/onboarding/Role";
 import ThanksPanel from "./panels/onboarding/Thanks";
@@ -55,7 +62,7 @@ import WhereStudyPanel from "./panels/onboarding/ChooseUniversity";
 import PreviewPanel from "./panels/PreviewPanel";
 import DormitoryReviews from "./panels/DormitoryReviews";
 import ReviewModal from "./panels/ReviewModal";
-import {Icon56ErrorOutline, Icon56WifiOutline} from "@vkontakte/icons";
+import {Icon56ErrorOutline, Icon56LockOutline, Icon56WifiOutline} from "@vkontakte/icons";
 import Base from "./panels/onboarding/Base";
 import Week from "./panels/Week";
 
@@ -242,13 +249,14 @@ const App = () => {
 			async function fetchData() {
 				const user = await bridge.send('VKWebAppGetUserInfo', );
 				setUser(user);
-				setPopout(null)
+				setPopout(null);
 			}
 
 			fetchData();
 			fetchStorageInit();
 			fetchReviews();
 			fetchRating();
+			checkServerApi();
 
 			setInterval(() => {
 				fetchReviews()
@@ -266,6 +274,20 @@ const App = () => {
 
 	async function fetchMessagesAllow() {
 		return await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198896747})
+	}
+
+	function checkServerApi() {
+		checkServer()
+			.then(res => {
+				if (activeView === "server_offline"){
+					goBack()
+				}
+			})
+			.catch(res => {
+				if (activeView !== "server_offline"){
+					go({currentTarget: {dataset: {goto: 'view_server_offline'}}})
+				}
+		})
 	}
 
 	function fetchReviews () {
@@ -567,7 +589,12 @@ const App = () => {
 			} else
 
 			if (goBackTo.slice(0, 8) === 'addPanel') {
-				setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+				if (goBackTo.slice(9, goBackTo.length) !== "text_photo_panel"){
+					setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+				} else {
+					window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
+					history.push( 'addPanel_' + "week_panel" );
+				}
 			}
 		}
 	}
@@ -782,6 +809,27 @@ const App = () => {
 												>
 													Сервер вернул ошибку, чтобы разобраться в проблеме,&#160;
 													<Link href="https://vk.me/yourdormitory" className="yellow-gradient-text">напишите нам</Link>
+												</Placeholder>
+											</Panel>
+										</View>
+										<View id="server_offline" activePanel={"server"}>
+											<Panel id="server">
+												<Placeholder
+													stretched
+													icon={<Icon56LockOutline width="120" height="120" className="yellow-gradient-text"/>}
+													header="Упс..."
+													style={{color: 'var(--yellow)'}}
+													action={
+														<Button
+															onClick={checkServerApi}
+															size="l"
+															className="yellow-gradient"
+														>
+															Попробовать еще раз
+														</Button>
+													}
+												>
+													Сервер устал и лёг, либо мы просто проводим обслуживание. Попробуйте зайти к нам чуть попозже
 												</Placeholder>
 											</Panel>
 										</View>

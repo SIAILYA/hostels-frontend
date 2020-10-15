@@ -4,7 +4,7 @@ import {
     Group,
     List,
     Panel,
-    PanelHeader,
+    PanelHeader, PanelSpinner,
     PullToRefresh,
     Separator,
     SimpleCell,
@@ -31,6 +31,10 @@ const Rating = () => {
     return (
         <Panel id="rating_panel">
             <PanelHeader>Рейтинг</PanelHeader>
+            {
+                ratingLoading && dormitoryRating.length === 0 &&
+                <PanelSpinner/>
+            }
             <PullToRefresh onRefresh={ () => {fetchRating()}} isFetching={ratingLoading}>
                 <Group>
                     <List>
