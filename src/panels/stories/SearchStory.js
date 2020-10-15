@@ -63,6 +63,7 @@ const SearchStory = ({id}) => {
             <Search
                 value={dormitoriesSearch}
                 onChange={e => {setDormitoriesSearch(e.target.value.trimStart())}}
+                placeholder="Название вуза"
             />
             {
                 !loading && dormitorySearch.length === 0 &&

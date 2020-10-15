@@ -224,6 +224,7 @@ const App = () => {
 				const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
 				if (onboarding_showed.keys[0].value === "true"){
 					setOnboardingShowed(true)
+					getToken()
 					setActiveView("epic_view")
 				} else {
 					setActiveView("onboarding_view")

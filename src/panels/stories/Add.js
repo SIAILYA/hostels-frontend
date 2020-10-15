@@ -15,12 +15,11 @@ import {
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
-import Icon28WriteOutline from '@vkontakte/icons/dist/28/write_outline';
 import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline';
 import {
     Icon28CancelCircleOutline,
     Icon28ChatsOutline,
-    Icon28DoneOutline, Icon28PrivacyOutline,
+    Icon28DoneOutline, Icon28MoreVertical, Icon28PrivacyOutline,
     Icon28ShareOutline,
     Icon28SyncOutline
 } from "@vkontakte/icons";
@@ -66,7 +65,7 @@ const Add = ({go}) => {
                         before={<Avatar size={40} src={fetchedUser.photo_200}/>}
                         size="m"
                         description={description}
-                        asideContent={<Icon28WriteOutline className="yellow-gradient-text"/>}
+                        asideContent={<Icon28MoreVertical className="yellow-gradient-text"/>}
                         data-goto="onboarding"
                         onClick={go}
                     >
