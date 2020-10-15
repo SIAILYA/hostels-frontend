@@ -368,7 +368,8 @@ const App = () => {
 				author_name: anonReview ? "Вася" : fetchedUser ? fetchedUser.first_name : null,
 				author_surname: anonReview? "Пупкин" : fetchedUser ? fetchedUser.last_name : null,
 				author_photo:anonReview
-					? `https://api.adorable.io/avatars/face/eyes${Math.round(Math.random() * 4)}/nose${Math.round(Math.random() * 4)}/mouth${Math.round(Math.random() * 4)}/F2994A`
+					// ? `https://api.adorable.io/avatars/face/eyes${Math.round(Math.random() * 4)}/nose${Math.round(Math.random() * 4)}/mouth${Math.round(Math.random() * 4)}/F2994A`
+					? 'https://vk.com/images/camera_200.png?ava=1'
 					: fetchedUser ? fetchedUser.photo_200 : null,
 				author_role: userRole,
 				anonymous: anonReview,

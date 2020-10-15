@@ -4,6 +4,8 @@ import bridge from "@vkontakte/vk-bridge";
 import {Group, Panel, PanelHeader, PanelHeaderBack, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 
 import {Navigation, LocationContext} from "../../Contexts";
+import Header from "@vkontakte/vkui/dist/components/Header/Header";
+import Div from "@vkontakte/vkui/dist/components/Div/Div";
 
 
 const CityChoosePanel = ({id}) => {
@@ -83,7 +85,13 @@ const CityChoosePanel = ({id}) => {
             <PanelHeader
                 left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
             >Выбор города</PanelHeader>
-            <Search value={searchValue} onChange={e => {setSearch(e.target.value)}}/>
+            <Search value={searchValue} onChange={e => {setSearch(e.target.value.substr(0, 100))}}/>
+            {
+                !loading && citiesList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).length === 0 &&
+                <Div>
+                    <Header mode="secondary" className="header-centered">Ничего не нашлось</Header>
+                </Div>
+            }
             {!loading ?
                 <Group>
                     {

@@ -95,68 +95,67 @@ const Main = ({onStoryChange}) => {
                 />
             </Group>
 
-            <Div>
-                <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide'>
+            <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide'>
+                {
+                    reviewsLoading ?
+                    <PanelSpinner/>
+                    :
+                    <CardScroll
+                        style={{ height: '105%'}}
+                    >
+                        <div style={{display: "flex"}}>
+
                     {
-                        reviewsLoading ?
-                        <PanelSpinner/>
-                        :
-                        <CardScroll
-                            style={{ height: '105%'}}
-                        >
-                            <div style={{display: "flex"}}>
+                        lastReviews.map((review, index) => {
+                            return (
 
-                        {
-                            lastReviews.map((review, index) => {
-                                return (
-
-                                        <Card
-                                            size="l"
-                                            mode="outline"
-                                            key={index}
-                                            style={{overflow: "hidden", width: "80vw"}}
-                                        >
-                                            <div style={{display: "flex", flexDirection: "column"}}>
-
-                                            <RichCell
-                                                // disabled
-                                                before={<Avatar size={48} src={review.author_photo}/>}
-                                                text={review.review.text.length > 50 ? review.review.text.slice(0, 50).trim()+ '...' : review.review.text}
-                                                caption={
-                                                    <Caption level="3" weight="medium" style={{ marginTop: 7 }}>
-                                                        {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address}
-                                                    </Caption>
+                                    <Card
+                                        size="l"
+                                        mode="outline"
+                                        key={index}
+                                        style={{overflow: "hidden", width: "80vw"}}
+                                        onClick={() => {
+                                            setPopout(<ScreenSpinner size='large' />)
+                                            fetchDormitoryReviews(review.dormitory.selected.id, () => {
+                                                    go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
                                                 }
-                                                multiline
-                                                style={{height: "100%"}}
-                                                onClick={() => {
-                                                    setPopout(<ScreenSpinner size='large' />)
-                                                    fetchDormitoryReviews(review.dormitory.selected.id, () => {
-                                                            go({currentTarget: {dataset: {goto: "reviewPanel_dormitory_reviews_panel"}}})
-                                                        }
-                                                    )
-                                                }}
-                                            >
-                                                {review.author_name} {review.author_surname}
-                                            </RichCell>
-                                            {/*<div style={{textAlign: "center"}}>*/}
-                                            {/*    <Button*/}
-                                            {/*        className='yellow-gradient'*/}
-                                            {/*        size={'m'}*/}
-                                            {/*    >*/}
-                                            {/*        Читать полностью*/}
-                                            {/*    </Button>*/}
-                                            {/*</div>*/}
-                                            </div>
-                                        </Card>
-                                )
-                            })
-                        }
-                        </div>
-                    </CardScroll>
+                                            )
+                                        }}
+                                    >
+                                        <div style={{display: "flex", flexDirection: "column"}}>
+
+                                        <RichCell
+                                            disabled
+                                            before={<Avatar size={48} src={review.author_photo}/>}
+                                            text={review.review.text.length > 50 ? review.review.text.slice(0, 50).trim()+ '...' : review.review.text}
+                                            caption={
+                                                <Caption level="3" weight="medium" style={{ marginTop: 7 }}>
+                                                    {review.university.title + ', ' + review.dormitory.title + ', ' + review.dormitory.address}
+                                                </Caption>
+                                            }
+                                            multiline
+                                            style={{height: "100%"}}
+                                        >
+                                            {review.author_name} {review.author_surname}
+                                        </RichCell>
+                                        {/*<div style={{textAlign: "center"}}>*/}
+                                        {/*    <Button*/}
+                                        {/*        className='yellow-gradient'*/}
+                                        {/*        size={'m'}*/}
+                                        {/*    >*/}
+                                        {/*        Читать полностью*/}
+                                        {/*    </Button>*/}
+                                        {/*</div>*/}
+                                        </div>
+                                    </Card>
+                            )
+                        })
                     }
-                </Group>
-            </Div>
+                    </div>
+                </CardScroll>
+                }
+            </Group>
+
 
             <Div>
                 <PromoBanner bannerData={searchBanner} isCloseButtonHidden/>

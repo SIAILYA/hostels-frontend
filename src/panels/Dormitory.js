@@ -25,7 +25,7 @@ const DormitoryPanel = ({id}) => {
 
             {
                 dormitoryList.length > 0 ?
-                    <div>
+                    <div style={{marginBottom: "10vh"}}>
                         <Div className='text-center'>
                             <Button
                                 mode='outline'

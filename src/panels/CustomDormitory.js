@@ -45,7 +45,7 @@ const CustomDormitoryPanel = ({id}) => {
                 Ввод адреса
             </PanelHeader>
 
-            <div>
+            <div style={{marginBottom: "20vh"}}>
                 <Div>
                     <FormStatus mode='default' header='Общежитие не нашлось в списке?'>
                         База общежитий постоянно растет благодаря нашим пользователям.
@@ -59,7 +59,7 @@ const CustomDormitoryPanel = ({id}) => {
                         <Input type='text'
                                value={customTitle}
                                onChange={e => {
-                                   setTitle(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").substr(0, 200))
+                                   setTitle(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
                                }}
                                name='custom_title'
                                placeholder="Общежитие №1"
@@ -71,7 +71,7 @@ const CustomDormitoryPanel = ({id}) => {
                         <Input type='text'
                                value={customAddress}
                                onChange={e => {
-                                   setAddress(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").substr(0, 200))
+                                   setAddress(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
                                }}
                                placeholder="Москва, улица Пушкина, 7к3"
                                name='custom_address'

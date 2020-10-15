@@ -130,21 +130,24 @@ const QuestionsPanel = ({id}) => {
                         top={<div>Стоимость за месяц&#160;<a style={{color: "var(--red)"}}>*</a></div>}
                         bottom={<p>Одно число - сколько вы платите в <b>месяц</b></p>}
                     >
-                        <Input type='text'
+                        <Input type='number'
                                max={100000}
                                min={1}
                                value={cost}
                                placeholder={2200}
+                               pattern="[0-9]{1,5}"
                                maxLength={5}
                                onChange={e => {
-                                   if (e.target.value.length > 0){
-                                       if (e.target.value <= 10000 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-                                           setCost(parseInt(e.target.value.trim('0')))
+                                   const val = e.target.value.replaceAll(RegExp("[^0-9]", "g"), '')
+                                   if (val.length > 0){
+                                       console.log(val)
+                                       if (parseInt(val) <= 10000 && parseInt(val) > 0) {
+                                           setCost(parseInt(val))
                                        } else {
-                                           console.log("Ввод только 1 числа до 10000")
+                                           setCost(prev => prev)
                                        }
                                    } else {
-                                       setCost(0)
+                                       setCost('')
                                        setCostStatus('error')
                                    }
                                }}
@@ -179,7 +182,7 @@ const QuestionsPanel = ({id}) => {
                     </Group>
                     <FormLayoutGroup top={<div>Количество человек в комнатах&#160;<a style={{color: "var(--red)"}}>*</a></div>} bottom={<p>Одно число - количество человек в <b>вашей</b> комнате</p>}>
                         <Input
-                            type='text'
+                            type='number'
                             max={20}
                             min={1}
                             pattern="[0-9]{1,2}"
@@ -187,14 +190,15 @@ const QuestionsPanel = ({id}) => {
                             maxLength={2}
                             placeholder={3}
                             onChange={e => {
-                                if (e.target.value.length > 0){
-                                    if (e.target.value <= 20 && e.target.value[e.target.value.length - 1] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-                                        setPeopleInRoom(parseInt(e.target.value.trim('0')))
+                                const val = e.target.value.replaceAll(RegExp("[^0-9]", "g"), '')
+                                if (val.length > 0){
+                                    if (parseInt(val) <= 20 && parseInt(val) > 0) {
+                                        setPeopleInRoom(parseInt(val))
                                     } else {
-                                        console.log("Ввод только 1 числа до 20")
+                                        setPeopleInRoom(prev => prev)
                                     }
                                 } else {
-                                    setPeopleInRoom(0)
+                                    setPeopleInRoom('')
                                     setPirStatus('error')
                                 }
                             }}
@@ -233,7 +237,6 @@ const QuestionsPanel = ({id}) => {
                             </label>
                     </FormLayoutGroup>
                     <Separator/>
-
 
                     <Group header={<Header mode='secondary'>Остальное</Header>} separator='hide'>
                         <Checkbox

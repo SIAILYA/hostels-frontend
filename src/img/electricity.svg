@@ -3,12 +3,13 @@
 <svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;stroke:#F2C94C;stroke-width:31;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:#F2C94C;stroke-width:31;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;stroke:#F2C94C;stroke-width:31;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
 <path class="st0" d="M398.2,135.3c0,97.9-67.6,177.4-151,177.4s-151-79.4-151-177.4L398.2,135.3L398.2,135.3z"/>
-<path class="st0" d="M318.9,135.3L318.9,135.3c-1.7,0-3-1.3-3-3V22c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v110.3
+<path class="st1" d="M318.9,135.3L318.9,135.3c-1.7,0-3-1.3-3-3V22c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v110.3
 	C321.9,133.9,320.5,135.3,318.9,135.3z"/>
-<path class="st0" d="M176.1,135.3L176.1,135.3c-1.7,0-3-1.3-3-3V22c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v110.3
+<path class="st1" d="M176.1,135.3L176.1,135.3c-1.7,0-3-1.3-3-3V22c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v110.3
 	C179.1,133.9,177.8,135.3,176.1,135.3z"/>
-<path class="st0" d="M247.2,312.7c1.5,13.5,2.7,34.1-1,58.6c-4.6,29.8-12.6,40.9-11.7,62c0.6,14.5,5.5,35.2,26.1,59.9"/>
+<path class="st1" d="M247.2,312.7c1.5,13.5,2.7,34.1-1,58.6c-4.6,29.8-12.6,40.9-11.7,62c0.6,14.5,5.5,35.2,26.1,59.9"/>
 </svg>

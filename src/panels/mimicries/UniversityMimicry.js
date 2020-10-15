@@ -4,6 +4,8 @@ import bridge from "@vkontakte/vk-bridge";
 import {Group, Panel, PanelHeader, PanelHeaderBack, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 
 import {LocationContext, Navigation} from "../../Contexts";
+import Header from "@vkontakte/vkui/dist/components/Header/Header";
+import Div from "@vkontakte/vkui/dist/components/Div/Div";
 
 
 const UniversityChoosePanel = ({id}) => {
@@ -58,7 +60,13 @@ const UniversityChoosePanel = ({id}) => {
             <PanelHeader
                 left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
             >Выбор ВУЗа</PanelHeader>
-            <Search value={searchValue} onChange={e => {setSearch(e.target.value)}}/>
+            <Search value={searchValue} onChange={e => {setSearch(e.target.value.substr(0, 100))}}/>
+            {
+                !loading && uniList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).length === 0 &&
+                <Div>
+                    <Header mode="secondary" className="header-centered">Ничего не нашлось</Header>
+                </Div>
+            }
             {
                 !loading ?
                     <Group>
