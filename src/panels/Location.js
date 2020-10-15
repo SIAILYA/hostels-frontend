@@ -21,7 +21,7 @@ const LocationPanel = ({id, user}) => {
         selectedCountry, selectedCity, selectedUniversity,
         setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity
     } = useContext(LocationContext)
-    const {go, goBack} = useContext(Navigation)
+    const {go, goBack, accessToken} = useContext(Navigation)
 
     return (
         <Panel id={id}>
@@ -39,6 +39,7 @@ const LocationPanel = ({id, user}) => {
                         placeholder="Страна не выбрана"
                         onClick={go}
                         data-goto='addPanel_country_choose'
+                        disabled={accessToken.length === 0}
                     >
                         {selectedCountry.title}
                     </SelectMimicry>
@@ -48,7 +49,7 @@ const LocationPanel = ({id, user}) => {
                         placeholder="Город не выбран"
                         onClick={go}
                         data-goto='addPanel_city_choose'
-                        disabled={!selectedCountry}
+                        disabled={!selectedCountry && accessToken.length === 0}
                     >
                         {selectedCity.title}
                     </SelectMimicry>
@@ -58,7 +59,7 @@ const LocationPanel = ({id, user}) => {
                         placeholder="ВУЗ не выбран"
                         onClick={go}
                         data-goto='addPanel_uni_choose'
-                        disabled={!selectedCity}
+                        disabled={!selectedCity && accessToken.length === 0}
                     >
                         {selectedUniversity.title}
                     </SelectMimicry>

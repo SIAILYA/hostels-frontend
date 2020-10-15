@@ -99,6 +99,7 @@ const Add = ({go}) => {
             {
                 !userReviewsLoading && userReviews.length === 0 &&
                 <Placeholder
+                    className="placeholder-no-bottom"
                     icon={<Icon56AddCircleOutline width="120" height="120" className="yellow-gradient-text" />}
                     header='Отзывы отсутствуют'
                     action={
@@ -222,13 +223,22 @@ const Add = ({go}) => {
                                                                         style={{display: "flex"}}
                                                                     >
                                                                         {
-                                                                            review.photos.map((photo, index) => {
+                                                                            review.photos.map((photo, index, photos) => {
                                                                                 return (
-                                                                                    <div key={index}
-                                                                                         style={{marginRight: 8}}>
-                                                                                        <Avatar key={index} size={60}
-                                                                                                mode="app"
-                                                                                                src={photo}/>
+                                                                                    <div
+                                                                                        key={index}
+                                                                                        style={{marginRight: 8}}
+                                                                                        onClick={() => {
+                                                                                            bridge.send("VKWebAppShowImages", {"images": photos, "start_index": index})
+                                                                                        }}
+                                                                                    >
+                                                                                        <Avatar
+                                                                                            key={index}
+                                                                                            size={60}
+                                                                                            mode="app"
+                                                                                            src={photo}
+                                                                                            style={{objectFit: "cover"}}
+                                                                                        />
                                                                                     </div>
 
                                                                                 )

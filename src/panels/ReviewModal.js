@@ -139,7 +139,7 @@ const ReviewModal = () => {
                     <Cell
                         before={<Icon28MoneyCircleOutline/>}
                     >
-                        <InfoRow header="Стоимомть">
+                        <InfoRow header="Стоимость">
                             {
                                 cost.length === 1 ?
                                     cost[0] :
@@ -228,7 +228,7 @@ const ReviewModal = () => {
                     <Cell
                         before={<img src={electricity_img} alt="" width={28} className="Icon Icon--28 Icon--w-28 Icon--h-28"/>}
                         multiline
-                        description="Такие электроприборы как микроволновка, мультиварка, чайник"
+                        description="Такие электроприборы, как микроволновка, мультиварка, чайник"
                     >
                         <InfoRow header="Электроприборы">
                         </InfoRow>
@@ -303,7 +303,7 @@ const ReviewModal = () => {
                     <Cell
                         before={<Icon28MoneyCircleOutline/>}
                     >
-                        <InfoRow header="Стоимомть">
+                        <InfoRow header="Стоимость">
                             {cost[0] ? cost[0] : " - "} руб. в месяц
                         </InfoRow>
                     </Cell>
@@ -383,7 +383,7 @@ const ReviewModal = () => {
                     <Cell
                         before={<img src={electricity_img} alt="" width={28} className="Icon Icon--28 Icon--w-28 Icon--h-28"/>}
                         multiline
-                        description="Такие электроприборы как микроволновка, чайник, мультиварка"
+                        description="Такие электроприборы, как микроволновка, чайник, мультиварка"
                     >
                         <InfoRow header="Электроприборы">
                         </InfoRow>

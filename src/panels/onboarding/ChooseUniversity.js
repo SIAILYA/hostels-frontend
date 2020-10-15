@@ -19,7 +19,7 @@ import {FailedSnackbar, SuccessSnackbar} from "../components/Snackbars";
 
 
 const WhereStudyPanel = ({id}) => {
-    const {fetchedUser, go, setOnboardingSnackbar, onboardingSnackbar} = useContext(Navigation)
+    const {fetchedUser, go, setOnboardingSnackbar, onboardingSnackbar, onboardingShowed} = useContext(Navigation)
     const {setActiveView} = useContext(Navigation)
     const {
         selectedCountry, selectedCity, selectedUniversity,
@@ -132,16 +132,19 @@ const WhereStudyPanel = ({id}) => {
                     >
                         Дальше
                     </Button>
-                    <Button
-                        size="m"
-                        mode='tertiary'
-                        style={{marginTop: "10px", color: "var(--yellow)"}}
-                        onClick={() => {
-                            setActiveView("epic_view")
-                        }}
-                    >
-                        Пропустить
-                    </Button>
+                    {
+                        !onboardingShowed &&
+                        <Button
+                            size="m"
+                            mode='tertiary'
+                            style={{marginTop: "10px", color: "var(--yellow)"}}
+                            onClick={() => {
+                                setActiveView("epic_view")
+                            }}
+                        >
+                            Пропустить
+                        </Button>
+                    }
                 </Div>
             </FixedLayout>
             {onboardingSnackbar}

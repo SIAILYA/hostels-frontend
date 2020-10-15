@@ -37,6 +37,14 @@
     src: url("fonts/Montserrat-SemiBold.ttf") format('truetype');
 }
 
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("fonts/Montserrat-Bold.ttf") format('truetype');
+}
+
 .SimpleCell__children{
     font-family: 'Montserrat', sans-serif!important;
 }
@@ -177,21 +185,25 @@ body{
 }
 
 .hello, .who-are-you{
+    font-family: 'Montserrat', sans-serif;
     font-size: 20vw;
     font-weight: bold;
 }
 
 .super{
+    font-family: 'Montserrat', sans-serif;
     font-size: 17vw;
     font-weight: bold;
 }
 
 .how{
+    font-family: 'Montserrat', sans-serif;
     font-size: 9vw;
     font-weight: bold;
 }
 
 .where-are-you{
+    font-family: 'Montserrat', sans-serif;
     font-size: 11vw;
     font-weight: bold;
 }
@@ -234,3 +246,6 @@ body{
     overflow: hidden;
 }
 
+.placeholder-no-bottom .Placeholder__in {
+    padding-bottom: 10px!important;
+}

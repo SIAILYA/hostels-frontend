@@ -106,6 +106,8 @@ const App = () => {
 	const [activeReviewModal, setReviewModal] = useState(null);
 	const [activeOnboardingPanel, setOnboardingPanel] = useState("hello_panel");
 
+	const [onboardingShowed, setOnboardingShowed] = useState(false)
+
 	const [photoCard, setPhotoCard] = useState('');
 	const [photoCaptionIndex, setPhotoCaptionIndex] = useState('');
 	const [photoCaptions, setPhotoCaptions] = useState([]);
@@ -221,6 +223,7 @@ const App = () => {
 			async function fetchStorageInit() {
 				const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
 				if (onboarding_showed.keys[0].value === "true"){
+					setOnboardingShowed(true)
 					setActiveView("epic_view")
 				} else {
 					setActiveView("onboarding_view")
@@ -445,27 +448,34 @@ const App = () => {
 	}
 
 	async function setEducation() {
-		const result = await bridge.send(
-			"VKWebAppCallAPIMethod",
-			{
-				"method": "users.get",
-				"request_id": "getEducation",
-				"params": {
-					"user_ids": fetchedUser.id,
-					"v": "5.124",
-					"fields": "education, photo_200",
-					"access_token": accessToken,
+		if (accessToken) {
+			const result = await bridge.send(
+				"VKWebAppCallAPIMethod",
+				{
+					"method": "users.get",
+					"request_id": "getEducation",
+					"params": {
+						"user_ids": fetchedUser.id,
+						"v": "5.124",
+						"fields": "education, photo_200",
+						"access_token": accessToken,
+					}
 				}
+			)
+
+			let tempUser = fetchedUser
+			tempUser.university = {
+				id: result.response[0].university,
+				title: result.response[0].university_name
 			}
-		)
 
-		let tempUser = fetchedUser
-		tempUser.university = {
-			id: result.response[0].university,
-			title: result.response[0].university_name
+			setUser(tempUser)
+		} else {
+			bridge.send("VKWebAppGetAuthToken", {"app_id": 7582793, "scope": ''}).then(res => {
+				setToken(res.access_token)
+				setEducation()
+			})
 		}
-
-		setUser(tempUser)
 	}
 
 	const go = e => {
@@ -626,7 +636,8 @@ const App = () => {
 				setPopout, accessToken, fetchedUser, activeOnboardingPanel, setOnboardingPanel,
 				searchBanner, onboardingPopup, setOnboardingPopup,
 				setOnboardingSnackbar, onboardingSnackbar,
-				activeReviewModal, setReviewModal, fetchMessagesAllow
+				activeReviewModal, setReviewModal, fetchMessagesAllow,
+				onboardingShowed
 			}}>
 				<LocationContext.Provider value={{
 					countryList, citiesList, uniList, dormitoryList,
