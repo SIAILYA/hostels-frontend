@@ -62,12 +62,12 @@ const TextPhotoPanel = ({id}) => {
                     <FormLayoutGroup bottom={<div style={{textAlign: "right"}}>{textReview.length ? textReview.length : 0}/2000</div>}>
                         <Textarea
                             top="Отзыв об общежитии"
-                            placeholder="Я (не) люблю это обжежитие за..."
+                            placeholder="Я (не) люблю это общежитие за..."
                             value={textReview}
                             getRef={textareaRef}
                             // maxLength="2000"
                             onChange={e => {
-                                setTextReview(e.target.value.replaceAll(RegExp("[<,>]", "g"), "").substr(0, 2000))
+                                setTextReview(e.target.value.replaceAll(RegExp("[<>]", "g"), "").substr(0, 2000))
                             }}
                         />
                     </FormLayoutGroup>

@@ -111,8 +111,7 @@ const ReviewModal = () => {
                         )}
                         right={(
                             <React.Fragment>
-                                {platform === ANDROID && <PanelHeaderButton onClick={goBack}><Icon24Done className="yellow-gradient-text"/></PanelHeaderButton>}
-                                {platform === IOS && <PanelHeaderButton onClick={goBack} className="yellow-color">Готово</PanelHeaderButton>}
+                                {platform === IOS && <PanelHeaderButton onClick={goBack} className="yellow-color">Закрыть</PanelHeaderButton>}
                             </React.Fragment>
                         )}
                     >
@@ -259,8 +258,7 @@ const ReviewModal = () => {
                         )}
                         right={(
                             <React.Fragment>
-                                {platform === ANDROID && <PanelHeaderButton onClick={goBack}><Icon24Done className="yellow-gradient-text" /></PanelHeaderButton>}
-                                {platform === IOS && <PanelHeaderButton className="yellow-color" onClick={goBack}>Готово</PanelHeaderButton>}
+                                {platform === IOS && <PanelHeaderButton className="yellow-color" onClick={goBack}>Закрыть</PanelHeaderButton>}
                             </React.Fragment>
                         )}
                     >

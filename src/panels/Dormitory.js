@@ -36,7 +36,7 @@ const DormitoryPanel = ({id}) => {
                                 Общежития нет в списке?
                             </Button>
                         </Div>
-                        <Group header={<Header mode="secondary">Выберете общежитие</Header>}>
+                        <Group header={<Header mode="secondary">Выберите общежитие</Header>}>
                             {
                                 dormitoryList.map((item, index) => {
                                     delete item.grades;

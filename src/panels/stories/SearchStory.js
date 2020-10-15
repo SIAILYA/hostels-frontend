@@ -15,13 +15,15 @@ import {searchDormitories} from "../../Backend";
 import CircularProgressBar from "../components/CircleProgress";
 import {Icon56CameraOffOutline} from "@vkontakte/icons";
 import {getPostfix} from "./Rating";
+import Header from "@vkontakte/vkui/dist/components/Header/Header";
+import Div from "@vkontakte/vkui/dist/components/Div/Div";
 
 
 const SearchStory = ({id}) => {
     const [intervalId, setIntervalId] = useState(0)
     const [dormitoriesSearch, setDormitoriesSearch] = useState('');
     const [loading, setLoading] = useState(true)
-    const {dormitoryRating, setDormitoryRating, fetchDormitoryReviews} = useContext(ReviewsContext)
+    const {dormitoryRating, setDormitoryRating, fetchDormitoryReviews, dormitorySearch, setDormitorySearch} = useContext(ReviewsContext)
     const {go} = useContext(Navigation)
 
     useEffect(() => {
@@ -38,16 +40,16 @@ const SearchStory = ({id}) => {
         if (dormitoriesSearch){
             setLoading(true)
             setIntervalId(setTimeout(() => {
-                searchDormitories(dormitoriesSearch)
+                searchDormitories(dormitoriesSearch.trim())
                     .then(res => {
-                        setDormitoryRating(res.data)
+                        setDormitorySearch(res.data)
                         setLoading(false);
                     })
             }, 1000))
         } else {
-            searchDormitories(dormitoriesSearch)
+            searchDormitories(dormitoriesSearch.trim())
                 .then(res => {
-                    setDormitoryRating(res.data)
+                    setDormitorySearch(res.data)
                     setLoading(false);
                 })
         }
@@ -60,15 +62,21 @@ const SearchStory = ({id}) => {
 
             <Search
                 value={dormitoriesSearch}
-                onChange={e => {setDormitoriesSearch(e.target.value)}}
+                onChange={e => {setDormitoriesSearch(e.target.value.trimStart())}}
             />
+            {
+                !loading && dormitorySearch.length === 0 &&
+                <Div>
+                    <Header mode="secondary" className="header-centered">Ничего не нашлось</Header>
+                </Div>
+            }
 
             {
-                !loading && dormitoryRating ?
+                !loading && dormitorySearch ?
                     <Group>
                         <List>
                             {
-                                dormitoryRating.map((item, index) => {
+                                dormitorySearch.map((item, index) => {
                                     return(
                                         <div key={index}>
                                             <SimpleCell

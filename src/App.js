@@ -116,6 +116,7 @@ const App = () => {
 	const [uniList, setUniList] = useState([]);
 	const [dormitoryList, setDormitoryList] = useState([]);
 	const [dormitoryRating, setDormitoryRating] = useState([])
+	const [dormitorySearch, setDormitorySearch] = useState([])
 	const [ratingLoading, setRatingLoading] = useState(true)
 	const [userReviews, setUserReviews] = useState([])
 	const [userReviewsLoading, setUserReviewsLoading] = useState(true)
@@ -258,9 +259,9 @@ const App = () => {
 			fetchRating();
 			checkServerApi();
 
-			setInterval(() => {
-				fetchReviews()
-			}, 120000)
+			// setInterval(() => {
+			// 	fetchReviews()
+			// }, 120000)
 		},
 		[]);
 
@@ -672,6 +673,7 @@ const App = () => {
 									modalUserInfo, setModalUserInfo,
 									modalDormitoryInfo, setModalDormitoryInfo,
 									dormitoryRating, setDormitoryRating,
+									dormitorySearch, setDormitorySearch,
 									fetchRating, ratingLoading,
 									userReviews, userReviewsLoading,
 									dormitoryObject, dormitoryReviews,

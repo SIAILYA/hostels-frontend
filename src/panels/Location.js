@@ -33,7 +33,7 @@ const LocationPanel = ({id, user}) => {
             </Div>
 
             <FormLayout>
-                <FormLayoutGroup top="Общая инофрмация" bottom="Расскажите, к какому учебному заведению относится ваше общежитие">
+                <FormLayoutGroup top="Общая информация" bottom="Расскажите, к какому учебному заведению относится ваше общежитие">
                     <SelectMimicry
                         top="Выберите страну"
                         placeholder="Страна не выбрана"

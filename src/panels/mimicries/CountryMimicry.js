@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import bridge from '@vkontakte/vk-bridge';
 
-import {Group, Panel, PanelHeader, SimpleCell} from "@vkontakte/vkui";
+import {Group, Panel, PanelHeader, PanelHeaderBack, SimpleCell} from "@vkontakte/vkui";
 
 import {LocationContext, Navigation} from "../../Contexts";
 
@@ -12,7 +12,9 @@ const CountryChoosePanel = ({id}) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>Выбор региона</PanelHeader>
+            <PanelHeader
+                left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
+            >Выбор региона</PanelHeader>
             <Group>
                 {
                     countryList.map((item, index) => {

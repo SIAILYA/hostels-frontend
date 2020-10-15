@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import bridge from "@vkontakte/vk-bridge";
 
-import {Group, Panel, PanelHeader, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
+import {Group, Panel, PanelHeader, PanelHeaderBack, PanelSpinner, Search, SimpleCell} from "@vkontakte/vkui";
 
 import {Navigation, LocationContext} from "../../Contexts";
 
@@ -80,7 +80,9 @@ const CityChoosePanel = ({id}) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>Выбор города</PanelHeader>
+            <PanelHeader
+                left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
+            >Выбор города</PanelHeader>
             <Search value={searchValue} onChange={e => {setSearch(e.target.value)}}/>
             {!loading ?
                 <Group>
