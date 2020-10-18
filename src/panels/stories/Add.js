@@ -58,7 +58,7 @@ const Add = ({go}) => {
 
     return (
         <Panel id="add_panel">
-            <PanelHeader>Добавить</PanelHeader>
+            <PanelHeader>Добавление</PanelHeader>
             <Div>
                 <Group header={<Header mode="secondary">Добро пожаловать!</Header>} separator="show">
                     <Cell
@@ -169,35 +169,35 @@ const Add = ({go}) => {
                                                                 <HorizontalScroll>
                                                                     <div style={{display: "flex"}}>
                                                                         <Button
-                                                                            className='yellow-gradient gradeBtn'
+                                                                            className='yellow-back gradeBtn'
                                                                             style={{fontSize: 10}}
                                                                             disabled
                                                                         >
                                                                             Состояние:&#160;{review.review.rating.condition}
                                                                         </Button>
                                                                         <Button
-                                                                            className='yellow-gradient gradeBtn'
+                                                                            className='yellow-back gradeBtn'
                                                                             style={{fontSize: 10}}
                                                                             disabled
                                                                         >
                                                                             Цена:&#160;{review.review.rating.cost}
                                                                         </Button>
                                                                         <Button
-                                                                            className='yellow-gradient gradeBtn'
+                                                                            className='yellow-back gradeBtn'
                                                                             style={{fontSize: 10}}
                                                                             disabled
                                                                         >
                                                                             Персонал:&#160;{review.review.rating.personal}
                                                                         </Button>
                                                                         <Button
-                                                                            className='yellow-gradient gradeBtn'
+                                                                            className='yellow-back gradeBtn'
                                                                             style={{fontSize: 10}}
                                                                             disabled
                                                                         >
                                                                             Расположение:&#160;{review.review.rating.location}
                                                                         </Button>
                                                                         <Button
-                                                                            className='yellow-gradient gradeBtn'
+                                                                            className='yellow-back gradeBtn'
                                                                             style={{fontSize: 10}}
                                                                             disabled
                                                                         >

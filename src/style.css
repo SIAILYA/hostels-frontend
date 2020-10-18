@@ -45,6 +45,14 @@
     src: url("fonts/Montserrat-Bold.ttf") format('truetype');
 }
 
+#hello_panel #base_panel, #role_panel, #thanks_panel{
+    position: fixed;
+}
+
+.yellow-back{
+    background-color: var(--yellow);
+}
+
 .SimpleCell__children{
     font-family: 'Montserrat', sans-serif!important;
 }

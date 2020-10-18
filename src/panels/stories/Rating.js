@@ -39,7 +39,7 @@ const Rating = () => {
                 <Group>
                     <List>
                         {
-                            dormitoryRating.sort((a, b) => {return(a.rating > b.rating ? -1 : 1)}).map((item, index, all) => {
+                            dormitoryRating.sort((a, b) => {return(a.rating > b.rating ? -1 : 1)}).map((item, index, array) => {
                                 return(
                                     <div key={index}>
                                         <SimpleCell
@@ -74,7 +74,10 @@ const Rating = () => {
                                             </Subhead>
                                             {typeof(item.university_title) === 'string' ? item.university_title : item.university_title.length + " ВУЗ" + getPostfix(item.university_title.length) }
                                         </SimpleCell>
-                                        <Separator/>
+                                        {
+                                            index !== array.length - 1 &&
+                                            <Separator/>
+                                        }
                                     </div>
                                 )
                             })

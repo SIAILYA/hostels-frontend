@@ -63,7 +63,7 @@ const SearchStory = ({id}) => {
             <Search
                 value={dormitoriesSearch}
                 onChange={e => {setDormitoriesSearch(e.target.value.trimStart())}}
-                placeholder="Название вуза"
+                placeholder="Название ВУЗа"
             />
             {
                 !loading && dormitorySearch.length === 0 &&
@@ -77,7 +77,7 @@ const SearchStory = ({id}) => {
                     <Group>
                         <List>
                             {
-                                dormitorySearch.map((item, index) => {
+                                dormitorySearch.map((item, index, array) => {
                                     return(
                                         <div key={index}>
                                             <SimpleCell
@@ -117,7 +117,10 @@ const SearchStory = ({id}) => {
                                                 {typeof(item.university_title) === 'string' ? item.university_title : item.university_title.length + " ВУЗ" + getPostfix(item.university_title.length) }
 
                                             </SimpleCell>
-                                            <Separator/>
+                                            {
+                                                index !== array.length - 1 &&
+                                                <Separator/>
+                                            }
                                         </div>
                                     )
                                 })

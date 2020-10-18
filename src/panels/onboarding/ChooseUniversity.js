@@ -74,7 +74,7 @@ const WhereStudyPanel = ({id}) => {
                 </FormLayoutGroup>
             </FormLayout>
 
-            <div style={{display: 'flex', paddingBotton: '5vh'}}>
+            <div style={{display: 'flex', paddingBottom: '20vh'}}>
                 <Button
                     mode='outline'
                     style={{color: 'var(--yellow)!important', margin: 'auto'}}

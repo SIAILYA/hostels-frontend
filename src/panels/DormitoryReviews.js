@@ -69,6 +69,7 @@ const DormitoryReviews = ({id}) => {
             >
                 <SimpleCell
                     multiline
+                    disabled
                 >
                     <Header className="header-centered">
                             {dormitoryObject.title}
