@@ -24,9 +24,9 @@ const Base = ({id}) => {
                     Делитесь и узнавайте!
                 </div>
                 <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
-                    <img src={population} alt="" width="200vh"/>
+                    <img src={population} alt="" className="img-base"/>
                 </div>
-                <div style={{textAlign: "center", marginTop: "25px"}}>
+                <div style={{textAlign: "center", marginTop: "25px"}} className="hello-box">
                     База общежитий постоянно растет благодаря пользователям — присоединяйтесь к нашему сообществу!
                 </div>
             </Div>

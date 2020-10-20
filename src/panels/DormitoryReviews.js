@@ -23,6 +23,7 @@ import RatingProgress from "./components/RatingProgress";
 // import dormitory from "./dormitoryObject.json"
 import {Navigation, ReviewsContext} from "../Contexts";
 import {Icon56CameraOffOutline} from "@vkontakte/icons";
+import {getPostfix} from "./stories/Rating";
 
 
 
@@ -58,7 +59,7 @@ const DormitoryReviews = ({id}) => {
                 left={<PanelHeaderBack className="yellow-gradient-text" onClick={goBack}/>}
             >
                 <PanelHeaderContent
-                    status={dormitoryObject.university_title}
+                    status={typeof(dormitoryObject.university_title) === 'string' ? dormitoryObject.university_title : dormitoryObject.university_title.length + " ВУЗ" + getPostfix(dormitoryObject.university_title.length) }
                 >
                     Отзывы
                 </PanelHeaderContent>

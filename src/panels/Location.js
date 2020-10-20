@@ -93,7 +93,7 @@ const LocationPanel = ({id, user}) => {
             }
             {
                 accessToken &&
-                <div style={{display: 'flex'}}>
+                <div style={{display: 'flex', paddingBottom: "15vh"}}>
                     <Button
                         mode='outline'
                         style={{color: 'var(--yellow)!important', margin: 'auto'}}

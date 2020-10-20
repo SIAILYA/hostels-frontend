@@ -10,7 +10,7 @@ import {
     PanelHeaderBack
 } from "@vkontakte/vkui";
 import GoogleMapReact from "google-map-react";
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {LocationContext, Navigation} from "../Contexts";
 import Icon36HomeOutline from "@vkontakte/icons/dist/36/home_outline";
 
@@ -22,6 +22,7 @@ const CustomDormitoryPanel = ({id}) => {
         setDormitory, customTitle, customAddress,
         setDormitoryList, dormitoryList,
         setAddress, setTitle} = useContext(LocationContext)
+    const [inList, setInList] = useState(false)
 
     const GoogleMap = () => (
         <div
@@ -38,6 +39,16 @@ const CustomDormitoryPanel = ({id}) => {
             <Icon36HomeOutline style={{color: 'var(--yellow)'}}/>
         </div>
     );
+
+    useEffect(() => {
+        setInList(false)
+        dormitoryList.forEach((item) => {
+            if (item.title === customTitle || item.address === customAddress){
+                setInList(true)
+            }
+        })
+    }, [customTitle, customAddress])
+
 
     return(
         <Panel id={id}>
@@ -59,6 +70,7 @@ const CustomDormitoryPanel = ({id}) => {
                         <Input type='text'
                                value={customTitle}
                                onChange={e => {
+                                   console.log(e.currentTarget.value)
                                    setTitle(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
                                }}
                                name='custom_title'
@@ -71,6 +83,7 @@ const CustomDormitoryPanel = ({id}) => {
                         <Input type='text'
                                value={customAddress}
                                onChange={e => {
+                                   console.log(e.currentTarget.value)
                                    setAddress(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
                                }}
                                placeholder="Москва, улица Пушкина, 7к3"
@@ -122,9 +135,11 @@ const CustomDormitoryPanel = ({id}) => {
                                 }
                             ])
                             goBack();
+                            setAddress('');
+                            setTitle('');
                         }
                         }
-                        disabled={!(customTitle && (customAddress || customCoordinates.lat))}
+                        disabled={!(customAddress && customTitle && !inList)}
                     >
                         Подтвердить
                     </Button>

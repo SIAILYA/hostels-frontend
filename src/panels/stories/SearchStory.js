@@ -66,7 +66,7 @@ const SearchStory = ({id}) => {
                 placeholder="Название ВУЗа"
             />
             {
-                !loading && dormitorySearch.length === 0 &&
+                !loading && dormitorySearch.length === 0 && dormitoriesSearch.length !== 0 &&
                 <Div>
                     <Header mode="secondary" className="header-centered">Ничего не нашлось</Header>
                 </Div>

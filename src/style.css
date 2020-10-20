@@ -45,8 +45,34 @@
     src: url("fonts/Montserrat-Bold.ttf") format('truetype');
 }
 
-#hello_panel #base_panel, #role_panel, #thanks_panel{
-    position: fixed;
+@media screen and (min-height: 560px) {
+    #base_panel, #thanks_panel{
+        position: fixed!important;
+    }
+}
+
+@media screen and (min-height: 520px) {
+    #hello_panel{
+        position: fixed!important;
+    }
+}
+
+@media screen and (max-height: 519px){
+    .hello-box{
+        padding-bottom: 25vh;
+    }
+}
+
+@media screen and (min-height: 750px){
+    #role_panel{
+        position: fixed!important;
+    }
+}
+
+@media screen and (min-height: 600px){
+    #university_panel{
+        position: fixed!important;
+    }
 }
 
 .yellow-back{
@@ -106,6 +132,14 @@ body{
     .write{
         background-image: url("img/banner2-max.jpg")!important;
     }
+}
+
+.img-hello{
+    width: 40vw;
+}
+
+.img-base{
+    width: 40vw;
 }
 
 .Gallery__slide {

@@ -140,7 +140,6 @@ const QuestionsPanel = ({id}) => {
                                onChange={e => {
                                    const val = e.target.value.replaceAll(RegExp("[^0-9]", "g"), '')
                                    if (val.length > 0){
-                                       console.log(val)
                                        if (parseInt(val) <= 10000 && parseInt(val) > 0) {
                                            setCost(parseInt(val))
                                        } else {
@@ -159,21 +158,21 @@ const QuestionsPanel = ({id}) => {
                     <Group header={<Header mode='secondary'>Комнаты</Header>} separator='hide'>
                         <Checkbox
                             name='check_beds'
-                            value={twoLevelBed}
+                            checked={twoLevelBed}
                             onChange={() => setTwoLevelBed(prev => !prev)}
                         >
                             Двухъярусные кровати
                         </Checkbox>
                         <Checkbox
                             name='check_balcony'
-                            value={balcony}
+                            checked={balcony}
                             onChange={() => setBalcony(prev => !prev)}
                         >
                             В комнатах есть балконы
                         </Checkbox>
                         <Checkbox
                             name='check_windows'
-                            value={plasticWindows}
+                            checked={plasticWindows}
                             onChange={() => setPlasticWindows(prev => !prev)}
                         >
                             Установлены пластиковые окна
@@ -210,7 +209,7 @@ const QuestionsPanel = ({id}) => {
                     <Group header={<Header mode='secondary'>Комендантский час&#160;<a style={{color: "var(--red)"}}>*</a></Header>} separator='hide'>
                         <Checkbox
                             name='check_work_always'
-                            value={workAlways}
+                            checked={workAlways}
                             onChange={() => setWorkAlways(prev => !prev)}
                         >
                             Общежитие работает круглосуточно
@@ -241,21 +240,21 @@ const QuestionsPanel = ({id}) => {
                     <Group header={<Header mode='secondary'>Остальное</Header>} separator='hide'>
                         <Checkbox
                             name='check_smoking'
-                            value={smoking}
+                            checked={smoking}
                             onChange={() => setSmoking(prev => !prev)}
                         >
                             В помещениях общежития разрешено курить
                         </Checkbox>
                         <Checkbox
                             name='check_electricity'
-                            value={electricity}
+                            checked={electricity}
                             onChange={() => setElectricity(prev => !prev)}
                         >
                             В комнатах можно использовать электроприборы (например, чайник или микроволновку)
                         </Checkbox>
                         <Checkbox
                             name='check_internet'
-                            value={internet}
+                            checked={internet}
                             onChange={() => setInternet(prev => !prev)}
                         >
                             Есть интернет-провайдер

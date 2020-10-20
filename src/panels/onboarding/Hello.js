@@ -5,7 +5,7 @@ import {Button, Div, FixedLayout, Panel, PanelHeader} from "@vkontakte/vkui";
 
 import {Navigation, ReviewsContext} from "../../Contexts";
 
-import logo from "../../img/logo.svg"
+import logo from "../../img/logo_new.svg"
 
 
 const OnboardingHelloPanel = ({id}) => {
@@ -24,9 +24,9 @@ const OnboardingHelloPanel = ({id}) => {
                     Это "Твоё общежитие"
                 </div>
                 <div style={{textAlign: "center", marginTop: "20px"}} className="animate-up-down">
-                    <img src={logo} alt="" width="200vh"/>
+                    <img className="img-hello" src={logo} alt=""/>
                 </div>
-                <div style={{textAlign: "center", marginTop: "25px"}}>
+                <div style={{textAlign: "center", marginTop: "25px"}} className="hello-box">
                     Сервис, который покажет десятки студенческих общежитий изнутри!
                 </div>
             </Div>
