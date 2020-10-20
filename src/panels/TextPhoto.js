@@ -37,10 +37,12 @@ const TextPhotoPanel = ({id}) => {
     useEffect(() => {
         setPreviews([])
         prevUserPhotos.current = userPhotos
-        for (let i = 0; i < prevUserPhotos.current.length; i++){
-            const new_preview = URL.createObjectURL(prevUserPhotos.current[i])
-            setPreviews(prevState => [...prevState, new_preview])
-            photoCaptions.push('')
+        if (prevUserPhotos.current){
+            for (let i = 0; i < prevUserPhotos.current.length; i++){
+                const new_preview = URL.createObjectURL(prevUserPhotos.current[i])
+                setPreviews(prevState => [...prevState, new_preview])
+                photoCaptions.push('')
+            }
         }
     }, [userPhotos, photoCaptions])
 

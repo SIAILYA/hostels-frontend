@@ -9,7 +9,7 @@ import App from "./App";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
-// import("./eruda").then(({ default: eruda }) => {}); //runtime download
+import("./eruda").then(({ default: eruda }) => {}); //runtime download
 
-// if (process.env.NODE_ENV === "development") {
-// }
+if (process.env.NODE_ENV === "development") {
+}
