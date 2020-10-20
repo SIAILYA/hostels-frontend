@@ -191,6 +191,12 @@ const App = () => {
 					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 					document.body.attributes.setNamedItem(schemeAttribute);
 					setScheme(data.scheme ? data.scheme : "bright_light")
+
+					let isLight = data.scheme !== "space_gray"
+					bridge.send("VKWebAppSetViewSettings", {
+						"status_bar_style": isLight ? "dark" : "light",
+						"action_bar_color": isLight ? "#fff" : "#000"
+					})
 				} else
 
 				if (type === 'VKWebAppAccessTokenReceived') {
