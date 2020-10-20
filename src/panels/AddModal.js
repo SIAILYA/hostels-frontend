@@ -25,23 +25,11 @@ const AddModal = () => {
             <ModalCard id="photo_modal" onClose={goBack}>
 
                 <div
-                    style={{
-                        marginBottom: '10px',
-                        marginTop: '30px',
-                        maxHeight: '60vh',
-                        overflowY: 'scroll',
-                        borderRadius: '10px',
-                        border: 'solid 1px var(--background_keyboard)'}}
+                    className="preview-box"
                 >
                     <img
                         src={photoCard}
-                        style={{
-                            margin: 'auto',
-                            display: 'block',
-                            objectFit: 'contain',
-                            width: '100%',
-                            maxHeight: '100%',
-                        }}
+                        className="preview-img"
                         alt='uploaded by user'
                     />
                 </div>

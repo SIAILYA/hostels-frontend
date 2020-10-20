@@ -1,4 +1,5 @@
 import React, {useContext} from "react";
+import bridge from '@vkontakte/vk-bridge';
 
 import {
     Button,
@@ -135,10 +136,13 @@ const PreviewPanel = ({id}) => {
                         >
                             <CardScroll>
                                 {
-                                    review.photos.map((photo, index) => {
+                                    review.photos.map((photo, index, array) => {
                                         return(
-                                            <div style={{marginRight: "10px"}} key={index}>
-                                                <Avatar mode="app" size={80} src={photo}/>
+                                            <div style={{marginRight: "10px"}} key={index} onClick={() => {
+                                                bridge.send("VKWebAppShowImages", {"images": array, "start_index": index})
+
+                                            }}>
+                                                <Avatar mode="app" size={80} src={photo} style={{objectFit: 'cover'}}/>
                                             </div>
                                         )
                                     })
@@ -154,7 +158,7 @@ const PreviewPanel = ({id}) => {
                 <Button
                     data-goto="view_epic_view"
                     onClick={() => {
-                        history.splice(history.indexOf("view_add_review_view") - 1, 8)
+                        history.splice(history.indexOf("view_add_review_view") - 1, 7)
                         go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
                         clearData()
                         fetchReviews()

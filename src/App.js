@@ -346,6 +346,7 @@ const App = () => {
 		setTextReview('')
 		setPhotoURLs([])
 		setReview({})
+		setUserPhotos([])
 	}
 
 	useEffect(() => {
@@ -559,8 +560,9 @@ const App = () => {
 			const last = history.pop()
 			const goBackTo = history[history.length - 1]
 
-			console.log(last)
-			console.log(history)
+			console.log('history:', history)
+			console.log('from:', last)
+			console.log('to:', goBackTo)
 
 
 			if (last === "onboarding"){
@@ -569,6 +571,10 @@ const App = () => {
 				} else {
 					goBack()
 				}
+			} else
+
+			if (goBackTo.slice(0, 4) === 'view') {
+				setActiveAddPanel('location_panel')
 			} else
 
 			if (last.slice(0, 15) === "onboardingPanel"){
@@ -597,16 +603,26 @@ const App = () => {
 				setActivePanel('epic_panel')
 			} else
 
-			if (goBackTo.slice(0, 4) === 'view') {
-				setActiveAddPanel('location_panel')
-			} else
 
 			if (goBackTo.slice(0, 8) === 'addPanel') {
+				if (last === "addPanel_preview_review_panel"){
+					history.splice(history.indexOf("view_add_review_view") - 1, 7)
+					console.log(history)
+					go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
+					clearData()
+					fetchReviews()
+				} else
+
 				if (goBackTo.slice(9, goBackTo.length) !== "text_photo_panel"){
 					setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
 				} else {
-					window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
-					history.push( 'addPanel_' + "week_panel" );
+					if (last !== "view_offline"){
+						window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
+						history.push( 'addPanel_' + "week_panel" );
+					} else {
+						setActiveView("add_review_view")
+						setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+					}
 				}
 			}
 		}
