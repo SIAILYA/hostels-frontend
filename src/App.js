@@ -177,9 +177,12 @@ const App = () => {
 	}
 
 	useEffect(() => {
-			window.addEventListener('popstate', () => goBack());
-			window.addEventListener('online', () => setOnline());
-			window.addEventListener('offline', () => setOnline());
+		window.addEventListener('popstate', () => goBack());
+		window.addEventListener('online', () => setOnline());
+		window.addEventListener('offline', () => setOnline());
+	}, [])
+
+	useEffect(() => {
 			axios.defaults.headers.common['Vk-Check-Launch-Params'] = window.location.search;
 
 			bridge.send("VKWebAppInit");
@@ -369,6 +372,9 @@ const App = () => {
 		setUserReviewsLoading(true)
 		getUserReviews(fetchedUser.id).then(res => {
 			setUserReviews(res.data)
+			setUserReviewsLoading(false)
+		})
+		.catch(() => {
 			setUserReviewsLoading(false)
 		})
 	}

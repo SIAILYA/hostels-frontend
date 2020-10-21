@@ -27,7 +27,7 @@ const TextPhotoPanel = ({id}) => {
     const {go, goBack, setPopout} = useContext(Navigation)
     const {setPhotoCaptionIndex, setPhotoCard, photoCaptions, userPhotos, setUserPhotos} = useContext(ModalContext)
     const {locationSnackbar, setTextReview, textReview, anonReview, setAnon, setLocationSnackbar} = useContext(LocationContext)
-    const {setPhotoURLs, review} = useContext(ReviewsContext)
+    const {setPhotoURLs, review, setUserReviews} = useContext(ReviewsContext)
     const {getInputProps} = useDropzone();
 
     const [previews, setPreviews] = useState([])
@@ -92,10 +92,23 @@ const TextPhotoPanel = ({id}) => {
                                           className='yellow-gradient'
                                           before={<Icon24CameraOutline />}
                                           controlSize="l"
-                                          multiple
                                           accept="image/*"
                                           disabled={previews.length >= 5}
-                                          onInput={e => setUserPhotos(prev => [...prev, ...e.currentTarget.files])}
+                                          onInput={e => {
+                                              let inList = false
+
+                                              userPhotos.forEach((item) => {
+                                                  if (item.name === e.currentTarget.files[0].name && item.lastModified === e.currentTarget.files[0].lastModified){
+                                                      inList = true
+                                                  }
+                                              })
+
+                                              if (!inList){
+                                                setUserPhotos(prev => [...prev, ...e.currentTarget.files])
+                                              } else {
+                                                  setLocationSnackbar(<FailedSnackbar caption="Вы уже загрузили эту фотографию" onClose={setLocationSnackbar}/>)
+                                              }
+                                          }}
                                     >
                                         Открыть галерею
                                     </File>
@@ -165,28 +178,55 @@ const TextPhotoPanel = ({id}) => {
                                     setPopout(null)
                                     if (res.status === 200){
                                         go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
+                                        setUserReviews([review])
                                     } else {
                                         setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                     }
-                                }).catch(() => {
+                                }).catch((res) => {
+                                    if (res.response) {
+                                        if (res.response.status === 429){
+                                            setPopout(null)
+                                            setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
+                                        }
+                                    }
+                                    else {
+                                        setPopout(null)
+                                        setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                    }
+                                })
+                            }).catch((res) => {
+                                if (res.response) {
+                                    if (res.response.status === 429){
+                                        setPopout(null)
+                                        setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
+                                    }
+                                }
+                                else {
                                     setPopout(null)
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
-                                })
-                            }).catch(() => {
-                                setPopout(null)
-                                setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                }
                             })
                         } else {
                             sendReview(review).then(res => {
                                 setPopout(null)
                                 if (res.status === 200){
                                     go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
+                                    setUserReviews([review])
                                 } else {
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                 }
-                            }).catch(() => {
-                                setPopout(null)
-                                setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                            }).catch((res) => {
+                                if (res.response) {
+                                    if (res.response.status === 429){
+                                        setPopout(null)
+                                        setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
+                                    }
+                                }
+                                else {
+                                    setPopout(null)
+                                    setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
+                                }
+
                             })
                         }
                     }}

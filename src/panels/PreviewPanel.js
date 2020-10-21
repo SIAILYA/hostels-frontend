@@ -21,7 +21,7 @@ import CircularProgressBar from "./components/CircleProgress";
 
 
 const PreviewPanel = ({id}) => {
-    const {review, clearData, fetchReviews} = useContext(ReviewsContext)
+    const {review, clearData, fetchUserReviews} = useContext(ReviewsContext)
     const {go, history} = useContext(Navigation)
 
 
@@ -131,24 +131,27 @@ const PreviewPanel = ({id}) => {
                                 </Div>
                             </Card>
                         </Group>
-                        <Group
-                            header={<Header mode="secondary">Фотографии</Header>}
-                        >
-                            <CardScroll>
-                                {
-                                    review.photos.map((photo, index, array) => {
-                                        return(
-                                            <div style={{marginRight: "10px"}} key={index} onClick={() => {
-                                                bridge.send("VKWebAppShowImages", {"images": array, "start_index": index})
+                        {
+                            review.photos.length > 0 &&
+                            <Group
+                                header={<Header mode="secondary">Фотографии</Header>}
+                            >
+                                <CardScroll>
+                                    {
+                                        review.photos.map((photo, index, array) => {
+                                            return(
+                                                <div style={{marginRight: "10px"}} key={index} onClick={() => {
+                                                    bridge.send("VKWebAppShowImages", {"images": array, "start_index": index})
 
-                                            }}>
-                                                <Avatar mode="app" size={80} src={photo} style={{objectFit: 'cover'}}/>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </CardScroll>
-                        </Group>
+                                                }}>
+                                                    <Avatar mode="app" size={80} src={photo} style={{objectFit: 'cover'}}/>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </CardScroll>
+                            </Group>
+                        }
                     </Div>
                 </Card>
                 }
@@ -158,10 +161,10 @@ const PreviewPanel = ({id}) => {
                 <Button
                     data-goto="view_epic_view"
                     onClick={() => {
+                        fetchUserReviews()
                         history.splice(history.indexOf("view_add_review_view") - 1, 7)
                         go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
                         clearData()
-                        fetchReviews()
                     }}
                     stretched
                     size="xl"

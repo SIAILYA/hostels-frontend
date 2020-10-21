@@ -11,7 +11,7 @@ import {
     Avatar,
     Header,
     Cell,
-    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh, PanelSpinner
+    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh, PanelSpinner, PanelHeaderButton
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
@@ -19,7 +19,7 @@ import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline'
 import {
     Icon28CancelCircleOutline,
     Icon28ChatsOutline,
-    Icon28DoneOutline, Icon28MoreVertical, Icon28PrivacyOutline,
+    Icon28DoneOutline, Icon28MoreVertical, Icon28PrivacyOutline, Icon28RefreshOutline,
     Icon28ShareOutline,
     Icon28SyncOutline
 } from "@vkontakte/icons";
@@ -52,13 +52,9 @@ const Add = ({go}) => {
         return [<Icon28CancelCircleOutline fill="var(--red)"/>, "Отзыв отклонен"]
     }
 
-    useEffect(() => {
-        forceUpdate()
-    }, [userReviews])
-
     return (
         <Panel id="add_panel">
-            <PanelHeader>Добавление</PanelHeader>
+            <PanelHeader left={<PanelHeaderButton onClick={() => {fetchUserReviews()}}><Icon28RefreshOutline className="yellow-gradient-text"/></PanelHeaderButton>}>Добавление</PanelHeader>
             <Div>
                 <Group header={<Header mode="secondary">Добро пожаловать!</Header>} separator="show">
                     <Cell

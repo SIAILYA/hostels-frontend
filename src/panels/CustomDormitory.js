@@ -71,7 +71,7 @@ const CustomDormitoryPanel = ({id}) => {
                                value={customTitle}
                                onChange={e => {
                                    console.log(e.currentTarget.value)
-                                   setTitle(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
+                                   setTitle(e.currentTarget.value.trimStart().substr(0, 100))
                                }}
                                name='custom_title'
                                placeholder="Общежитие №1"
@@ -84,7 +84,7 @@ const CustomDormitoryPanel = ({id}) => {
                                value={customAddress}
                                onChange={e => {
                                    console.log(e.currentTarget.value)
-                                   setAddress(e.currentTarget.value.replaceAll(RegExp("[<>]", "g"), "").trimStart().substr(0, 200))
+                                   setAddress(e.currentTarget.value.trimStart().substr(0, 100))
                                }}
                                placeholder="Москва, улица Пушкина, 7к3"
                                name='custom_address'
