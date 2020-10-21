@@ -130,7 +130,7 @@ const WhereStudyPanel = ({id}) => {
                             selectedUniversity.title === ""
                         }
                     >
-                        Дальше
+                        Приступить!
                     </Button>
                     {
                         !onboardingShowed &&

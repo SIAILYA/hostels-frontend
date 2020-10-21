@@ -366,6 +366,7 @@ const App = () => {
 		setPhotoURLs([])
 		setReview({})
 		setUserPhotos([])
+		setLocationSnackbar(null)
 	}
 
 	useEffect(() => {
@@ -586,18 +587,22 @@ const App = () => {
 			const last = history.pop()
 			const goBackTo = history[history.length - 1]
 
-			// console.log('history:', history)
-			// console.log('from:', last)
-			// console.log('to:', goBackTo)
+			console.log('history:', history)
+			console.log('from:', last)
+			console.log('to:', goBackTo)
 
 			if (goBackTo.slice(0, 4) === 'view') {
-				setActiveView("add_review_view")
-				setActiveAddPanel('location_panel')
+				if (goBackTo !== "view_epic_view"){
+					setActiveView("add_review_view")
+					setActiveAddPanel('location_panel')
+				} else {
+					setActiveView("epic_view")
+				}
 			} else
 
 			if (goBackTo.slice(0, 8) === 'addPanel') {
 				if (last === "addPanel_preview_review_panel"){
-					history.splice(history.indexOf("view_add_review_view") - 1, 7)
+					history.splice(history.indexOf("view_add_review_view") - 1, 8)
 					console.log(history)
 					go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
 					clearData()
@@ -903,6 +908,11 @@ const App = () => {
 															onClick={() => {
 																	if (navigator.onLine){
 																		goBack()
+																	} else {
+																		checkServer().then(res => {
+																			goBack()
+																		}).catch(err => {
+																		})
 																	}
 																}
 															}

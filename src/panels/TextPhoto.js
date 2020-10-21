@@ -10,7 +10,8 @@ import {
     FormLayout, FormLayoutGroup,
     FormStatus,
     Panel,
-    PanelHeader, Placeholder, Textarea, ScreenSpinner, PanelHeaderBack
+    PanelHeader, Placeholder, Textarea, ScreenSpinner, PanelHeaderBack,
+    Alert
 } from "@vkontakte/vkui";
 
 import Icon24CameraOutline from '@vkontakte/icons/dist/24/camera_outline';
@@ -24,10 +25,10 @@ import {FailedSnackbar} from "./components/Snackbars";
 
 
 const TextPhotoPanel = ({id}) => {
-    const {go, goBack, setPopout} = useContext(Navigation)
+    const {go, goBack, setPopout, history} = useContext(Navigation)
     const {setPhotoCaptionIndex, setPhotoCard, photoCaptions, userPhotos, setUserPhotos} = useContext(ModalContext)
     const {locationSnackbar, setTextReview, textReview, anonReview, setAnon, setLocationSnackbar} = useContext(LocationContext)
-    const {setPhotoURLs, review, setUserReviews} = useContext(ReviewsContext)
+    const {setPhotoURLs, review, setUserReviews, clearData} = useContext(ReviewsContext)
     const {getInputProps} = useDropzone();
 
     const [previews, setPreviews] = useState([])
@@ -232,6 +233,40 @@ const TextPhotoPanel = ({id}) => {
                     }}
                 >
                     Опубликовать
+                </Button>
+            </Div>
+            <Div style={{paddingTop: 0}}>
+                <Button
+                    size="xl"
+                    stretched
+                    style={{backgroundColor: "var(--red)"}}
+                    onClick={() => {
+                        setPopout(
+                            <Alert
+                                actionsLayout="vertical"
+                                actions={[{
+                                    title: 'Стереть отзыв',
+                                    autoclose: true,
+                                    mode: 'destructive',
+                                    action: () => {
+                                        history.splice(history.indexOf("view_add_review_view") - 1, 6)
+                                        go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
+                                        clearData()
+                                    }
+                                }, {
+                                    title: 'Вернуться к отзыву',
+                                    autoclose: true,
+                                    mode: 'cancel'
+                                }]}
+                                onClose={() => setPopout(null)}
+                            >
+                                <h2>Подтвердите действие</h2>
+                                <p>Вы уверены, что хотите отменить создание отзыва?</p>
+                            </Alert>
+                        )
+                    }}
+                >
+                    Отменить публикацию
                 </Button>
             </Div>
 

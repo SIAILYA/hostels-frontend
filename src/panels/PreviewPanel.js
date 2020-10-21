@@ -162,7 +162,7 @@ const PreviewPanel = ({id}) => {
                     data-goto="view_epic_view"
                     onClick={() => {
                         fetchUserReviews()
-                        history.splice(history.indexOf("view_add_review_view") - 1, 7)
+                        history.splice(history.indexOf("view_add_review_view") - 1, 8)
                         go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
                         clearData()
                     }}
