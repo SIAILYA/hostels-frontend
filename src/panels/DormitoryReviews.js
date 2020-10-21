@@ -72,9 +72,9 @@ const DormitoryReviews = ({id}) => {
                     multiline
                     disabled
                 >
-                    <Header className="header-centered">
+                    <p className="header-centered header-dormitory">
                             {dormitoryObject.title}
-                    </Header>
+                    </p>
                     <Subhead weight="regular" style={{textAlign: "center"}}>
                             {dormitoryObject.address}
                     </Subhead>

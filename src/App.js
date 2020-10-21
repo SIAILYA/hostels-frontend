@@ -75,20 +75,21 @@ const App = () => {
 	const [accessToken, setToken] = useState('');
 
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+	const [windowPopout, setWindowPopout] = useState(<ScreenSpinner size='large' />)
 	const [onboardingPopup, setOnboardingPopup] = useState('');
 
 	const [locationSnackbar, setLocationSnackbar] = useState(null)
 	const [onboardingSnackbar, setOnboardingSnackbar] = useState('');
 
 	const [searchBanner, setSearchBanner] = useState({
-		title: 'Заголовок',
-		domain: 'vk.com',
-		trackingLink: 'https://vk.com',
-		ctaText: 'Перейти',
+		title: 'Наше сообщество',
+		domain: '@yourdormitory',
+		trackingLink: 'https://vk.com/yourdormitory',
+		ctaText: 'Открыть',
 		advertisingLabel: 'Реклама',
-		iconLink: 'https://sun9-7.userapi.com/c846420/v846420985/1526c3/ISX7VF8NjZk.jpg',
-		description: 'Описание рекламы',
-		ageRestrictions: 14,
+		iconLink: 'https://i.ibb.co/X3P34Kk/2.png',
+		description: '',
+		ageRestrictions: 0,
 		statistics: [
 			{ url: '', type: 'playbackStarted' },
 			{ url: '', type: 'click' }
@@ -170,113 +171,122 @@ const App = () => {
 
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
-
+	const [block, setBlock] = useState(false)
 
 	function setOnline() {
 		!navigator.onLine ? go({currentTarget: {dataset: {goto: "view_offline"}}}) : goBack()
 	}
 
 	useEffect(() => {
-		window.addEventListener('popstate', () => goBack());
-		window.addEventListener('online', () => setOnline());
-		window.addEventListener('offline', () => setOnline());
+
 	}, [])
 
 	useEffect(() => {
-			axios.defaults.headers.common['Vk-Check-Launch-Params'] = window.location.search;
+		bridge.send("VKWebAppInit");
 
-			bridge.send("VKWebAppInit");
+		axios.defaults.headers.common['Vk-Check-Launch-Params'] = window.location.search;
 
-			bridge.subscribe(({ detail: { type, data }}) => {
-				if (type === 'VKWebAppUpdateConfig') {
-					console.log(data)
-					const schemeAttribute = document.createAttribute('scheme');
-					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-					document.body.attributes.setNamedItem(schemeAttribute);
-					setScheme(data.scheme ? data.scheme : "bright_light")
-
-					let isLight = data.scheme !== "space_gray"
-					bridge.send("VKWebAppSetViewSettings", {
-						"status_bar_style": isLight ? "dark" : "light",
-						"action_bar_color": isLight ? "#fff" : "#000"
-					})
-				} else
-
-				if (type === 'VKWebAppAccessTokenReceived') {
-					setToken(data.access_token)
-				} else
-
-				if (type === "VKWebAppCallAPIMethodResult"){
-					if (data.request_id === "getCities"){
-						setCitiesList(data.response.items)
-					}
-
-					if (data.request_id === "getUniversities"){
-						setUniList(data.response.items)
-					}
-				} else
-
-				if (type === "VKWebAppStorageSetResult" ||
-					type === "VKWebAppStorageGetResult" ||
-					type === "VKWebAppGetUserInfoResult" ||
-					type === "VKWebAppInitResult"){
-
-				} else
-
-				{
-					console.log(type)
-					console.log(data)
-				}
-			});
-
-			async function fetchStorageInit() {
-				const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
-				if (onboarding_showed.keys[0].value === "true"){
-					setOnboardingShowed(true)
-					getToken()
-					setActiveView("epic_view")
-				} else {
-					setActiveView("onboarding_view")
-				}
-
-				const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role", "allow_access"]})
-
-				if (defaults.keys[0].value !== ""){
-					const default_location = JSON.parse(defaults.keys[0].value)
-					setCountry(default_location.country)
-					setCity(default_location.city)
-					setUniversity(default_location.university)
-					bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": "true"})
-				}
-
-				if (defaults.keys[1].value !== ""){
-					setUserRole(defaults.keys[1].value)
-				}
-
-				if (defaults.keys[2].value === "true" && onboarding_showed.keys[0].value === "true"){
-					getToken()
-				}
-
-				setPopout(null)
-			}
-
-			async function fetchData() {
-				const user = await bridge.send('VKWebAppGetUserInfo', );
-				setUser(user);
-				setPopout(null);
-			}
-
+		window.onload = () => {
+			console.log('window load end')
+			window.addEventListener('popstate', () => goBack());
+			window.addEventListener('online', () => setOnline());
+			window.addEventListener('offline', () => setOnline());
+			fetchReviews();
 			fetchData();
 			fetchStorageInit();
-			fetchReviews();
 			fetchRating();
 			checkServerApi();
+			setWindowPopout(null)
+		}
 
-			// setInterval(() => {
-			// 	fetchReviews()
-			// }, 120000)
-		},
-		[]);
+		bridge.send('VKWebAppGetAds').then(promoBannerProps => {
+			setSearchBanner(promoBannerProps)
+		})
+
+		bridge.subscribe(({ detail: { type, data }}) => {
+			if (type === 'VKWebAppUpdateConfig') {
+				console.log(data)
+				const schemeAttribute = document.createAttribute('scheme');
+				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				document.body.attributes.setNamedItem(schemeAttribute);
+				setScheme(data.scheme ? data.scheme : "bright_light")
+
+				let isLight = data.scheme !== "space_gray"
+				bridge.send("VKWebAppSetViewSettings", {
+					"status_bar_style": isLight ? "dark" : "light",
+					"action_bar_color": isLight ? "#fff" : "#000"
+				})
+			} else
+
+			if (type === 'VKWebAppAccessTokenReceived') {
+				setToken(data.access_token)
+			} else
+
+			if (type === "VKWebAppCallAPIMethodResult"){
+				if (data.request_id === "getCities"){
+					setCitiesList(data.response.items)
+				}
+
+				if (data.request_id === "getUniversities"){
+					setUniList(data.response.items)
+				}
+			} else
+
+			if (type === "VKWebAppStorageSetResult" ||
+				type === "VKWebAppStorageGetResult" ||
+				type === "VKWebAppGetUserInfoResult" ||
+				type === "VKWebAppInitResult"){
+
+			} else
+
+			{
+				console.log(type)
+				console.log(data)
+			}
+		});
+
+		async function fetchStorageInit() {
+			const onboarding_showed = await bridge.send("VKWebAppStorageGet", {"keys": ["onboarding_showed"]})
+			if (onboarding_showed.keys[0].value === "true"){
+				setOnboardingShowed(true)
+				getToken()
+				setActiveView("epic_view")
+			} else {
+				setActiveView("onboarding_view")
+			}
+
+			const defaults = await bridge.send("VKWebAppStorageGet", {"keys": ["default_location", "default_role", "allow_access"]})
+
+			if (defaults.keys[0].value !== ""){
+				const default_location = JSON.parse(defaults.keys[0].value)
+				setCountry(default_location.country)
+				setCity(default_location.city)
+				setUniversity(default_location.university)
+				bridge.send("VKWebAppStorageSet", {"key": "allow_access", "value": "true"})
+			}
+
+			if (defaults.keys[1].value !== ""){
+				setUserRole(defaults.keys[1].value)
+			}
+
+			if (defaults.keys[2].value === "true" && onboarding_showed.keys[0].value === "true"){
+				getToken()
+			}
+
+			setPopout(null)
+		}
+
+		async function fetchData() {
+			const user = await bridge.send('VKWebAppGetUserInfo', );
+			setUser(user);
+			setPopout(null);
+		}
+
+		setInterval(() => {
+			fetchReviews()
+		}, 120000)
+	},
+	[]);
 
 	function fetchRating() {
 		setRatingLoading(true)
@@ -568,14 +578,45 @@ const App = () => {
 	const goBack = () => {
 		if( history.length === 1 ) {
 			bridge.send("VKWebAppClose", {"status": "success"});
-		} else if( history.length > 1 && navigator.onLine ) {
+		} else
+
+		if( history.length > 1 && navigator.onLine) {
+			// setBlock(true)
+			// setTimeout(() => {setBlock(false)}, 400)
 			const last = history.pop()
 			const goBackTo = history[history.length - 1]
 
-			console.log('history:', history)
-			console.log('from:', last)
-			console.log('to:', goBackTo)
+			// console.log('history:', history)
+			// console.log('from:', last)
+			// console.log('to:', goBackTo)
 
+			if (goBackTo.slice(0, 4) === 'view') {
+				setActiveView("add_review_view")
+				setActiveAddPanel('location_panel')
+			} else
+
+			if (goBackTo.slice(0, 8) === 'addPanel') {
+				if (last === "addPanel_preview_review_panel"){
+					history.splice(history.indexOf("view_add_review_view") - 1, 7)
+					console.log(history)
+					go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
+					clearData()
+					fetchReviews()
+				} else
+
+				if (goBackTo.slice(9, goBackTo.length) !== "text_photo_panel"){
+					setActiveView("add_review_view")
+					setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+				} else {
+					if (last !== "view_offline"){
+						window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
+						history.push( 'addPanel_' + "week_panel" );
+					} else {
+						setActiveView("add_review_view")
+						setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+					}
+				}
+			} else
 
 			if (last === "onboarding"){
 				if (activeView !== "epic_view"){
@@ -583,10 +624,6 @@ const App = () => {
 				} else {
 					goBack()
 				}
-			} else
-
-			if (goBackTo.slice(0, 4) === 'view') {
-				setActiveAddPanel('location_panel')
 			} else
 
 			if (last.slice(0, 15) === "onboardingPanel"){
@@ -613,29 +650,6 @@ const App = () => {
 				setActiveStory(goBackTo.slice(6, goBackTo.length))
 				setActiveView('epic_view')
 				setActivePanel('epic_panel')
-			} else
-
-
-			if (goBackTo.slice(0, 8) === 'addPanel') {
-				if (last === "addPanel_preview_review_panel"){
-					history.splice(history.indexOf("view_add_review_view") - 1, 7)
-					console.log(history)
-					go({currentTarget: {dataset: {goto: 'view_epic_view'}}})
-					clearData()
-					fetchReviews()
-				} else
-
-				if (goBackTo.slice(9, goBackTo.length) !== "text_photo_panel"){
-					setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
-				} else {
-					if (last !== "view_offline"){
-						window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
-						history.push( 'addPanel_' + "week_panel" );
-					} else {
-						setActiveView("add_review_view")
-						setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
-					}
-				}
 			}
 		}
 	}
@@ -726,7 +740,7 @@ const App = () => {
 										<View
 											id="epic_view"
 											activePanel="epic_panel"
-											popout={popout}
+											popout={popout || windowPopout}
 											header={null}
 											onSwipeBack={() => goBack()}
 										>

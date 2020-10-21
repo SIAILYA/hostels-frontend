@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 
 import {
     Panel,
@@ -24,6 +24,7 @@ const Main = ({onStoryChange}) => {
     const {lastReviews, reviewsLoading, fetchDormitoryReviews} = useContext(ReviewsContext)
     const {searchBanner, go, setPopout} = useContext(Navigation)
     const platform = usePlatform()
+    const [bannerShow, setBannerShow] = useState(true)
 
     return (
         <Panel id="main_panel">
@@ -95,7 +96,14 @@ const Main = ({onStoryChange}) => {
                 />
             </Group>
 
-            <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide'>
+            {
+                bannerShow && searchBanner &&
+                <Div>
+                    <PromoBanner bannerData={searchBanner} onClose={() => setBannerShow(false)}/>
+                </Div>
+            }
+
+            <Group header={<Header mode='secondary'>Последние отзывы</Header>} separator='hide' style={{marginBottom: "5vh"}}>
                 {
                     reviewsLoading ?
                     <PanelSpinner/>
@@ -126,7 +134,7 @@ const Main = ({onStoryChange}) => {
 
                                         <RichCell
                                             disabled
-                                            before={<Avatar size={48} src={review.author_photo}/>}
+                                            before={<Avatar size={48} src={review.author_photo || 'https://vk.com/images/camera_200.png?ava=1'}/>}
                                             text={review.review.text.length > 50 ? review.review.text.slice(0, 50).trim()+ '...' : review.review.text}
                                             caption={
                                                 <Caption level="3" weight="medium" style={{ marginTop: 7 }}>
@@ -156,10 +164,6 @@ const Main = ({onStoryChange}) => {
                 }
             </Group>
 
-
-            <Div>
-                <PromoBanner bannerData={searchBanner} isCloseButtonHidden/>
-            </Div>
 
             {/*<Group*/}
             {/*    header={<Header mode='secondary'>Интересное и полезное</Header>}*/}

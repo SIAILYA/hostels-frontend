@@ -13,13 +13,6 @@
     font-family: 'Montserrat', sans-serif!important;
 }
 
-/*html,*/
-/*body {*/
-/*    height: 100%!important;*/
-/*    width: 100%!important;*/
-/*    overflow: auto!important;*/
-/*}*/
-
 @font-face {
     font-family: 'Montserrat';
     font-style: normal;
@@ -319,4 +312,12 @@ body{
     overflow-y: auto;
     border-radius: 10px;
     border: solid 1px var(--background_keyboard);
+}
+
+.header-dormitory{
+    font-weight: bolder;
+    text-align: center;
+    line-height: 1;
+    padding-bottom: 0;
+    margin-bottom: 3px;
 }
