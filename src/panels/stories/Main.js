@@ -92,7 +92,7 @@ const Main = ({onStoryChange}) => {
                             }}
                         />
                     }
-                    actions={<Button mode="overlay_primary" size="l" onClick={onStoryChange} data-story="add">Рассказать</Button>}
+                    actions={<Button mode="overlay_primary" size="l" onClick={onStoryChange} data-story="add">Перейти</Button>}
                 />
             </Group>
 

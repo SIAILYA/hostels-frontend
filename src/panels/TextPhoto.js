@@ -241,6 +241,8 @@ const TextPhotoPanel = ({id}) => {
                     stretched
                     style={{backgroundColor: "var(--red)"}}
                     onClick={() => {
+                        window.history.pushState( {panel: 'addAlert'}, 'addAlert' );
+                        history.push( 'addAlert' );
                         setPopout(
                             <Alert
                                 actionsLayout="vertical"
@@ -258,7 +260,10 @@ const TextPhotoPanel = ({id}) => {
                                     autoclose: true,
                                     mode: 'cancel'
                                 }]}
-                                onClose={() => setPopout(null)}
+                                onClose={() => {
+                                    setPopout(null)
+                                    goBack()
+                                }}
                             >
                                 <h2>Подтвердите действие</h2>
                                 <p>Вы уверены, что хотите отменить создание отзыва?</p>

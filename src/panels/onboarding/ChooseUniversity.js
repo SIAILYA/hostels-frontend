@@ -89,10 +89,14 @@ const WhereStudyPanel = ({id}) => {
                                                                              onClose={() => setOnboardingSnackbar('')}
                                                                              duration={1000}/>)
                                     } else {
+                                        console.log(fetchedUser)
                                         if (fetchedUser.country.title){
+                                            setUniversity('')
+                                            setCity('')
                                             setCountry(fetchedUser.country)
                                         }
                                         if (fetchedUser.city.title){
+                                            setUniversity('')
                                             setCity(fetchedUser.city)
                                         }
                                         if (fetchedUser.university.title){
@@ -121,30 +125,30 @@ const WhereStudyPanel = ({id}) => {
                         size="xl"
                         stretched
                         onClick={() => {
+                            console.log(selectedCountry.title,
+                            selectedCity.title,
+                            selectedUniversity.title)
                             setActiveView("epic_view")
                             bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": JSON.stringify({country: selectedCountry, city: selectedCity, university: selectedUniversity})});
                         }}
                         disabled={
-                            selectedCountry.title === "" ||
-                            selectedCity.title === "" ||
-                            selectedUniversity.title === ""
+                            (selectedCountry.title && selectedCountry.title === "") ||
+                            (selectedCity.title && selectedCity.title === "") ||
+                            (selectedUniversity.title && selectedUniversity.title === "")
                         }
                     >
                         Приступить!
                     </Button>
-                    {
-                        !onboardingShowed &&
-                        <Button
-                            size="m"
-                            mode='tertiary'
-                            style={{marginTop: "10px", color: "var(--yellow)"}}
-                            onClick={() => {
-                                setActiveView("epic_view")
-                            }}
-                        >
-                            Пропустить
-                        </Button>
-                    }
+                    <Button
+                        size="m"
+                        mode='tertiary'
+                        style={{marginTop: "10px", color: "var(--yellow)"}}
+                        onClick={() => {
+                            setActiveView("epic_view")
+                        }}
+                    >
+                        Пропустить
+                    </Button>
                 </Div>
             </FixedLayout>
             {onboardingSnackbar}

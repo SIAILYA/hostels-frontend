@@ -59,7 +59,7 @@ export const COUNTRIES = [
     },
 ];
 
-export const DEV_BACKEND_URL = "";
+export const DEV_BACKEND_URL = "https://5e119fa18cc0.ngrok.io/";
 export const BACKEND_URL = DEV_BACKEND_URL || "https://yd.ftitdev.ru/";
 
 export const INIT_VIEW = "empty_view";

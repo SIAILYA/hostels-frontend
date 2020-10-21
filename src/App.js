@@ -613,12 +613,22 @@ const App = () => {
 					setActiveView("add_review_view")
 					setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
 				} else {
+					if (last === "addAlert"){
+						setPopout(null)
+					} else
+					if (last === 'addModal_photo_modal'){
+						setActiveAddModal(null)
+					} else
+
 					if (last !== "view_offline"){
 						window.history.pushState( {panel: 'addPanel_' + "week_panel"}, 'addPanel_' + "week_panel" );
 						history.push( 'addPanel_' + "week_panel" );
-					} else {
+					} else
+
+					{
 						setActiveView("add_review_view")
 						setActiveAddPanel(goBackTo.slice(9, goBackTo.length))
+						setActiveAddModal(null)
 					}
 				}
 			} else

@@ -109,9 +109,12 @@ const LocationPanel = ({id, user}) => {
                                                                              duration={1000}/>)
                                     } else {
                                         if (user.country.title){
+                                            setUniversity('')
+                                            setCity('')
                                             setCountry(user.country)
                                         }
                                         if (user.city.title){
+                                            setUniversity('')
                                             setCity(user.city)
                                         }
                                         if (user.university.title){
