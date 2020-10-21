@@ -194,6 +194,7 @@ const App = () => {
 			fetchReviews();
 			fetchData();
 			fetchStorageInit();
+			fetchUserReviews();
 			fetchRating();
 			checkServerApi();
 			setWindowPopout(null)
@@ -369,26 +370,31 @@ const App = () => {
 		setLocationSnackbar(null)
 	}
 
-	useEffect(() => {
+	function fetchUserReviews(){
 		if (fetchedUser){
 			setUserReviewsLoading(true)
 			getUserReviews(fetchedUser.id).then(res => {
 				setUserReviews(res.data)
 				setUserReviewsLoading(false)
 			})
+			.catch(() => {
+				setUserReviewsLoading(false)
+			})
+		} else {
+			bridge.send("VKWebAppGetUserInfo").then(res => {
+				setUser(res)
+				setUserReviewsLoading(true)
+				getUserReviews(res.id).then(res => {
+					setUserReviews(res.data)
+					setUserReviewsLoading(false)
+				})
+					.catch(() => {
+						setUserReviewsLoading(false)
+					})
+			})
 		}
-	}, [fetchedUser])
-
-	function fetchUserReviews(){
-		setUserReviewsLoading(true)
-		getUserReviews(fetchedUser.id).then(res => {
-			setUserReviews(res.data)
-			setUserReviewsLoading(false)
-		})
-		.catch(() => {
-			setUserReviewsLoading(false)
-		})
 	}
+
 
 	useEffect(() => {
 			setReview({
@@ -602,6 +608,7 @@ const App = () => {
 
 			if (goBackTo.slice(0, 8) === 'addPanel') {
 				if (last === "addPanel_preview_review_panel"){
+					fetchUserReviews()
 					history.splice(history.indexOf("view_add_review_view") - 1, 8)
 					console.log(history)
 					go({currentTarget: {dataset: {goto: 'view_epic_view'}}})

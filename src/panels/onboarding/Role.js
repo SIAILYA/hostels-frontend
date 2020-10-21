@@ -151,7 +151,14 @@ const RolePanel = ({id}) => {
                         }}
                         disabled={!userRole}
                     >
-                        Дальше
+                        {
+                            userRole === "Интересующийся" &&
+                            "Приступить!"
+                        }
+                        {
+                            userRole !== "Интересующийся" &&
+                            "Дальше!"
+                        }
                     </Button>
                     <Button
                         size="m"

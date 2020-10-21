@@ -10,7 +10,7 @@ import bridge from "@vkontakte/vk-bridge";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
-import("./eruda").then(({ default: eruda }) => {}); //runtime download
+// import("./eruda").then(({ default: eruda }) => {}); //runtime download
 
 // if (process.env.NODE_ENV === "development") {
 // }
