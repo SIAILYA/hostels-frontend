@@ -129,7 +129,7 @@ const Add = ({go}) => {
                             mode="primary"
                             className='yellow-gradient'
                             onClick={accessToken ? go : () => {
-                                getToken()
+                                // getToken()
                                 go({currentTarget: {dataset: {goto: "view_add_review_view"}}})
                             }
                             }
