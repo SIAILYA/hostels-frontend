@@ -62,7 +62,7 @@ const UniversityChoosePanel = ({id}) => {
             >Выбор ВУЗа</PanelHeader>
             <Search value={searchValue} onChange={e => {setSearch(e.target.value.substr(0, 100))}}/>
             {
-                !loading && uniList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).length === 0 &&
+                !loading && uniList.length === 0 &&
                 <Div>
                     <Header mode="secondary" className="header-centered">Ничего не нашлось</Header>
                 </Div>
@@ -71,7 +71,7 @@ const UniversityChoosePanel = ({id}) => {
                 !loading ?
                     <Group>
                         {
-                            uniList.filter(({title}) => title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1).map((item, index) => {
+                            uniList.map((item, index) => {
                                 return (
                                     <SimpleCell
                                         onClick={() => {

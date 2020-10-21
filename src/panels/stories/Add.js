@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import bridge from "@vkontakte/vk-bridge"
 
 import {
@@ -11,7 +11,7 @@ import {
     Avatar,
     Header,
     Cell,
-    SimpleCell, Card, HorizontalScroll, Link, PullToRefresh, PanelSpinner, PanelHeaderButton
+    SimpleCell, Card, HorizontalScroll, Link, PanelSpinner, PanelHeaderButton
 } from "@vkontakte/vkui";
 import {LocationContext, Navigation, ReviewsContext} from "../../Contexts";
 
@@ -26,8 +26,8 @@ import {
 
 
 const Add = ({go}) => {
-    const {fetchedUser, accessToken, getToken, setPopout} = useContext(Navigation)
-    const {userRole, userReviews, userReviewsLoading, fetchUserReviews, fetchDormitoryReviews} = useContext(ReviewsContext)
+    const {fetchedUser, accessToken, getToken} = useContext(Navigation)
+    const {userRole, userReviews, userReviewsLoading, fetchUserReviews} = useContext(ReviewsContext)
     const {selectedUniversity} = useContext(LocationContext)
 
     const [, updateState] = React.useState();

@@ -321,3 +321,7 @@ body{
     padding-bottom: 0;
     margin-bottom: 3px;
 }
+
+.yellow-spinner{
+    color: var(--yellow)!important;
+}

@@ -9,7 +9,7 @@ import population from "../../img/population.svg"
 
 
 const Base = ({id}) => {
-    const {setOnboardingPanel, accessToken, setActiveView} = useContext(Navigation)
+    const {setOnboardingPanel, accessToken, setActiveView, setSkip} = useContext(Navigation)
     const {userRole, setUserRole} = useContext(ReviewsContext)
 
 
@@ -49,6 +49,8 @@ const Base = ({id}) => {
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
                         onClick={() => {
+                            // onOnboardingEnd()
+                            setSkip(true)
                             setUserRole(prev => prev || "Интересующийся")
                             bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
                             if (!accessToken){

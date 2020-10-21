@@ -19,7 +19,7 @@ import {FailedSnackbar, SuccessSnackbar} from "../components/Snackbars";
 
 
 const WhereStudyPanel = ({id}) => {
-    const {fetchedUser, go, setOnboardingSnackbar, onboardingSnackbar, onboardingShowed} = useContext(Navigation)
+    const {fetchedUser, go, setOnboardingSnackbar, onboardingSnackbar, onboardingShowed, history, onOnboardingEnd}  = useContext(Navigation)
     const {setActiveView} = useContext(Navigation)
     const {
         selectedCountry, selectedCity, selectedUniversity,
@@ -125,16 +125,13 @@ const WhereStudyPanel = ({id}) => {
                         size="xl"
                         stretched
                         onClick={() => {
-                            console.log(selectedCountry.title,
-                            selectedCity.title,
-                            selectedUniversity.title)
+                            onOnboardingEnd()
                             setActiveView("epic_view")
                             bridge.send("VKWebAppStorageSet", {"key": "default_location", "value": JSON.stringify({country: selectedCountry, city: selectedCity, university: selectedUniversity})});
                         }}
                         disabled={
-                            (selectedCountry.title && selectedCountry.title === "") ||
-                            (selectedCity.title && selectedCity.title === "") ||
-                            (selectedUniversity.title && selectedUniversity.title === "")
+                            !((selectedCountry.title) &&
+                            (selectedCity.title))
                         }
                     >
                         Приступить!
@@ -144,6 +141,7 @@ const WhereStudyPanel = ({id}) => {
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
                         onClick={() => {
+                            onOnboardingEnd()
                             setActiveView("epic_view")
                         }}
                     >

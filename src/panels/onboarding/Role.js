@@ -13,7 +13,7 @@ import parent from "../../img/parent.png"
 
 const RolePanel = ({id}) => {
     const {userRole, setUserRole} = useContext(ReviewsContext)
-    const {fetchedUser, setActiveView, accessToken} = useContext(Navigation)
+    const {fetchedUser, setActiveView, accessToken, onOnboardingEnd, setSkip} = useContext(Navigation)
     const {setOnboardingPanel} = useContext(Navigation)
 
 
@@ -143,6 +143,7 @@ const RolePanel = ({id}) => {
                                 setOnboardingPanel("thanks_panel")
                             } else {
                                 if (userRole !== "Студент"){
+                                    onOnboardingEnd()
                                     setActiveView("epic_view")
                                 } else {
                                     setOnboardingPanel("university_panel")
@@ -152,11 +153,11 @@ const RolePanel = ({id}) => {
                         disabled={!userRole}
                     >
                         {
-                            userRole === "Интересующийся" &&
+                            userRole !== "Студент" &&
                             "Приступить!"
                         }
                         {
-                            userRole !== "Интересующийся" &&
+                            userRole === "Студент" &&
                             "Дальше!"
                         }
                     </Button>
@@ -165,11 +166,13 @@ const RolePanel = ({id}) => {
                         mode='tertiary'
                         style={{marginTop: "10px", color: "var(--yellow)"}}
                         onClick={() => {
+                            setSkip(true)
                             setUserRole(prev => prev || "Интересующийся")
                             bridge.send("VKWebAppStorageSet", {"key": "default_role", "value": userRole});
                             if (!accessToken){
                                 setOnboardingPanel("thanks_panel")
                             } else {
+                                onOnboardingEnd()
                                 setActiveView("epic_view")
                             }
                         }}

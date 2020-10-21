@@ -14,7 +14,6 @@ import {
 } from "@vkontakte/vkui";
 
 import Icon24Cancel from "@vkontakte/icons/dist/24/cancel";
-import Icon24Done from "@vkontakte/icons/dist/24/done";
 
 import {Navigation, ReviewsContext} from "../Contexts";
 import RatingProgress from "./components/RatingProgress";

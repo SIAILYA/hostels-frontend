@@ -1,4 +1,6 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import bridge from '@vkontakte/vk-bridge';
+
 import {
     Button,
     Div,
@@ -6,7 +8,7 @@ import {
     FormLayout,
     FormLayoutGroup, FormStatus,
     Panel,
-    PanelHeader, PanelHeaderBack, Placeholder,
+    PanelHeader, PanelHeaderBack, PanelSpinner, Placeholder,
     SelectMimicry,
 } from "@vkontakte/vkui";
 
@@ -14,7 +16,7 @@ import Icon24UserOutgoing from '@vkontakte/icons/dist/24/user_outgoing';
 
 import {Navigation, LocationContext} from "../Contexts";
 import {FailedSnackbar, SuccessSnackbar} from "./components/Snackbars";
-import {Icon56ErrorOutline} from "@vkontakte/icons";
+import {Icon56ErrorOutline, Icon56LockOutline} from "@vkontakte/icons";
 
 
 const LocationPanel = ({id, user}) => {
@@ -22,7 +24,18 @@ const LocationPanel = ({id, user}) => {
         selectedCountry, selectedCity, selectedUniversity,
         setCountry, setCity, setLocationSnackbar, locationSnackbar, setEducation, setUniversity
     } = useContext(LocationContext)
-    const {go, goBack, accessToken, getToken} = useContext(Navigation)
+    const {go, goBack, accessToken, getToken, setToken} = useContext(Navigation)
+    const [denied, setDenied] = useState(false)
+
+    useEffect(() => {
+        bridge.send("VKWebAppGetAuthToken", {"app_id": 7582793, "scope": ''})
+            .then((res) => {
+                setToken(res.access_token)
+            })
+            .catch(() => {
+                setDenied(true)
+            })
+    }, [])
 
     return (
         <Panel id={id}>
@@ -39,9 +52,10 @@ const LocationPanel = ({id, user}) => {
                 !accessToken &&
                 <div>
                     <Placeholder
-                        header="Нет разрешения"
-                        icon={<Icon56ErrorOutline className="yellow-gradient-text"/>}
+                        header={!denied ? "Получаем разрешение" : "Предоставьте доступ"}
+                        icon={!denied ? <PanelSpinner size="large" className="yellow-spinner"/> : <Icon56LockOutline className="yellow-gradient-text"/>}
                         action={
+                            denied &&
                             <Button
                                 size="xl"
                                 className="yellow-gradient"
@@ -51,7 +65,7 @@ const LocationPanel = ({id, user}) => {
                             </Button>
                         }
                     >
-                        Вы не предоставили разрешение на доступ к общей информации. Увы, но без него не получится оставить отзыв
+                        Нам нужен доступ к вашей основной информации, чтобы вы смогли оставить свой отзыв
                     </Placeholder>
                 </div>
             }

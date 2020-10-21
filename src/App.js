@@ -171,7 +171,7 @@ const App = () => {
 
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
-	const [block, setBlock] = useState(false)
+	const [skip, setSkip] = useState(false)
 
 	function setOnline() {
 		!navigator.onLine ? go({currentTarget: {dataset: {goto: "view_offline"}}}) : goBack()
@@ -196,8 +196,10 @@ const App = () => {
 			fetchStorageInit();
 			fetchUserReviews();
 			fetchRating();
-			checkServerApi();
-			setWindowPopout(null)
+			setTimeout(() => {
+				checkServerApi();
+				setWindowPopout(null)
+			}, 1000)
 		}
 
 		bridge.send('VKWebAppGetAds').then(promoBannerProps => {
@@ -308,16 +310,12 @@ const App = () => {
 					goBack()
 				}
 			})
-			.catch(res => {
-				if (activeView !== "server_offline"){
-					go({currentTarget: {dataset: {goto: 'view_server_offline'}}})
-				}
-		})
 	}
 
 	function fetchReviews () {
 		setReviewsLoading(true)
-		getLastReviews().then(res => {
+		getLastReviews()
+		.then(res => {
 			setLastReviews(res);
 			setReviewsLoading(false)
 			forceUpdate()
@@ -332,9 +330,20 @@ const App = () => {
 			callback()
 			setPopout(null)
 		}).catch(() => {
-			go({currentTarget: {dataset: {goto: "view_server_error"}}})
+			if (activeView !== "server_offline"){
+				go({currentTarget: {dataset: {goto: 'view_server_offline'}}})
+			}
 			setPopout(null)
 		})
+	}
+
+	function onOnboardingEnd() {
+		if (history[history.length - 1] === "onboarding") {
+			history.pop()
+		} else if (history[history.length - 1] === "onboardingAlert"){
+			history.pop()
+			history.pop()
+		}
 	}
 
 	function clearData() {
@@ -597,6 +606,10 @@ const App = () => {
 			console.log('from:', last)
 			console.log('to:', goBackTo)
 
+			if (last === 'onboardingAlert') {
+				setOnboardingPopup('')
+			} else
+
 			if (goBackTo.slice(0, 4) === 'view') {
 				if (goBackTo !== "view_epic_view"){
 					setActiveView("add_review_view")
@@ -702,7 +715,8 @@ const App = () => {
 				searchBanner, onboardingPopup, setOnboardingPopup,
 				setOnboardingSnackbar, onboardingSnackbar,
 				activeReviewModal, setReviewModal, fetchMessagesAllow,
-				onboardingShowed
+				onboardingShowed, onOnboardingEnd,
+				skip, setSkip
 			}}>
 				<LocationContext.Provider value={{
 					countryList, citiesList, uniList, dormitoryList,
