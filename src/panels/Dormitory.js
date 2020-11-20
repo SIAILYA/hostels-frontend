@@ -12,12 +12,13 @@ import {
 import Icon28DoneOutline from "@vkontakte/icons/dist/28/done_outline";
 import Icon56ErrorOutline from "@vkontakte/icons/dist/56/error_outline";
 import React, {useContext} from "react";
-import {LocationContext, Navigation} from "../Contexts";
+import {LocationContext, Navigation, ReviewsContext} from "../Contexts";
 
 
 const DormitoryPanel = ({id}) => {
     const {go, goBack} = useContext(Navigation)
     const {dormitoryList, setDormitory, selectedDormitory} = useContext(LocationContext)
+    const {clearOnChangeDormitory} = useContext(ReviewsContext)
 
     return(
         <Panel id={id}>
@@ -47,7 +48,12 @@ const DormitoryPanel = ({id}) => {
 
                                     return (
                                         <SimpleCell
-                                            onClick={() => {setDormitory(item)}}
+                                            onClick={() => {
+                                                setDormitory(item)
+                                                if (selectedDormitory !== item){
+                                                    clearOnChangeDormitory()
+                                                }
+                                            }}
                                             key={index}
                                             after={selectedDormitory.id === item.id ? <Icon28DoneOutline /> : null}
                                             description={item.address}

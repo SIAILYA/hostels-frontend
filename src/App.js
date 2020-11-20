@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
@@ -80,6 +80,8 @@ const App = () => {
 
 	const [locationSnackbar, setLocationSnackbar] = useState(null)
 	const [onboardingSnackbar, setOnboardingSnackbar] = useState('');
+
+	const [bannerShow, setBannerShow] = useState(true)
 
 	const [searchBanner, setSearchBanner] = useState({
 		title: 'Наше сообщество',
@@ -173,6 +175,12 @@ const App = () => {
 	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const [skip, setSkip] = useState(false)
 
+	const [dormitoriesSearch, setDormitoriesSearch] = useState('');
+	const previousSearch = useRef("")
+
+	const [block, setBlock] = useState(false)
+
+
 	function setOnline() {
 		!navigator.onLine ? go({currentTarget: {dataset: {goto: "view_offline"}}}) : goBack()
 	}
@@ -189,7 +197,7 @@ const App = () => {
 		window.onload = () => {
 			console.log('window load end')
 			window.addEventListener('popstate', () => goBack());
-			window.addEventListener('online', () => setOnline());
+			window.addEventListener('online', () => goBack());
 			window.addEventListener('offline', () => setOnline());
 			fetchReviews();
 			fetchData();
@@ -350,6 +358,10 @@ const App = () => {
 		setDormitory('')
 		setAddress('')
 		setTitle('')
+		clearOnChangeDormitory()
+	}
+
+	function clearOnChangeDormitory() {
 		setCoordinates({lat: 0, lng: 0})
 		setConditionRating(0)
 		setCostRating(0)
@@ -532,6 +544,7 @@ const App = () => {
 			}
 		} else
 
+
 		if (goTo === 'onboarding') {
 			window.history.pushState( {panel: "onboarding"}, "onboarding" );
 			history.push( "onboarding" );
@@ -547,6 +560,7 @@ const App = () => {
 		} else
 
 		if (goTo.slice(0, 8) === 'addPanel') {
+			setLocationSnackbar(null)
 			const panel = goTo.slice(9, goTo.length)
 			window.history.pushState( {panel: 'addPanel_' + panel}, 'addPanel_' + panel );
 			history.push( 'addPanel_' + panel );
@@ -592,13 +606,11 @@ const App = () => {
 	};
 
 	const goBack = () => {
-		if( history.length === 1 ) {
+		if (history.length === 1 ) {
 			bridge.send("VKWebAppClose", {"status": "success"});
 		} else
 
-		if( history.length > 1 && navigator.onLine) {
-			// setBlock(true)
-			// setTimeout(() => {setBlock(false)}, 400)
+		if (history.length > 1 && navigator.onLine && !block) {
 			const last = history.pop()
 			const goBackTo = history[history.length - 1]
 
@@ -608,6 +620,11 @@ const App = () => {
 
 			if (last === 'onboardingAlert') {
 				setOnboardingPopup('')
+			} else
+
+			if (goBackTo.slice(0, 15) === 'onboardingAlert') {
+				setActiveView("onboarding_view")
+				setOnboardingPanel("thanks_panel")
 			} else
 
 			if (goBackTo.slice(0, 4) === 'view') {
@@ -716,7 +733,8 @@ const App = () => {
 				setOnboardingSnackbar, onboardingSnackbar,
 				activeReviewModal, setReviewModal, fetchMessagesAllow,
 				onboardingShowed, onOnboardingEnd,
-				skip, setSkip
+				skip, setSkip, block, setBlock,
+				bannerShow, setBannerShow
 			}}>
 				<LocationContext.Provider value={{
 					countryList, citiesList, uniList, dormitoryList,
@@ -770,13 +788,16 @@ const App = () => {
 									dormitoryObject, dormitoryReviews,
 									fetchDormitoryReviews,
 									clearData,
-									fetchReviews, fetchUserReviews
+									fetchReviews, fetchUserReviews,
+									dormitoriesSearch, setDormitoriesSearch,
+									previousSearch,
+									clearOnChangeDormitory
 								}}>
 									<Root activeView={activeView}>
 										<View
 											id="epic_view"
 											activePanel="epic_panel"
-											popout={popout || windowPopout}
+											popout={popout}
 											header={null}
 											onSwipeBack={() => goBack()}
 										>
@@ -934,6 +955,7 @@ const App = () => {
 													header="Кажется, вы оффлайн"
 													style={{color: 'var(--yellow)'}}
 													action={
+														!navigator.onLine &&
 														<Button
 															className="yellow-gradient"
 															onClick={() => {

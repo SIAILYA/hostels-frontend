@@ -25,7 +25,7 @@ import {FailedSnackbar} from "./components/Snackbars";
 
 
 const TextPhotoPanel = ({id}) => {
-    const {go, goBack, setPopout, history} = useContext(Navigation)
+    const {go, goBack, setPopout, history, setBlock} = useContext(Navigation)
     const {setPhotoCaptionIndex, setPhotoCard, photoCaptions, userPhotos, setUserPhotos} = useContext(ModalContext)
     const {locationSnackbar, setTextReview, textReview, anonReview, setAnon, setLocationSnackbar} = useContext(LocationContext)
     const {setPhotoURLs, review, setUserReviews, clearData} = useContext(ReviewsContext)
@@ -70,7 +70,7 @@ const TextPhotoPanel = ({id}) => {
                             getRef={textareaRef}
                             // maxLength="2000"
                             onChange={e => {
-                                setTextReview(e.target.value.replaceAll(RegExp("[<>]", "g"), "").substr(0, 2000))
+                                setTextReview(e.target.value.replaceAll(RegExp("[<>]", "g"), "").substr(0, 2000).trimStart())
                             }}
                         />
                     </FormLayoutGroup>
@@ -171,12 +171,14 @@ const TextPhotoPanel = ({id}) => {
                     disabled={!textReview}
                     onClick={() => {
                         setPopout(<ScreenSpinner size='large' />)
+                        setBlock(true)
                         if (userPhotos.length > 0){
                             uploadPhotos(userPhotos).then(res => {
                                 setPhotoURLs(res.data)
                                 review.photos = res.data
                                 sendReview(review).then(res => {
                                     setPopout(null)
+                                    setBlock(false)
                                     if (res.status === 200){
                                         go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
                                         setUserReviews([review])
@@ -187,11 +189,13 @@ const TextPhotoPanel = ({id}) => {
                                     if (res.response) {
                                         if (res.response.status === 429){
                                             setPopout(null)
+                                            setBlock(false)
                                             setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
                                         }
                                     }
                                     else {
                                         setPopout(null)
+                                        setBlock(false)
                                         setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                     }
                                 })
@@ -199,17 +203,20 @@ const TextPhotoPanel = ({id}) => {
                                 if (res.response) {
                                     if (res.response.status === 429){
                                         setPopout(null)
+                                        setBlock(false)
                                         setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
                                     }
                                 }
                                 else {
                                     setPopout(null)
+                                    setBlock(false)
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                 }
                             })
                         } else {
                             sendReview(review).then(res => {
                                 setPopout(null)
+                                setBlock(false)
                                 if (res.status === 200){
                                     go({currentTarget: {dataset: {goto: "addPanel_week_panel"}}})
                                     setUserReviews([review])
@@ -220,11 +227,13 @@ const TextPhotoPanel = ({id}) => {
                                 if (res.response) {
                                     if (res.response.status === 429){
                                         setPopout(null)
+                                        setBlock(false)
                                         setLocationSnackbar(<FailedSnackbar caption="Слишком много отзывов, давайте продолжим завтра" onClose={setLocationSnackbar}/>)
                                     }
                                 }
                                 else {
                                     setPopout(null)
+                                    setBlock(false)
                                     setLocationSnackbar(<FailedSnackbar caption="Не удалось выполнить загрузку отзыва на сервер" onClose={setLocationSnackbar}/>)
                                 }
 

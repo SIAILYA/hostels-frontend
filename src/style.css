@@ -45,7 +45,7 @@
     src: url("fonts/Montserrat-Bold.ttf") format('truetype');
 }
 
-@media screen and (min-height: 560px) {
+@media screen and (min-height: 580px) {
     #base_panel, #thanks_panel{
         position: fixed!important;
     }

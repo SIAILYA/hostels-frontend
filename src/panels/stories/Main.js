@@ -22,9 +22,8 @@ import ScreenSpinner from "@vkontakte/vkui/dist/components/ScreenSpinner/ScreenS
 
 const Main = ({onStoryChange}) => {
     const {lastReviews, reviewsLoading, fetchDormitoryReviews} = useContext(ReviewsContext)
-    const {searchBanner, go, setPopout} = useContext(Navigation)
+    const {searchBanner, go, setPopout, bannerShow, setBannerShow} = useContext(Navigation)
     const platform = usePlatform()
-    const [bannerShow, setBannerShow] = useState(true)
 
     return (
         <Panel id="main_panel">
@@ -48,7 +47,9 @@ const Main = ({onStoryChange}) => {
                             <div style={{ width: 96, height: 96 }} />
                         </Card>
                     }
-                    <Link href="https://vk.com/@yourdormitory-week-review" target="_blank" style={{marginRight: 8}}>
+                    <Link href="https://vk.com/@yourdormitory-week-review" target="_blank"
+                          // style={{marginRight: 8}}
+                    >
                         <Card size="s" className='review'>
                             <div style={{ width: 96, height: 96 }} />
                         </Card>

@@ -120,8 +120,11 @@ const QuestionsPanel = ({id}) => {
                         </Radio>
                         <Checkbox
                             name='check_billing'
-                            value={cardPay}
-                            onChange={() => {setCardPay(prev => !prev)}}
+                            checked={cardPay}
+                            onChange={() => {
+                                console.log(cardPay)
+                                setCardPay(prev => !prev)
+                            }}
                         >
                             Можно оплатить картой или в интернет-банке
                         </Checkbox>
@@ -135,7 +138,7 @@ const QuestionsPanel = ({id}) => {
                                min={1}
                                value={cost}
                                placeholder={2200}
-                               pattern="[0-9]{1,5}"
+                               pattern="\d*"
                                maxLength={5}
                                onChange={e => {
                                    const val = e.target.value.replaceAll(RegExp("[^0-9]", "g"), '')
@@ -184,7 +187,7 @@ const QuestionsPanel = ({id}) => {
                             type='number'
                             max={20}
                             min={1}
-                            pattern="[0-9]{1,2}"
+                            pattern="\d*"
                             value={peopleInRoom}
                             maxLength={2}
                             placeholder={3}

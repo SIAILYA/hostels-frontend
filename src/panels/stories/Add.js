@@ -86,11 +86,11 @@ const Add = ({go}) => {
                     </Cell>
                 </Group>
             </Div>
+            {
+                userReviewsLoading &&
+                <PanelSpinner size="large"/>
+            }
 
-            {/*{*/}
-            {/*    userReviewsLoading &&*/}
-            {/*    <PanelSpinner/>*/}
-            {/*}*/}
             {
                 !userReviewsLoading && userReviews.length === 0 &&
                 <Placeholder
@@ -117,11 +117,11 @@ const Add = ({go}) => {
                 </Placeholder>
             }
             {
-                userReviews.length === 0 && userReviewsLoading &&
-                <PanelSpinner size="large"/>
+
             }
+
             {
-                userReviews.length > 0 &&
+                userReviews.length > 0 && !userReviewsLoading &&
                 <Div>
                     <div>
                         <Button

@@ -21,37 +21,53 @@ import Div from "@vkontakte/vkui/dist/components/Div/Div";
 
 const SearchStory = ({id}) => {
     const [intervalId, setIntervalId] = useState(0)
-    const [dormitoriesSearch, setDormitoriesSearch] = useState('');
     const [loading, setLoading] = useState(true)
-    const {dormitoryRating, setDormitoryRating, fetchDormitoryReviews, dormitorySearch, setDormitorySearch} = useContext(ReviewsContext)
+    const {setDormitoryRating, fetchDormitoryReviews, dormitorySearch, setDormitorySearch, dormitoriesSearch, setDormitoriesSearch, previousSearch} = useContext(ReviewsContext)
     const {go} = useContext(Navigation)
 
-    useEffect(() => {
-        searchDormitories(dormitoriesSearch)
-            .then(res => {
-                setDormitoryRating(res.data)
-                setLoading(false);
-            })
-    }, [])
+    // useEffect(() => {
+    //     console.log(123123)
+    //     searchDormitories(dormitoriesSearch)
+    //         .then(res => {
+    //             setDormitoryRating(res.data)
+    //             setLoading(false);
+    //         })
+    // }, [])
 
 
     useEffect(() => {
         clearTimeout(intervalId)
-        if (dormitoriesSearch){
+        console.log(dormitoriesSearch)
+        console.log(previousSearch.current)
+        if (dormitoriesSearch && dormitoriesSearch !== previousSearch.current){
             setLoading(true)
             setIntervalId(setTimeout(() => {
+                previousSearch.current = dormitoriesSearch
                 searchDormitories(dormitoriesSearch.trim())
                     .then(res => {
                         setDormitorySearch(res.data)
                         setLoading(false);
                     })
+                    .catch(err => {
+                        setDormitorySearch([])
+                        setLoading(false)
+                    })
             }, 1000))
-        } else {
+        } else if (dormitoriesSearch === ""){
+            previousSearch.current = dormitoriesSearch
             searchDormitories(dormitoriesSearch.trim())
                 .then(res => {
                     setDormitorySearch(res.data)
                     setLoading(false);
                 })
+                .catch(err => {
+                    setDormitorySearch([])
+                    setLoading(false)
+                })
+        } else {
+            if (dormitorySearch.length){
+                setLoading(false)
+            }
         }
     }, [dormitoriesSearch])
 

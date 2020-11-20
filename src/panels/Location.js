@@ -16,7 +16,7 @@ import Icon24UserOutgoing from '@vkontakte/icons/dist/24/user_outgoing';
 
 import {Navigation, LocationContext} from "../Contexts";
 import {FailedSnackbar, SuccessSnackbar} from "./components/Snackbars";
-import {Icon56ErrorOutline, Icon56LockOutline} from "@vkontakte/icons";
+import {Icon56LockOutline} from "@vkontakte/icons";
 
 
 const LocationPanel = ({id, user}) => {

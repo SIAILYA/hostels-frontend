@@ -30,6 +30,7 @@ const ThanksPanel = ({id}) => {
                     if (userRole === "Студент" && !skip){
                         setOnboardingPanel("university_panel")
                     } else {
+                        onOnboardingEnd()
                         setActiveView('epic_view')
                     }
                     setOnboardingPopup(null)
@@ -52,6 +53,7 @@ const ThanksPanel = ({id}) => {
                     Рады знакомству
                 </div>
                 <Placeholder
+                    style={{paddingBottom: "10vh"}}
                     header="Получаем разрешение"
                     icon={<Icon56LockOutline className="yellow-gradient-text"/>}
                     action={
@@ -78,7 +80,7 @@ const ThanksPanel = ({id}) => {
                         </Button>
                     }
                 >
-                    Нам нужен доступ к вашим данным чтобы приложение корректно работало, а вы могли отставлять отзывы
+                    Нам нужен доступ к вашим данным, чтобы приложение корректно работало, а вы могли отставлять отзывы
                 </Placeholder>
                 {/*<div style={{textAlign: "center", marginTop: "25px"}}>*/}
                 {/*    Чтобы все работало, предоставьте доступ к вашей информации*/}
@@ -100,7 +102,6 @@ const ThanksPanel = ({id}) => {
                                     actions={[{
                                         title: 'Предоставить доступ',
                                         autoclose: true,
-                                        mode: "cancel",
                                         action: () => {
                                             bridge.send("VKWebAppGetAuthToken", {"app_id": 7582793, "scope": ''})
                                                 .then((res) => {
@@ -117,13 +118,17 @@ const ThanksPanel = ({id}) => {
                                     }, {
                                         title: 'Не предоставлять',
                                         autoclose: true,
+                                        mode: "destructive",
                                         action: () => {
                                             onOnboardingEnd()
                                             setActiveView("epic_view")
                                             bridge.send("VKWebAppStorageSet", {"key": "onboarding_showed", "value": "true"});
                                         }
                                     }]}
-                                    onClose={() => setOnboardingPopup('')}
+                                    onClose={() => {
+                                        setOnboardingPopup('')
+                                        history.pop()
+                                    }}
                                 >
                                     <h2>Вы уверены?</h2>
                                     <p>Без вашего разрешения будет недоступна большая часть функционала сервиса (не получится искать общежития и добавлять отзывы)</p>
